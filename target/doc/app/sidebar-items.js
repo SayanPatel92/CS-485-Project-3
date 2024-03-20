@@ -1,0 +1,1 @@
+window.SIDEBAR_ITEMS = {"fn":["decrypt_file","find_files","main","send_file"]};
