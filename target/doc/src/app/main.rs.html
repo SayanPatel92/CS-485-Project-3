@@ -104,19 +104,78 @@
 <a href="#102" id="102">102</a>
 <a href="#103" id="103">103</a>
 <a href="#104" id="104">104</a>
+<a href="#105" id="105">105</a>
+<a href="#106" id="106">106</a>
+<a href="#107" id="107">107</a>
+<a href="#108" id="108">108</a>
+<a href="#109" id="109">109</a>
+<a href="#110" id="110">110</a>
+<a href="#111" id="111">111</a>
+<a href="#112" id="112">112</a>
+<a href="#113" id="113">113</a>
+<a href="#114" id="114">114</a>
+<a href="#115" id="115">115</a>
+<a href="#116" id="116">116</a>
+<a href="#117" id="117">117</a>
+<a href="#118" id="118">118</a>
+<a href="#119" id="119">119</a>
+<a href="#120" id="120">120</a>
+<a href="#121" id="121">121</a>
+<a href="#122" id="122">122</a>
+<a href="#123" id="123">123</a>
+<a href="#124" id="124">124</a>
+<a href="#125" id="125">125</a>
+<a href="#126" id="126">126</a>
+<a href="#127" id="127">127</a>
+<a href="#128" id="128">128</a>
+<a href="#129" id="129">129</a>
+<a href="#130" id="130">130</a>
+<a href="#131" id="131">131</a>
+<a href="#132" id="132">132</a>
+<a href="#133" id="133">133</a>
+<a href="#134" id="134">134</a>
+<a href="#135" id="135">135</a>
+<a href="#136" id="136">136</a>
+<a href="#137" id="137">137</a>
+<a href="#138" id="138">138</a>
+<a href="#139" id="139">139</a>
+<a href="#140" id="140">140</a>
+<a href="#141" id="141">141</a>
+<a href="#142" id="142">142</a>
+<a href="#143" id="143">143</a>
+<a href="#144" id="144">144</a>
+<a href="#145" id="145">145</a>
+<a href="#146" id="146">146</a>
+<a href="#147" id="147">147</a>
+<a href="#148" id="148">148</a>
+<a href="#149" id="149">149</a>
+<a href="#150" id="150">150</a>
+<a href="#151" id="151">151</a>
 </pre></div><pre class="rust"><code><span class="kw">use </span>std::env;
 <span class="kw">use </span>std::fs;
 <span class="kw">use </span>std::io::{Read, Write};
 <span class="kw">use </span>std::path::Path;
 <span class="kw">use </span>reqwest::blocking::Client;
 
-<span class="doccomment">/// finds files in function
-/// # Arguments
-/// * start_dir - starting directory 
+<span class="doccomment">/// # Arguments
+/// * `start_dir` - The starting directory to begin the search.
+/// * `target_file` - The name of the target file to find.
+/// * `key_file` - The name of the key file to find.
+///
+/// # Returns
+/// A tuple containing `Option&lt;String&gt;` paths to the target and key files if found, respectively.
+///
 /// # Example
 /// ```
-/// let _x = 7u8;
+/// use std::path::Path;
+/// let start_dir = Path::new(".");
+/// let target_file = "example_target.txt";
+/// let key_file = "example_key.txt";
+/// let (target_path, key_path) = find_files(start_dir, target_file, key_file);
+/// println!("Target file path: {:?}", target_path);
+/// println!("Key file path: {:?}", key_path);
 /// ```
+
 </span><span class="kw">fn </span>find_files(start_dir: <span class="kw-2">&amp;</span>Path, target_file: <span class="kw-2">&amp;</span>str, key_file: <span class="kw-2">&amp;</span>str) -&gt; (<span class="prelude-ty">Option</span>&lt;String&gt;, <span class="prelude-ty">Option</span>&lt;String&gt;) {
     <span class="kw">let </span><span class="kw-2">mut </span>target_path = <span class="prelude-val">None</span>;
     <span class="kw">let </span><span class="kw-2">mut </span>key_path = <span class="prelude-val">None</span>;
@@ -143,7 +202,23 @@
     (target_path, key_path)
 }
 
-<span class="kw">fn </span>decrypt_file(target_path: <span class="kw-2">&amp;</span>str, key_path: <span class="kw-2">&amp;</span>str) -&gt; Vec&lt;u8&gt; {
+<span class="doccomment">/// Decrypts a file using a specified key file.
+///
+/// # Arguments
+/// * `target_path` - The path to the file to decrypt.
+/// * `key_path` - The path to the key file used for decryption.
+///
+/// # Returns
+/// A `Vec&lt;u8&gt;` containing the decrypted file data.
+///
+/// # Example
+/// ```
+/// let target_path = "path/to/target.txt";
+/// let key_path = "path/to/key.txt";
+/// let decrypted_data = decrypt_file(target_path, key_path);
+/// ```
+
+</span><span class="kw">fn </span>decrypt_file(target_path: <span class="kw-2">&amp;</span>str, key_path: <span class="kw-2">&amp;</span>str) -&gt; Vec&lt;u8&gt; {
     <span class="kw">let </span><span class="kw-2">mut </span>key_file = fs::File::open(key_path).unwrap();
     <span class="kw">let </span><span class="kw-2">mut </span>key = Vec::new();
     key_file.read_to_end(<span class="kw-2">&amp;mut </span>key).unwrap();
@@ -157,7 +232,20 @@
     plaintext
 }
 
-<span class="kw">fn </span>send_file(data: <span class="kw-2">&amp;</span>[u8], server_url: <span class="kw-2">&amp;</span>str) {
+<span class="doccomment">/// Sends file data to a specified server URL.
+///
+/// # Arguments
+/// * `data` - The data of the file to send.
+/// * `server_url` - The URL of the server to which the file will be sent.
+///
+/// # Example
+/// ```
+/// let decrypted_data: Vec&lt;u8&gt; = vec![...]; // Assume this is decrypted file data
+/// let server_url = "http://example.com/upload";
+/// send_file(&amp;decrypted_data, server_url);
+/// ```
+
+</span><span class="kw">fn </span>send_file(data: <span class="kw-2">&amp;</span>[u8], server_url: <span class="kw-2">&amp;</span>str) {
     <span class="kw">let </span>client = Client::new();
     <span class="kw">let </span>response = client
         .post(server_url)
@@ -178,7 +266,13 @@
     }
 }
 
-<span class="kw">fn </span>main() {
+<span class="doccomment">/// Main function to orchestrate file finding, decryption, and sending.
+///
+/// # Example
+/// Run the program from the command line with the following arguments:
+/// ```
+
+</span><span class="kw">fn </span>main() {
     <span class="kw">let </span>args: Vec&lt;String&gt; = env::args().collect();
     <span class="kw">if </span>args.len() != <span class="number">4 </span>{
         <span class="macro">println!</span>(<span class="string">"Usage: {} &lt;start_dir&gt; &lt;target_file&gt; &lt;key_file&gt;"</span>, args[<span class="number">0</span>]);
