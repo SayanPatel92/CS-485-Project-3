@@ -1,0 +1,1 @@
+window.SIDEBAR_ITEMS = {"enum":["Path","Query"],"struct":["Formatter"],"trait":["FromUriParam","Ignorable","Part","UriDisplay"]};

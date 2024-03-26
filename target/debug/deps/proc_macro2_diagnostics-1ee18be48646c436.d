@@ -1,0 +1,8 @@
+C:\Users\patel\OneDrive\Attachments\CSCI 485 Programming Lang\Project 3\rust\target\debug\deps\libproc_macro2_diagnostics-1ee18be48646c436.rmeta: C:\Users\patel\.cargo\registry\src\index.crates.io-6f17d22bba15001f\proc-macro2-diagnostics-0.10.1\src\lib.rs C:\Users\patel\.cargo\registry\src\index.crates.io-6f17d22bba15001f\proc-macro2-diagnostics-0.10.1\src\ext.rs C:\Users\patel\.cargo\registry\src\index.crates.io-6f17d22bba15001f\proc-macro2-diagnostics-0.10.1\src\diagnostic.rs C:\Users\patel\.cargo\registry\src\index.crates.io-6f17d22bba15001f\proc-macro2-diagnostics-0.10.1\src\line.rs
+
+C:\Users\patel\OneDrive\Attachments\CSCI 485 Programming Lang\Project 3\rust\target\debug\deps\proc_macro2_diagnostics-1ee18be48646c436.d: C:\Users\patel\.cargo\registry\src\index.crates.io-6f17d22bba15001f\proc-macro2-diagnostics-0.10.1\src\lib.rs C:\Users\patel\.cargo\registry\src\index.crates.io-6f17d22bba15001f\proc-macro2-diagnostics-0.10.1\src\ext.rs C:\Users\patel\.cargo\registry\src\index.crates.io-6f17d22bba15001f\proc-macro2-diagnostics-0.10.1\src\diagnostic.rs C:\Users\patel\.cargo\registry\src\index.crates.io-6f17d22bba15001f\proc-macro2-diagnostics-0.10.1\src\line.rs
+
+C:\Users\patel\.cargo\registry\src\index.crates.io-6f17d22bba15001f\proc-macro2-diagnostics-0.10.1\src\lib.rs:
+C:\Users\patel\.cargo\registry\src\index.crates.io-6f17d22bba15001f\proc-macro2-diagnostics-0.10.1\src\ext.rs:
+C:\Users\patel\.cargo\registry\src\index.crates.io-6f17d22bba15001f\proc-macro2-diagnostics-0.10.1\src\diagnostic.rs:
+C:\Users\patel\.cargo\registry\src\index.crates.io-6f17d22bba15001f\proc-macro2-diagnostics-0.10.1\src\line.rs:

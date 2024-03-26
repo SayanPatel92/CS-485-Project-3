@@ -1,0 +1,1 @@
+window.SIDEBAR_ITEMS = {"enum":["Method","SameSite","StatusClass"],"macro":["impl_from_uri_param_identity"],"mod":["ext","hyper","uncased","uri"],"struct":["Accept","ContentType","Cookie","CookieJar","Header","HeaderMap","Iter","MediaType","QMediaType","RawStr","RawStrBuf","Status"]};

@@ -1,0 +1,1 @@
+window.SIDEBAR_ITEMS = {"enum":["Uri"],"mod":["error","fmt"],"struct":["Absolute","Asterisk","Authority","Error","Host","Origin","Path","Query","Reference","Segments"]};

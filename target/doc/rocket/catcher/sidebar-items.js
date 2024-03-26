@@ -1,0 +1,1 @@
+window.SIDEBAR_ITEMS = {"struct":["Catcher"],"trait":["Cloneable","Handler"],"type":["BoxFuture","Result"]};

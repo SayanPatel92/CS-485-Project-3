@@ -1,0 +1,1 @@
+window.SIDEBAR_ITEMS = {"enum":["Allow","ExpectCt","Feature","Frame","Hsts","NoSniff","Prefetch","Referrer","XssFilter"],"struct":["Permission","Shield"],"trait":["Policy"]};

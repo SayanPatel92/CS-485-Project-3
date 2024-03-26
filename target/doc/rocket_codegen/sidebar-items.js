@@ -1,0 +1,1 @@
+window.SIDEBAR_ITEMS = {"attr":["async_test","catch","delete","get","head","launch","main","options","patch","post","put","route"],"derive":["FromForm","FromFormField","Responder","UriDisplayPath","UriDisplayQuery"],"macro":["catchers","routes","uri"]};

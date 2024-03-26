@@ -1,0 +1,75 @@
+<!DOCTYPE html><html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1.0"><meta name="generator" content="rustdoc"><meta name="description" content="Form field validation routines."><title>rocket::form::validate - Rust</title><link rel="preload" as="font" type="font/woff2" crossorigin href="../../../static.files/SourceSerif4-Regular-46f98efaafac5295.ttf.woff2"><link rel="preload" as="font" type="font/woff2" crossorigin href="../../../static.files/FiraSans-Regular-018c141bf0843ffd.woff2"><link rel="preload" as="font" type="font/woff2" crossorigin href="../../../static.files/FiraSans-Medium-8f9a781e4970d388.woff2"><link rel="preload" as="font" type="font/woff2" crossorigin href="../../../static.files/SourceCodePro-Regular-562dcc5011b6de7d.ttf.woff2"><link rel="preload" as="font" type="font/woff2" crossorigin href="../../../static.files/SourceCodePro-Semibold-d899c5a5c4aeb14a.ttf.woff2"><link rel="stylesheet" href="../../../static.files/normalize-76eba96aa4d2e634.css"><link rel="stylesheet" href="../../../static.files/rustdoc-5bc39a1768837dd0.css"><meta name="rustdoc-vars" data-root-path="../../../" data-static-root-path="../../../static.files/" data-current-crate="rocket" data-themes="" data-resource-suffix="" data-rustdoc-version="1.77.0 (aedd173a2 2024-03-17)" data-channel="1.77.0" data-search-js="search-dd67cee4cfa65049.js" data-settings-js="settings-4313503d2e1961c2.js" ><script src="../../../static.files/storage-4c98445ec4002617.js"></script><script defer src="../sidebar-items.js"></script><script defer src="../../../static.files/main-48f368f3872407c8.js"></script><noscript><link rel="stylesheet" href="../../../static.files/noscript-04d5337699b92874.css"></noscript><link rel="icon" href="https://rocket.rs/images/favicon.ico"></head><body class="rustdoc mod"><!--[if lte IE 11]><div class="warning">This old browser is unsupported and will most likely display funky things.</div><![endif]--><nav class="mobile-topbar"><button class="sidebar-menu-toggle" title="show sidebar"></button><a class="logo-container" href="../../../rocket/index.html"><img src="https://rocket.rs/images/logo-boxed.png" alt=""></a></nav><nav class="sidebar"><div class="sidebar-crate"><a class="logo-container" href="../../../rocket/index.html"><img src="https://rocket.rs/images/logo-boxed.png" alt="logo"></a><h2><a href="../../../rocket/index.html">rocket</a><span class="version">0.5.0</span></h2></div><h2 class="location"><a href="#">Module validate</a></h2><div class="sidebar-elems"><section><ul class="block"><li><a href="#reexports">Re-exports</a></li><li><a href="#traits">Traits</a></li><li><a href="#functions">Functions</a></li></ul></section><h2><a href="../index.html">In rocket::form</a></h2></div></nav><div class="sidebar-resizer"></div>
+    <main><div class="width-limiter"><nav class="sub"><form class="search-form"><span></span><div id="sidebar-button" tabindex="-1"><a href="../../../rocket/all.html" title="show sidebar"></a></div><input class="search-input" name="search" aria-label="Run search in the documentation" autocomplete="off" spellcheck="false" placeholder="Click or press ‘S’ to search, ‘?’ for more options…" type="search"><div id="help-button" tabindex="-1"><a href="../../../help.html" title="help">?</a></div><div id="settings-menu" tabindex="-1"><a href="../../../settings.html" title="settings"><img width="22" height="22" alt="Change settings" src="../../../static.files/wheel-7b819b6101059cd0.svg"></a></div></form></nav><section id="main-content" class="content"><div class="main-heading"><h1>Module <a href="../../index.html">rocket</a>::<wbr><a href="../index.html">form</a>::<wbr><a class="mod" href="#">validate</a><button id="copy-path" title="Copy item path to clipboard"><img src="../../../static.files/clipboard-7571035ce49a181d.svg" width="19" height="18" alt="Copy item path"></button></h1><span class="out-of-band"><a class="src" href="../../../src/rocket/form/validate.rs.html#1-894">source</a> · <button id="toggle-all-docs" title="collapse all docs">[<span>&#x2212;</span>]</button></span></div><details class="toggle top-doc" open><summary class="hideme"><span>Expand description</span></summary><div class="docblock"><p>Form field validation routines.</p>
+<p>Each function in this module can be used as the target of the
+<code>field(validate)</code> field attribute of the <code>FromForm</code> derive.</p>
+
+<div class="example-wrap"><pre class="rust rust-example-rendered"><code><span class="kw">use </span>rocket::form::FromForm;
+
+<span class="attr">#[derive(FromForm)]
+</span><span class="kw">struct </span>MyForm&lt;<span class="lifetime">'r</span>&gt; {
+    <span class="attr">#[field(validate = range(<span class="number">2</span>..<span class="number">10</span>))]
+    </span>id: usize,
+    <span class="attr">#[field(validate = omits(<span class="string">"password"</span>))]
+    </span>password: <span class="kw-2">&amp;</span><span class="lifetime">'r </span>str,
+}</code></pre></div>
+<p>The <code>validate</code> parameter takes any expression that returns a
+<a href="../type.Result.html" title="type rocket::form::Result"><code>form::Result&lt;()&gt;</code></a>. If the expression is a function
+call, a reference to the field is inserted as the first parameter. Thus,
+functions calls to <code>validate</code> must take a reference to <em>some</em> type,
+typically a generic with some bounds, as their first argument.</p>
+<h3 id="custom-error-messages"><a class="doc-anchor" href="#custom-error-messages">§</a>Custom Error Messages</h3>
+<p>To set a custom error messages, it is useful to chain results:</p>
+
+<div class="example-wrap"><pre class="rust rust-example-rendered"><code><span class="kw">use </span>rocket::form::{Errors, Error, FromForm};
+
+<span class="attr">#[derive(FromForm)]
+</span><span class="kw">struct </span>MyForm&lt;<span class="lifetime">'r</span>&gt; {
+    <span class="comment">// By defining another function...
+    </span><span class="attr">#[field(validate = omits(<span class="string">"password"</span>).map_err(pass_help))]
+    </span>password: <span class="kw-2">&amp;</span><span class="lifetime">'r </span>str,
+    <span class="comment">// or inline using the `msg` helper. `or_else` inverts the validator
+    </span><span class="attr">#[field(validate = omits(<span class="string">"password"</span>).or_else(<span class="macro">msg!</span>(<span class="string">"please omit `password`"</span>)))]
+    </span>password2: <span class="kw-2">&amp;</span><span class="lifetime">'r </span>str,
+    <span class="comment">// You can even refer to the field in the message...
+    </span><span class="attr">#[field(validate = range(<span class="number">1</span>..).or_else(<span class="macro">msg!</span>(<span class="string">"`{}` &lt; 1"</span>, <span class="self">self</span>.n)))]
+    </span>n: isize,
+    <span class="comment">// ..or other fields!
+    </span><span class="attr">#[field(validate = range(..<span class="self">self</span>.n).or_else(<span class="macro">msg!</span>(<span class="string">"`{}` &gt; `{}`"</span>, <span class="self">self</span>.z, <span class="self">self</span>.n)))]
+    </span>z: isize,
+}
+
+<span class="kw">fn </span>pass_help&lt;<span class="lifetime">'a</span>&gt;(errors: Errors&lt;<span class="lifetime">'_</span>&gt;) -&gt; Errors&lt;<span class="lifetime">'a</span>&gt; {
+    Error::validation(<span class="string">"passwords can't contain the text \"password\""</span>).into()
+}</code></pre></div>
+<h3 id="custom-validation"><a class="doc-anchor" href="#custom-validation">§</a>Custom Validation</h3>
+<p>Custom validation routines can be defined as regular functions. Consider a
+routine that tries to validate a credit card number:</p>
+
+<div class="example-wrap"><pre class="rust rust-example-rendered"><code><span class="kw">extern crate </span>time;
+
+<span class="kw">use </span>rocket::form::{<span class="self">self</span>, FromForm, Error};
+
+<span class="attr">#[derive(FromForm)]
+</span><span class="kw">struct </span>CreditCard {
+    <span class="attr">#[field(validate = luhn(<span class="self">self</span>.cvv, <span class="kw-2">&amp;</span><span class="self">self</span>.expiration))]
+    </span>number: u64,
+    cvv: u16,
+    expiration: time::Date,
+}
+
+<span class="comment">// Implementation of Luhn validator.
+</span><span class="kw">fn </span>luhn&lt;<span class="lifetime">'v</span>&gt;(number: <span class="kw-2">&amp;</span>u64, cvv: u16, exp: <span class="kw-2">&amp;</span>time::Date) -&gt; form::Result&lt;<span class="lifetime">'v</span>, ()&gt; {
+    <span class="kw">if </span>!valid {
+        <span class="prelude-val">Err</span>(Error::validation(<span class="string">"invalid credit card number"</span>))<span class="question-mark">?</span>;
+    }
+
+    <span class="prelude-val">Ok</span>(())
+}</code></pre></div>
+</div></details><h2 id="reexports" class="section-header">Re-exports<a href="#reexports" class="anchor">§</a></h2><ul class="item-table"><li><div class="item-name" id="reexport.msg"><code>pub use msg_10669407088418120022::___internal_msg as msg;</code></div></li></ul><h2 id="traits" class="section-header">Traits<a href="#traits" class="anchor">§</a></h2><ul class="item-table"><li><div class="item-name"><a class="trait" href="trait.Contains.html" title="trait rocket::form::validate::Contains">Contains</a></div><div class="desc docblock-short">Types for values that contain items.</div></li><li><div class="item-name"><a class="trait" href="trait.Len.html" title="trait rocket::form::validate::Len">Len</a></div><div class="desc docblock-short">Types for values that have a length.</div></li></ul><h2 id="functions" class="section-header">Functions<a href="#functions" class="anchor">§</a></h2><ul class="item-table"><li><div class="item-name"><a class="fn" href="fn.contains.html" title="fn rocket::form::validate::contains">contains</a></div><div class="desc docblock-short">Contains validator: succeeds when a value contains <code>item</code>.</div></li><li><div class="item-name"><a class="fn" href="fn.dbg_contains.html" title="fn rocket::form::validate::dbg_contains">dbg_contains</a></div><div class="desc docblock-short">Debug contains validator: like <a href="fn.contains.html" title="fn rocket::form::validate::contains"><code>contains()</code></a> but mentions <code>item</code> in the
+error message.</div></li><li><div class="item-name"><a class="fn" href="fn.dbg_eq.html" title="fn rocket::form::validate::dbg_eq">dbg_eq</a></div><div class="desc docblock-short">Debug equality validator: like <a href="fn.eq.html" title="fn rocket::form::validate::eq"><code>eq()</code></a> but mentions <code>b</code> in the error
+message.</div></li><li><div class="item-name"><a class="fn" href="fn.dbg_omits.html" title="fn rocket::form::validate::dbg_omits">dbg_omits</a></div><div class="desc docblock-short">Debug omits validator: like <a href="fn.omits.html" title="fn rocket::form::validate::omits"><code>omits()</code></a> but mentions <code>item</code> in the error
+message.</div></li><li><div class="item-name"><a class="fn" href="fn.eq.html" title="fn rocket::form::validate::eq">eq</a></div><div class="desc docblock-short">Equality validator: succeeds exactly when <code>a</code> == <code>b</code>, using <a href="https://doc.rust-lang.org/1.77.0/core/cmp/trait.PartialEq.html" title="trait core::cmp::PartialEq"><code>PartialEq</code></a>.</div></li><li><div class="item-name"><a class="fn" href="fn.ext.html" title="fn rocket::form::validate::ext">ext</a></div><div class="desc docblock-short">File type validator: succeeds when a <a href="../../fs/enum.TempFile.html" title="enum rocket::fs::TempFile"><code>TempFile</code></a> has the Content-Type
+<code>content_type</code>.</div></li><li><div class="item-name"><a class="fn" href="fn.len.html" title="fn rocket::form::validate::len">len</a></div><div class="desc docblock-short">Length validator: succeeds when the length of a value is within a <code>range</code>.</div></li><li><div class="item-name"><a class="fn" href="fn.neq.html" title="fn rocket::form::validate::neq">neq</a></div><div class="desc docblock-short">Negative equality validator: succeeds exactly when <code>a</code> != <code>b</code>, using
+<a href="https://doc.rust-lang.org/1.77.0/core/cmp/trait.PartialEq.html" title="trait core::cmp::PartialEq"><code>PartialEq</code></a>.</div></li><li><div class="item-name"><a class="fn" href="fn.omits.html" title="fn rocket::form::validate::omits">omits</a></div><div class="desc docblock-short">Omits validator: succeeds when a value <em>does not</em> contains <code>item</code>.
+error message.</div></li><li><div class="item-name"><a class="fn" href="fn.one_of.html" title="fn rocket::form::validate::one_of">one_of</a></div><div class="desc docblock-short">Contains one of validator: succeeds when a value contains at least one item
+in an <code>items</code> iterator.</div></li><li><div class="item-name"><a class="fn" href="fn.range.html" title="fn rocket::form::validate::range">range</a></div><div class="desc docblock-short">Integer range validator: succeeds when an integer value is within a range.</div></li><li><div class="item-name"><a class="fn" href="fn.try_with.html" title="fn rocket::form::validate::try_with">try_with</a></div><div class="desc docblock-short"><em>Try</em> With validator: succeeds when an arbitrary function or closure does.</div></li><li><div class="item-name"><a class="fn" href="fn.with.html" title="fn rocket::form::validate::with">with</a></div><div class="desc docblock-short">With validator: succeeds when an arbitrary function or closure does.</div></li></ul></section></div></main></body></html>

@@ -1,0 +1,60 @@
+<!DOCTYPE html><html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1.0"><meta name="generator" content="rustdoc"><meta name="description" content="Success, error, and forward handling."><title>rocket::outcome - Rust</title><link rel="preload" as="font" type="font/woff2" crossorigin href="../../static.files/SourceSerif4-Regular-46f98efaafac5295.ttf.woff2"><link rel="preload" as="font" type="font/woff2" crossorigin href="../../static.files/FiraSans-Regular-018c141bf0843ffd.woff2"><link rel="preload" as="font" type="font/woff2" crossorigin href="../../static.files/FiraSans-Medium-8f9a781e4970d388.woff2"><link rel="preload" as="font" type="font/woff2" crossorigin href="../../static.files/SourceCodePro-Regular-562dcc5011b6de7d.ttf.woff2"><link rel="preload" as="font" type="font/woff2" crossorigin href="../../static.files/SourceCodePro-Semibold-d899c5a5c4aeb14a.ttf.woff2"><link rel="stylesheet" href="../../static.files/normalize-76eba96aa4d2e634.css"><link rel="stylesheet" href="../../static.files/rustdoc-5bc39a1768837dd0.css"><meta name="rustdoc-vars" data-root-path="../../" data-static-root-path="../../static.files/" data-current-crate="rocket" data-themes="" data-resource-suffix="" data-rustdoc-version="1.77.0 (aedd173a2 2024-03-17)" data-channel="1.77.0" data-search-js="search-dd67cee4cfa65049.js" data-settings-js="settings-4313503d2e1961c2.js" ><script src="../../static.files/storage-4c98445ec4002617.js"></script><script defer src="../sidebar-items.js"></script><script defer src="../../static.files/main-48f368f3872407c8.js"></script><noscript><link rel="stylesheet" href="../../static.files/noscript-04d5337699b92874.css"></noscript><link rel="icon" href="https://rocket.rs/images/favicon.ico"></head><body class="rustdoc mod"><!--[if lte IE 11]><div class="warning">This old browser is unsupported and will most likely display funky things.</div><![endif]--><nav class="mobile-topbar"><button class="sidebar-menu-toggle" title="show sidebar"></button><a class="logo-container" href="../../rocket/index.html"><img src="https://rocket.rs/images/logo-boxed.png" alt=""></a></nav><nav class="sidebar"><div class="sidebar-crate"><a class="logo-container" href="../../rocket/index.html"><img src="https://rocket.rs/images/logo-boxed.png" alt="logo"></a><h2><a href="../../rocket/index.html">rocket</a><span class="version">0.5.0</span></h2></div><h2 class="location"><a href="#">Module outcome</a></h2><div class="sidebar-elems"><section><ul class="block"><li><a href="#reexports">Re-exports</a></li><li><a href="#enums">Enums</a></li><li><a href="#traits">Traits</a></li></ul></section><h2><a href="../index.html">In crate rocket</a></h2></div></nav><div class="sidebar-resizer"></div>
+    <main><div class="width-limiter"><nav class="sub"><form class="search-form"><span></span><div id="sidebar-button" tabindex="-1"><a href="../../rocket/all.html" title="show sidebar"></a></div><input class="search-input" name="search" aria-label="Run search in the documentation" autocomplete="off" spellcheck="false" placeholder="Click or press ‘S’ to search, ‘?’ for more options…" type="search"><div id="help-button" tabindex="-1"><a href="../../help.html" title="help">?</a></div><div id="settings-menu" tabindex="-1"><a href="../../settings.html" title="settings"><img width="22" height="22" alt="Change settings" src="../../static.files/wheel-7b819b6101059cd0.svg"></a></div></form></nav><section id="main-content" class="content"><div class="main-heading"><h1>Module <a href="../index.html">rocket</a>::<wbr><a class="mod" href="#">outcome</a><button id="copy-path" title="Copy item path to clipboard"><img src="../../static.files/clipboard-7571035ce49a181d.svg" width="19" height="18" alt="Copy item path"></button></h1><span class="out-of-band"><a class="src" href="../../src/rocket/outcome.rs.html#1-867">source</a> · <button id="toggle-all-docs" title="collapse all docs">[<span>&#x2212;</span>]</button></span></div><details class="toggle top-doc" open><summary class="hideme"><span>Expand description</span></summary><div class="docblock"><p>Success, error, and forward handling.</p>
+<p>The <code>Outcome&lt;S, E, F&gt;</code> type is similar to the standard library’s <code>Result&lt;S, E&gt;</code> type. It is an enum with three variants, each containing a value:
+<code>Success(S)</code>, which represents a successful outcome, <code>Error(E)</code>, which
+represents an erroring outcome, and <code>Forward(F)</code>, which represents neither a
+success or error, but instead, indicates that processing could not be
+handled and should instead be <em>forwarded</em> to whatever can handle the
+processing next.</p>
+<p>The <code>Outcome</code> type is the return type of many of the core Rocket traits,
+including <a href="../request/trait.FromRequest.html" title="trait rocket::request::FromRequest"><code>FromRequest</code></a>, <a href="../data/trait.FromData.html" title="trait rocket::data::FromData"><code>FromData</code></a>
+<a href="../response/trait.Responder.html" title="trait rocket::response::Responder"><code>Responder</code></a>. It is also the return type of request handlers via the
+<a href="../response/struct.Response.html" title="struct rocket::response::Response"><code>Response</code></a> type.</p>
+<h2 id="success"><a class="doc-anchor" href="#success">§</a>Success</h2>
+<p>A successful <code>Outcome&lt;S, E, F&gt;</code>, <code>Success(S)</code>, is returned from functions
+that complete successfully. The meaning of a <code>Success</code> outcome depends on
+the context. For instance, the <code>Outcome</code> of the <code>from_data</code> method of the
+<a href="../data/trait.FromData.html" title="trait rocket::data::FromData"><code>FromData</code></a> trait will be matched against the type expected by
+the user. For example, consider the following handler:</p>
+
+<div class="example-wrap"><pre class="rust rust-example-rendered"><code><span class="attr">#[post(<span class="string">"/"</span>, data = <span class="string">"&lt;my_val&gt;"</span>)]
+</span><span class="kw">fn </span>hello(my_val: S) { <span class="comment">/* ... */  </span>}</code></pre></div>
+<p>The <a href="../data/trait.FromData.html" title="trait rocket::data::FromData"><code>FromData</code></a> implementation for the type <code>S</code> returns an <code>Outcome</code> with a
+<code>Success(S)</code>. If <code>from_data</code> returns a <code>Success</code>, the <code>Success</code> value will
+be unwrapped and the value will be used as the value of <code>my_val</code>.</p>
+<h2 id="error"><a class="doc-anchor" href="#error">§</a>Error</h2>
+<p>An error <code>Outcome&lt;S, E, F&gt;</code>, <code>Error(E)</code>, is returned when a function
+fails with some error and no processing can or should continue as a result.
+The meaning of an error depends on the context.</p>
+<p>In Rocket, an <code>Error</code> generally means that a request is taken out of normal
+processing. The request is then given to the catcher corresponding to some
+status code. Users can catch errors by requesting a type of <code>Result&lt;S, E&gt;</code>
+or <code>Option&lt;S&gt;</code> in request handlers. For example, if a user’s handler looks
+like:</p>
+
+<div class="example-wrap"><pre class="rust rust-example-rendered"><code><span class="attr">#[post(<span class="string">"/"</span>, data = <span class="string">"&lt;my_val&gt;"</span>)]
+</span><span class="kw">fn </span>hello(my_val: <span class="prelude-ty">Result</span>&lt;S, E&gt;) { <span class="comment">/* ... */ </span>}</code></pre></div>
+<p>The <a href="../data/trait.FromData.html" title="trait rocket::data::FromData"><code>FromData</code></a> implementation for the type <code>S</code> returns an <code>Outcome</code> with a
+<code>Success(S)</code> and <code>Error(E)</code>. If <code>from_data</code> returns an <code>Error</code>, the <code>Error</code>
+value will be unwrapped and the value will be used as the <code>Err</code> value of
+<code>my_val</code> while a <code>Success</code> will be unwrapped and used the <code>Ok</code> value.</p>
+<h2 id="forward"><a class="doc-anchor" href="#forward">§</a>Forward</h2>
+<p>A forward <code>Outcome&lt;S, E, F&gt;</code>, <code>Forward(F)</code>, is returned when a function
+wants to indicate that the requested processing should be <em>forwarded</em> to the
+next available processor. Again, the exact meaning depends on the context.</p>
+<p>In Rocket, a <code>Forward</code> generally means that a request is forwarded to the
+next available request handler. For example, consider the following request
+handler:</p>
+
+<div class="example-wrap"><pre class="rust rust-example-rendered"><code><span class="attr">#[post(<span class="string">"/"</span>, data = <span class="string">"&lt;my_val&gt;"</span>)]
+</span><span class="kw">fn </span>hello(my_val: S) { <span class="comment">/* ... */ </span>}</code></pre></div>
+<p>The <a href="../data/trait.FromData.html" title="trait rocket::data::FromData"><code>FromData</code></a> implementation for the type <code>S</code> returns an <code>Outcome</code> with a
+<code>Success(S)</code>, <code>Error(E)</code>, and <code>Forward(F)</code>. If the <code>Outcome</code> is a
+<code>Forward</code>, the <code>hello</code> handler isn’t called. Instead, the incoming request
+is forwarded, or passed on to, the next matching route, if any. Ultimately,
+if there are no non-forwarding routes, forwarded requests are handled by the
+404 catcher. Similar to <code>Error</code>s, users can catch <code>Forward</code>s by requesting
+a type of <code>Option&lt;S&gt;</code>. If an <code>Outcome</code> is a <code>Forward</code>, the <code>Option</code> will be
+<code>None</code>.</p>
+</div></details><h2 id="reexports" class="section-header">Re-exports<a href="#reexports" class="anchor">§</a></h2><ul class="item-table"><li><div class="item-name" id="reexport.try_outcome"><code>pub use try_outcome_5420308106142756157::___internal_try_outcome as try_outcome;</code></div></li></ul><h2 id="enums" class="section-header">Enums<a href="#enums" class="anchor">§</a></h2><ul class="item-table"><li><div class="item-name"><a class="enum" href="enum.Outcome.html" title="enum rocket::outcome::Outcome">Outcome</a></div><div class="desc docblock-short">An enum representing success (<code>Success</code>), error (<code>Error</code>), or forwarding
+(<code>Forward</code>).</div></li></ul><h2 id="traits" class="section-header">Traits<a href="#traits" class="anchor">§</a></h2><ul class="item-table"><li><div class="item-name"><a class="trait" href="trait.IntoOutcome.html" title="trait rocket::outcome::IntoOutcome">IntoOutcome</a></div><div class="desc docblock-short">Conversion trait from some type into an Outcome type.</div></li></ul></section></div></main></body></html>

@@ -1,0 +1,73 @@
+<!DOCTYPE html><html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1.0"><meta name="generator" content="rustdoc"><meta name="description" content="A simple, complete, `const`-everything, saturating, human-friendly, `#![no_std]` library for byte units."><title>ubyte - Rust</title><link rel="preload" as="font" type="font/woff2" crossorigin href="../static.files/SourceSerif4-Regular-46f98efaafac5295.ttf.woff2"><link rel="preload" as="font" type="font/woff2" crossorigin href="../static.files/FiraSans-Regular-018c141bf0843ffd.woff2"><link rel="preload" as="font" type="font/woff2" crossorigin href="../static.files/FiraSans-Medium-8f9a781e4970d388.woff2"><link rel="preload" as="font" type="font/woff2" crossorigin href="../static.files/SourceCodePro-Regular-562dcc5011b6de7d.ttf.woff2"><link rel="preload" as="font" type="font/woff2" crossorigin href="../static.files/SourceCodePro-Semibold-d899c5a5c4aeb14a.ttf.woff2"><link rel="stylesheet" href="../static.files/normalize-76eba96aa4d2e634.css"><link rel="stylesheet" href="../static.files/rustdoc-5bc39a1768837dd0.css"><meta name="rustdoc-vars" data-root-path="../" data-static-root-path="../static.files/" data-current-crate="ubyte" data-themes="" data-resource-suffix="" data-rustdoc-version="1.77.0 (aedd173a2 2024-03-17)" data-channel="1.77.0" data-search-js="search-dd67cee4cfa65049.js" data-settings-js="settings-4313503d2e1961c2.js" ><script src="../static.files/storage-4c98445ec4002617.js"></script><script defer src="../crates.js"></script><script defer src="../static.files/main-48f368f3872407c8.js"></script><noscript><link rel="stylesheet" href="../static.files/noscript-04d5337699b92874.css"></noscript><link rel="alternate icon" type="image/png" href="../static.files/favicon-16x16-8b506e7a72182f1c.png"><link rel="alternate icon" type="image/png" href="../static.files/favicon-32x32-422f7d1d52889060.png"><link rel="icon" type="image/svg+xml" href="../static.files/favicon-2c020d218678b618.svg"></head><body class="rustdoc mod crate"><!--[if lte IE 11]><div class="warning">This old browser is unsupported and will most likely display funky things.</div><![endif]--><nav class="mobile-topbar"><button class="sidebar-menu-toggle" title="show sidebar"></button></nav><nav class="sidebar"><div class="sidebar-crate"><h2><a href="../ubyte/index.html">ubyte</a><span class="version">0.10.4</span></h2></div><div class="sidebar-elems"><ul class="block">
+            <li><a id="all-types" href="all.html">All Items</a></li></ul><section><ul class="block"><li><a href="#structs">Structs</a></li><li><a href="#enums">Enums</a></li><li><a href="#traits">Traits</a></li></ul></section></div></nav><div class="sidebar-resizer"></div>
+    <main><div class="width-limiter"><nav class="sub"><form class="search-form"><span></span><div id="sidebar-button" tabindex="-1"><a href="../ubyte/all.html" title="show sidebar"></a></div><input class="search-input" name="search" aria-label="Run search in the documentation" autocomplete="off" spellcheck="false" placeholder="Click or press ‘S’ to search, ‘?’ for more options…" type="search"><div id="help-button" tabindex="-1"><a href="../help.html" title="help">?</a></div><div id="settings-menu" tabindex="-1"><a href="../settings.html" title="settings"><img width="22" height="22" alt="Change settings" src="../static.files/wheel-7b819b6101059cd0.svg"></a></div></form></nav><section id="main-content" class="content"><div class="main-heading"><h1>Crate <a class="mod" href="#">ubyte</a><button id="copy-path" title="Copy item path to clipboard"><img src="../static.files/clipboard-7571035ce49a181d.svg" width="19" height="18" alt="Copy item path"></button></h1><span class="out-of-band"><a class="src" href="../src/ubyte/lib.rs.html#1-77">source</a> · <button id="toggle-all-docs" title="collapse all docs">[<span>&#x2212;</span>]</button></span></div><details class="toggle top-doc" open><summary class="hideme"><span>Expand description</span></summary><div class="docblock"><p>A simple, complete, <code>const</code>-everything, saturating, human-friendly,
+<code>#![no_std]</code> library for byte units.</p>
+
+<div class="example-wrap"><pre class="rust rust-example-rendered"><code><span class="kw">use </span>ubyte::{ByteUnit, ToByteUnit};
+
+<span class="comment">// Constructors and associated units for all SI units up to exbibyte.
+</span><span class="kw">let </span>half_mb = <span class="number">500</span>.kilobytes();
+<span class="kw">let </span>half_mb = ByteUnit::Kilobyte(<span class="number">500</span>);
+<span class="kw">let </span>half_mb = <span class="number">500 </span>* ByteUnit::kB;
+
+<span class="comment">// All arithmetic operations and conversions saturate.
+</span><span class="kw">let </span>exbibyte_too_large_a = <span class="number">1024 </span>* ByteUnit::EiB;
+<span class="kw">let </span>exbibyte_too_large_b = ByteUnit::Exbibyte(<span class="number">1024</span>);
+<span class="kw">let </span>exbibyte_too_large_c = <span class="number">1024</span>.exbibytes();
+<span class="macro">assert_eq!</span>(exbibyte_too_large_a, ByteUnit::max_value());
+<span class="macro">assert_eq!</span>(exbibyte_too_large_b, ByteUnit::max_value());
+<span class="macro">assert_eq!</span>(exbibyte_too_large_c, ByteUnit::max_value());
+
+<span class="comment">// Printing is human-friendly and customizeable.
+</span><span class="macro">assert_eq!</span>(<span class="number">323</span>.kilobytes().to_string(), <span class="string">"323kB"</span>);
+<span class="macro">assert_eq!</span>(<span class="number">3</span>.mebibytes().to_string(), <span class="string">"3MiB"</span>);
+<span class="macro">assert_eq!</span>((<span class="number">7</span>.gigabytes() + <span class="number">58</span>.mebibytes() + <span class="number">3</span>.kilobytes()).to_string(), <span class="string">"7.06GB"</span>);
+<span class="macro">assert_eq!</span>(<span class="macro">format!</span>(<span class="string">"{:.0}"</span>, <span class="number">7</span>.gibibytes() + <span class="number">920</span>.mebibytes()), <span class="string">"8GiB"</span>);
+<span class="macro">assert_eq!</span>(<span class="macro">format!</span>(<span class="string">"{:.3}"</span>, <span class="number">7</span>.gibibytes() + <span class="number">920</span>.mebibytes()), <span class="string">"7.898GiB"</span>);
+<span class="macro">assert_eq!</span>(<span class="macro">format!</span>(<span class="string">"{:04.2}"</span>, <span class="number">999</span>.kilobytes() + <span class="number">990</span>.bytes()), <span class="string">"0976.55KiB"</span>);
+<span class="macro">assert_eq!</span>(<span class="macro">format!</span>(<span class="string">"{:02.0}"</span>, <span class="number">999</span>.kilobytes() + <span class="number">990</span>.bytes()), <span class="string">"01MB"</span>);
+
+<span class="comment">// Parsing is intuitive. Explicit `ByteUnit` is typically unnecessary.
+</span><span class="macro">assert_eq!</span>(<span class="string">"10 KiB"</span>.parse::&lt;ByteUnit&gt;().unwrap(), <span class="number">10</span>.kibibytes());
+<span class="macro">assert_eq!</span>(<span class="string">"10 kb"</span>.parse::&lt;ByteUnit&gt;().unwrap(), <span class="number">10</span>.kilobytes());
+<span class="macro">assert_eq!</span>(<span class="string">"512Kb"</span>.parse::&lt;ByteUnit&gt;().unwrap(), <span class="number">512</span>.kilobytes());
+<span class="macro">assert_eq!</span>(<span class="string">"99kb"</span>.parse::&lt;ByteUnit&gt;().unwrap(), <span class="number">99</span>.kilobytes());
+<span class="macro">assert_eq!</span>(<span class="string">"1 MiB"</span>.parse::&lt;ByteUnit&gt;().unwrap(), <span class="number">1</span>.mebibytes());
+<span class="macro">assert_eq!</span>(<span class="string">"1.5 MiB"</span>.parse::&lt;ByteUnit&gt;().unwrap(), <span class="number">1</span>.mebibytes() + <span class="number">512</span>.kibibytes());
+<span class="macro">assert_eq!</span>(<span class="string">"0.2MB"</span>.parse::&lt;ByteUnit&gt;().unwrap(), <span class="number">200</span>.kilobytes());
+<span class="macro">assert_eq!</span>(<span class="string">"7.25 gb"</span>.parse::&lt;ByteUnit&gt;().unwrap(), <span class="number">7</span>.gigabytes() + <span class="number">250</span>.megabytes());</code></pre></div>
+<h2 id="overview"><a class="doc-anchor" href="#overview">§</a>Overview</h2>
+<ul>
+<li>
+<p><a href="struct.ByteUnit.html" title="struct ubyte::ByteUnit"><code>ByteUnit</code></a> constructors – <a href="struct.ByteUnit.html#method.Byte" title="associated function ubyte::ByteUnit::Byte"><code>ByteUnit::Byte</code></a> and friends – for all SI
+units of bytes up to the exbibyte are provided; all constructors are <code>const</code>
+and saturating. Associated constants – <a href="struct.ByteUnit.html#associatedconstant.B" title="associated constant ubyte::ByteUnit::B"><code>ByteUnit::B</code></a> and friends – for
+<code>1</code>-valued units are provided. Saturating arithmetic operations between
+<code>ByteUnit</code> and all integers types are implemented. <code>From&lt;{integer}&gt; for ByteUnit</code> for all integer types is implemented. <code>From&lt;ByteUnit&gt; for {u64, u128}&gt;</code> is implemented.</p>
+</li>
+<li>
+<p><a href="trait.ToByteUnit.html" title="trait ubyte::ToByteUnit"><code>ToByteUnit</code></a> provides human-friendly methods on all integer types for
+converting into a <code>ByteUnit</code>: <a href="trait.ToByteUnit.html#method.kilobytes" title="method ubyte::ToByteUnit::kilobytes"><code>512.kilobytes()</code></a>.</p>
+</li>
+<li>
+<p>The <a href="struct.ByteUnit.html#impl-Display"><code>Display</code></a> implementation displays
+<code>ByteUnit</code>s in a human-friendly format. For truly custom printing,
+<a href="struct.ByteUnit.html#method.repr" title="method ubyte::ByteUnit::repr"><code>ByteUnit::repr()</code></a> splits a value into its minimal components.</p>
+</li>
+<li>
+<p>The <a href="struct.ByteUnit.html#impl-FromStr"><code>FromStr</code></a> implementation parses
+byte units in a case-free manner: <code>1B</code> or <code>1b</code> or <code>1 b</code> =&gt; <code>1.bytes()</code>.</p>
+</li>
+<li>
+<p>With the <code>serde</code> feaure enabled (disabled by default), <code>ByteUnit</code>
+implements <a href="struct.ByteUnit.html#impl-Deserialize%3C%27de%3E"><code>Deserialize</code></a>
+from strings and all integer types as well as
+<a href="struct.ByteUnit.html#impl-Serialize"><code>Serialize</code></a> into a <code>u64</code>.</p>
+</li>
+<li>
+<p>All operations – constructors, arithmetic – saturate. Overflow,
+underflow, divide-by-zero, and mod-by-zero are impossible.</p>
+</li>
+</ul>
+</div></details><h2 id="structs" class="section-header">Structs<a href="#structs" class="anchor">§</a></h2><ul class="item-table"><li><div class="item-name"><a class="struct" href="struct.ByteUnit.html" title="struct ubyte::ByteUnit">ByteUnit</a></div><div class="desc docblock-short">A unit of bytes with saturating <code>const</code> constructors and arithmetic.</div></li></ul><h2 id="enums" class="section-header">Enums<a href="#enums" class="anchor">§</a></h2><ul class="item-table"><li><div class="item-name"><a class="enum" href="enum.Error.html" title="enum ubyte::Error">Error</a></div><div class="desc docblock-short">Parsing error, as returned by
+<a href="struct.ByteUnit.html#impl-FromStr"><code>ByteUnit::from_str()</code></a>.</div></li></ul><h2 id="traits" class="section-header">Traits<a href="#traits" class="anchor">§</a></h2><ul class="item-table"><li><div class="item-name"><a class="trait" href="trait.ToByteUnit.html" title="trait ubyte::ToByteUnit">ToByteUnit</a></div><div class="desc docblock-short">Extension trait for conversion from integer types to <a href="struct.ByteUnit.html" title="struct ubyte::ByteUnit"><code>ByteUnit</code></a>.</div></li></ul></section></div></main></body></html>

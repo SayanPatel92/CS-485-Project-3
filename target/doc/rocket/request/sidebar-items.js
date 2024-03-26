@@ -1,0 +1,1 @@
+window.SIDEBAR_ITEMS = {"struct":["Request"],"trait":["FromParam","FromRequest","FromSegments"],"type":["FlashMessage","Outcome"]};

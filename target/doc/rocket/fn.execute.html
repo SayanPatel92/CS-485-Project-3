@@ -1,0 +1,60 @@
+<!DOCTYPE html><html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1.0"><meta name="generator" content="rustdoc"><meta name="description" content="Executes a `future` to completion on a new tokio-based Rocket async runtime."><title>execute in rocket - Rust</title><link rel="preload" as="font" type="font/woff2" crossorigin href="../static.files/SourceSerif4-Regular-46f98efaafac5295.ttf.woff2"><link rel="preload" as="font" type="font/woff2" crossorigin href="../static.files/FiraSans-Regular-018c141bf0843ffd.woff2"><link rel="preload" as="font" type="font/woff2" crossorigin href="../static.files/FiraSans-Medium-8f9a781e4970d388.woff2"><link rel="preload" as="font" type="font/woff2" crossorigin href="../static.files/SourceCodePro-Regular-562dcc5011b6de7d.ttf.woff2"><link rel="preload" as="font" type="font/woff2" crossorigin href="../static.files/SourceCodePro-Semibold-d899c5a5c4aeb14a.ttf.woff2"><link rel="stylesheet" href="../static.files/normalize-76eba96aa4d2e634.css"><link rel="stylesheet" href="../static.files/rustdoc-5bc39a1768837dd0.css"><meta name="rustdoc-vars" data-root-path="../" data-static-root-path="../static.files/" data-current-crate="rocket" data-themes="" data-resource-suffix="" data-rustdoc-version="1.77.0 (aedd173a2 2024-03-17)" data-channel="1.77.0" data-search-js="search-dd67cee4cfa65049.js" data-settings-js="settings-4313503d2e1961c2.js" ><script src="../static.files/storage-4c98445ec4002617.js"></script><script defer src="sidebar-items.js"></script><script defer src="../static.files/main-48f368f3872407c8.js"></script><noscript><link rel="stylesheet" href="../static.files/noscript-04d5337699b92874.css"></noscript><link rel="icon" href="https://rocket.rs/images/favicon.ico"></head><body class="rustdoc fn"><!--[if lte IE 11]><div class="warning">This old browser is unsupported and will most likely display funky things.</div><![endif]--><nav class="mobile-topbar"><button class="sidebar-menu-toggle" title="show sidebar"></button><a class="logo-container" href="../rocket/index.html"><img src="https://rocket.rs/images/logo-boxed.png" alt=""></a></nav><nav class="sidebar"><div class="sidebar-crate"><a class="logo-container" href="../rocket/index.html"><img src="https://rocket.rs/images/logo-boxed.png" alt="logo"></a><h2><a href="../rocket/index.html">rocket</a><span class="version">0.5.0</span></h2></div><div class="sidebar-elems"></div></nav><div class="sidebar-resizer"></div>
+    <main><div class="width-limiter"><nav class="sub"><form class="search-form"><span></span><div id="sidebar-button" tabindex="-1"><a href="../rocket/all.html" title="show sidebar"></a></div><input class="search-input" name="search" aria-label="Run search in the documentation" autocomplete="off" spellcheck="false" placeholder="Click or press ‘S’ to search, ‘?’ for more options…" type="search"><div id="help-button" tabindex="-1"><a href="../help.html" title="help">?</a></div><div id="settings-menu" tabindex="-1"><a href="../settings.html" title="settings"><img width="22" height="22" alt="Change settings" src="../static.files/wheel-7b819b6101059cd0.svg"></a></div></form></nav><section id="main-content" class="content"><div class="main-heading"><h1>Function <a href="index.html">rocket</a>::<wbr><a class="fn" href="#">execute</a><button id="copy-path" title="Copy item path to clipboard"><img src="../static.files/clipboard-7571035ce49a181d.svg" width="19" height="18" alt="Copy item path"></button></h1><span class="out-of-band"><a class="src" href="../src/rocket/lib.rs.html#357-361">source</a> · <button id="toggle-all-docs" title="collapse all docs">[<span>&#x2212;</span>]</button></span></div><pre class="rust item-decl"><code>pub fn execute&lt;R, F&gt;(future: F) -&gt; R<div class="where">where
+    F: <a class="trait" href="https://doc.rust-lang.org/1.77.0/core/future/future/trait.Future.html" title="trait core::future::future::Future">Future</a>&lt;Output = R&gt; + <a class="trait" href="https://doc.rust-lang.org/1.77.0/core/marker/trait.Send.html" title="trait core::marker::Send">Send</a>,</div></code></pre><details class="toggle top-doc" open><summary class="hideme"><span>Expand description</span></summary><div class="docblock"><p>Executes a <code>future</code> to completion on a new tokio-based Rocket async runtime.</p>
+<p>The runtime is terminated on shutdown, and the future’s resolved value is
+returned.</p>
+<h2 id="considerations"><a class="doc-anchor" href="#considerations">§</a>Considerations</h2>
+<p>This function is a low-level mechanism intended to be used to execute the
+future returned by <a href="struct.Rocket.html#method.launch" title="method rocket::Rocket::launch"><code>Rocket::launch()</code></a> in a self-contained async runtime
+designed for Rocket. It runs futures in exactly the same manner as
+<a href="attr.launch.html" title="attr rocket::launch"><code>#[launch]</code></a> and <a href="attr.main.html" title="attr rocket::main"><code>#[main]</code></a> do and is thus
+<em>never</em> the preferred mechanism for running a Rocket application. <em>Always</em>
+prefer to use the <a href="attr.launch.html" title="attr rocket::launch"><code>#[launch]</code></a> or <a href="attr.main.html" title="attr rocket::main"><code>#[main]</code></a>
+attributes. For example <a href="attr.main.html" title="attr rocket::main"><code>#[main]</code></a> can be used even when
+Rocket is just a small part of a bigger application:</p>
+
+<div class="example-wrap"><pre class="rust rust-example-rendered"><code><span class="attr">#[rocket::main]
+</span><span class="kw">async fn </span>main() {
+    <span class="kw">let </span>rocket = rocket::build();
+    <span class="kw">if </span>should_start_server_in_foreground {
+        rocket::build().launch().<span class="kw">await</span>;
+    } <span class="kw">else if </span>should_start_server_in_background {
+        rocket::tokio::spawn(rocket.launch());
+    } <span class="kw">else </span>{
+        <span class="comment">// do something else
+    </span>}
+}</code></pre></div>
+<p>See <a href="struct.Rocket.html#launching" title="struct rocket::Rocket">Rocket</a> for more on using these attributes.</p>
+<h2 id="example"><a class="doc-anchor" href="#example">§</a>Example</h2>
+<p>Build an instance of Rocket, launch it, and wait for shutdown:</p>
+
+<div class="example-wrap"><pre class="rust rust-example-rendered"><code><span class="kw">use </span>rocket::fairing::AdHoc;
+
+<span class="kw">let </span>rocket = rocket::build()
+    .attach(AdHoc::on_liftoff(<span class="string">"Liftoff Printer"</span>, |<span class="kw">_</span>| Box::pin(<span class="kw">async move </span>{
+        <span class="macro">println!</span>(<span class="string">"Stalling liftoff for a second..."</span>);
+        rocket::tokio::time::sleep(std::time::Duration::from_secs(<span class="number">1</span>)).<span class="kw">await</span>;
+        <span class="macro">println!</span>(<span class="string">"And we're off!"</span>);
+    })));
+
+rocket::execute(rocket.launch());</code></pre></div>
+<p>Launch a pre-built instance of Rocket and wait for it to shutdown:</p>
+
+<div class="example-wrap"><pre class="rust rust-example-rendered"><code><span class="kw">use </span>rocket::{Rocket, Ignite, Phase, Error};
+
+<span class="kw">fn </span>launch&lt;P: Phase&gt;(rocket: Rocket&lt;P&gt;) -&gt; <span class="prelude-ty">Result</span>&lt;Rocket&lt;Ignite&gt;, Error&gt; {
+    rocket::execute(rocket.launch())
+}</code></pre></div>
+<p>Do async work to build an instance of Rocket, launch, and wait for shutdown:</p>
+
+<div class="example-wrap"><pre class="rust rust-example-rendered"><code><span class="kw">use </span>rocket::fairing::AdHoc;
+
+<span class="comment">// This line can also be inside of the `async` block.
+</span><span class="kw">let </span>rocket = rocket::build();
+
+rocket::execute(<span class="kw">async move </span>{
+    <span class="kw">let </span>rocket = rocket.ignite().<span class="kw">await</span><span class="question-mark">?</span>;
+    <span class="kw">let </span>config = rocket.config();
+    rocket.launch().<span class="kw">await
+</span>});</code></pre></div>
+</div></details></section></div></main></body></html>

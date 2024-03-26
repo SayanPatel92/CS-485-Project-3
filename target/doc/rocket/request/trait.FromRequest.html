@@ -1,0 +1,314 @@
+<!DOCTYPE html><html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1.0"><meta name="generator" content="rustdoc"><meta name="description" content="Trait implemented by request guards to derive a value from incoming requests."><title>FromRequest in rocket::request - Rust</title><link rel="preload" as="font" type="font/woff2" crossorigin href="../../static.files/SourceSerif4-Regular-46f98efaafac5295.ttf.woff2"><link rel="preload" as="font" type="font/woff2" crossorigin href="../../static.files/FiraSans-Regular-018c141bf0843ffd.woff2"><link rel="preload" as="font" type="font/woff2" crossorigin href="../../static.files/FiraSans-Medium-8f9a781e4970d388.woff2"><link rel="preload" as="font" type="font/woff2" crossorigin href="../../static.files/SourceCodePro-Regular-562dcc5011b6de7d.ttf.woff2"><link rel="preload" as="font" type="font/woff2" crossorigin href="../../static.files/SourceCodePro-Semibold-d899c5a5c4aeb14a.ttf.woff2"><link rel="stylesheet" href="../../static.files/normalize-76eba96aa4d2e634.css"><link rel="stylesheet" href="../../static.files/rustdoc-5bc39a1768837dd0.css"><meta name="rustdoc-vars" data-root-path="../../" data-static-root-path="../../static.files/" data-current-crate="rocket" data-themes="" data-resource-suffix="" data-rustdoc-version="1.77.0 (aedd173a2 2024-03-17)" data-channel="1.77.0" data-search-js="search-dd67cee4cfa65049.js" data-settings-js="settings-4313503d2e1961c2.js" ><script src="../../static.files/storage-4c98445ec4002617.js"></script><script defer src="sidebar-items.js"></script><script defer src="../../static.files/main-48f368f3872407c8.js"></script><noscript><link rel="stylesheet" href="../../static.files/noscript-04d5337699b92874.css"></noscript><link rel="icon" href="https://rocket.rs/images/favicon.ico"></head><body class="rustdoc trait"><!--[if lte IE 11]><div class="warning">This old browser is unsupported and will most likely display funky things.</div><![endif]--><nav class="mobile-topbar"><button class="sidebar-menu-toggle" title="show sidebar"></button><a class="logo-container" href="../../rocket/index.html"><img src="https://rocket.rs/images/logo-boxed.png" alt=""></a></nav><nav class="sidebar"><div class="sidebar-crate"><a class="logo-container" href="../../rocket/index.html"><img src="https://rocket.rs/images/logo-boxed.png" alt="logo"></a><h2><a href="../../rocket/index.html">rocket</a><span class="version">0.5.0</span></h2></div><h2 class="location"><a href="#">FromRequest</a></h2><div class="sidebar-elems"><section><h3><a href="#required-associated-types">Required Associated Types</a></h3><ul class="block"><li><a href="#associatedtype.Error">Error</a></li></ul><h3><a href="#required-methods">Required Methods</a></h3><ul class="block"><li><a href="#tymethod.from_request">from_request</a></li></ul><h3><a href="#foreign-impls">Implementations on Foreign Types</a></h3><ul class="block"><li><a href="#impl-FromRequest%3C'r%3E-for-IpAddr">IpAddr</a></li><li><a href="#impl-FromRequest%3C'r%3E-for-Option%3CT%3E">Option&lt;T&gt;</a></li><li><a href="#impl-FromRequest%3C'r%3E-for-Result%3CT,+%3CT+as+FromRequest%3C'r%3E%3E::Error%3E">Result&lt;T, T::Error&gt;</a></li><li><a href="#impl-FromRequest%3C'r%3E-for-SocketAddr">SocketAddr</a></li></ul><h3><a href="#object-safety">Object Safety</a></h3><h3><a href="#implementors">Implementors</a></h3></section><h2><a href="index.html">In rocket::request</a></h2></div></nav><div class="sidebar-resizer"></div>
+    <main><div class="width-limiter"><nav class="sub"><form class="search-form"><span></span><div id="sidebar-button" tabindex="-1"><a href="../../rocket/all.html" title="show sidebar"></a></div><input class="search-input" name="search" aria-label="Run search in the documentation" autocomplete="off" spellcheck="false" placeholder="Click or press ‘S’ to search, ‘?’ for more options…" type="search"><div id="help-button" tabindex="-1"><a href="../../help.html" title="help">?</a></div><div id="settings-menu" tabindex="-1"><a href="../../settings.html" title="settings"><img width="22" height="22" alt="Change settings" src="../../static.files/wheel-7b819b6101059cd0.svg"></a></div></form></nav><section id="main-content" class="content"><div class="main-heading"><h1>Trait <a href="../index.html">rocket</a>::<wbr><a href="index.html">request</a>::<wbr><a class="trait" href="#">FromRequest</a><button id="copy-path" title="Copy item path to clipboard"><img src="../../static.files/clipboard-7571035ce49a181d.svg" width="19" height="18" alt="Copy item path"></button></h1><span class="out-of-band"><a class="src" href="../../src/rocket/request/from_request.rs.html#373-384">source</a> · <button id="toggle-all-docs" title="collapse all docs">[<span>&#x2212;</span>]</button></span></div><pre class="rust item-decl"><code>pub trait FromRequest&lt;'r&gt;: <a class="trait" href="https://doc.rust-lang.org/1.77.0/core/marker/trait.Sized.html" title="trait core::marker::Sized">Sized</a> {
+    type <a href="#associatedtype.Error" class="associatedtype">Error</a>: <a class="trait" href="https://doc.rust-lang.org/1.77.0/core/fmt/trait.Debug.html" title="trait core::fmt::Debug">Debug</a>;
+
+    // Required method
+    fn <a href="#tymethod.from_request" class="fn">from_request</a>&lt;'life0, 'async_trait&gt;(
+        request: &amp;'r <a class="struct" href="struct.Request.html" title="struct rocket::request::Request">Request</a>&lt;'life0&gt;
+    ) -&gt; <a class="struct" href="https://doc.rust-lang.org/1.77.0/core/pin/struct.Pin.html" title="struct core::pin::Pin">Pin</a>&lt;<a class="struct" href="https://doc.rust-lang.org/1.77.0/alloc/boxed/struct.Box.html" title="struct alloc::boxed::Box">Box</a>&lt;dyn <a class="trait" href="https://doc.rust-lang.org/1.77.0/core/future/future/trait.Future.html" title="trait core::future::future::Future">Future</a>&lt;Output = <a class="type" href="type.Outcome.html" title="type rocket::request::Outcome">Outcome</a>&lt;Self, Self::<a class="associatedtype" href="trait.FromRequest.html#associatedtype.Error" title="type rocket::request::FromRequest::Error">Error</a>&gt;&gt; + <a class="trait" href="https://doc.rust-lang.org/1.77.0/core/marker/trait.Send.html" title="trait core::marker::Send">Send</a> + 'async_trait&gt;&gt;
+       <span class="where">where Self: 'async_trait,
+             'r: 'async_trait,
+             'life0: 'async_trait</span>;
+}</code></pre><details class="toggle top-doc" open><summary class="hideme"><span>Expand description</span></summary><div class="docblock"><p>Trait implemented by request guards to derive a value from incoming
+requests.</p>
+<h2 id="request-guards"><a class="doc-anchor" href="#request-guards">§</a>Request Guards</h2>
+<p>A request guard is a type that represents an arbitrary validation policy.
+The validation policy is implemented through <code>FromRequest</code>. In other words,
+every type that implements <code>FromRequest</code> is a request guard.</p>
+<p>Request guards appear as inputs to handlers. An arbitrary number of request
+guards can appear as arguments in a route handler. Rocket will automatically
+invoke the <code>FromRequest</code> implementation for request guards before calling
+the handler. Rocket only dispatches requests to a handler when all of its
+guards pass.</p>
+<h3 id="async-trait"><a class="doc-anchor" href="#async-trait">§</a>Async Trait</h3>
+<p><a href="trait.FromRequest.html" title="trait rocket::request::FromRequest"><code>FromRequest</code></a> is an <em>async</em> trait. Implementations of <code>FromRequest</code> must
+be decorated with an attribute of <code>#[rocket::async_trait]</code>:</p>
+
+<div class="example-wrap"><pre class="rust rust-example-rendered"><code><span class="kw">use </span>rocket::request::{<span class="self">self</span>, Request, FromRequest};
+
+<span class="attr">#[rocket::async_trait]
+</span><span class="kw">impl</span>&lt;<span class="lifetime">'r</span>&gt; FromRequest&lt;<span class="lifetime">'r</span>&gt; <span class="kw">for </span>MyType {
+    <span class="kw">type </span>Error = MyError;
+
+    <span class="kw">async fn </span>from_request(req: <span class="kw-2">&amp;</span><span class="lifetime">'r </span>Request&lt;<span class="lifetime">'_</span>&gt;) -&gt; request::Outcome&lt;<span class="self">Self</span>, <span class="self">Self</span>::Error&gt; {
+        <span class="comment">/* .. */
+    </span>}
+}</code></pre></div>
+<h3 id="example"><a class="doc-anchor" href="#example">§</a>Example</h3>
+<p>The following dummy handler makes use of three request guards, <code>A</code>, <code>B</code>, and
+<code>C</code>. An input type can be identified as a request guard if it is not named
+in the route attribute. This is why, for instance, <code>param</code> is not a request
+guard.</p>
+
+<div class="example-wrap"><pre class="rust rust-example-rendered"><code><span class="attr">#[get(<span class="string">"/&lt;param&gt;"</span>)]
+</span><span class="kw">fn </span>index(param: isize, a: A, b: B, c: C) -&gt; T { <span class="comment">/* ... */ </span>}</code></pre></div>
+<p>Request guards always fire in left-to-right declaration order. In the
+example above, the order is <code>a</code> followed by <code>b</code> followed by <code>c</code>. Errors are
+short-circuiting; if one guard errors, the remaining are not attempted.</p>
+<h2 id="outcomes"><a class="doc-anchor" href="#outcomes">§</a>Outcomes</h2>
+<p>The returned <a href="type.Outcome.html" title="type rocket::request::Outcome"><code>Outcome</code></a> of a <code>from_request</code> call determines how the
+incoming request will be processed.</p>
+<ul>
+<li>
+<p><strong>Success</strong>(S)</p>
+<p>If the <code>Outcome</code> is <a href="../outcome/enum.Outcome.html#variant.Success" title="variant rocket::outcome::Outcome::Success"><code>Success</code></a>, then the <code>Success</code> value will be used as
+the value for the corresponding parameter.  As long as all other guards
+succeed, the request will be handled.</p>
+</li>
+<li>
+<p><strong>Error</strong>(Status, E)</p>
+<p>If the <code>Outcome</code> is <a href="../outcome/enum.Outcome.html#variant.Error" title="variant rocket::outcome::Outcome::Error"><code>Error</code></a>, the request will fail with the given
+status code and error. The designated error <a href="../catcher/struct.Catcher.html" title="struct rocket::catcher::Catcher"><code>Catcher</code></a>
+will be used to respond to the request. Note that users can request types
+of <code>Result&lt;S, E&gt;</code> and <code>Option&lt;S&gt;</code> to catch <code>Error</code>s and retrieve the
+error value.</p>
+</li>
+<li>
+<p><strong>Forward</strong>(Status)</p>
+<p>If the <code>Outcome</code> is <a href="../outcome/enum.Outcome.html#variant.Forward" title="variant rocket::outcome::Outcome::Forward"><code>Forward</code></a>, the request will be forwarded to the next
+matching route until either one succeeds or there are no further matching
+routes to attempt. In the latter case, the request will be sent to the
+<a href="../catcher/struct.Catcher.html" title="struct rocket::catcher::Catcher"><code>Catcher</code></a> for the designated <code>Status</code>. Note that users
+can request an <code>Option&lt;S&gt;</code> to catch <code>Forward</code>s.</p>
+</li>
+</ul>
+<h2 id="provided-implementations"><a class="doc-anchor" href="#provided-implementations">§</a>Provided Implementations</h2>
+<p>Rocket implements <code>FromRequest</code> for several built-in types. Their behavior
+is documented here.</p>
+<ul>
+<li>
+<p><strong>Method</strong></p>
+<p>Extracts the <a href="../http/enum.Method.html" title="enum rocket::http::Method"><code>Method</code></a> from the incoming request.</p>
+<p><em>This implementation always returns successfully.</em></p>
+</li>
+<li>
+<p><strong>&amp;Origin</strong></p>
+<p>Extracts the <a href="../http/uri/struct.Origin.html" title="struct rocket::http::uri::Origin"><code>Origin</code></a> URI from the incoming request.</p>
+<p><em>This implementation always returns successfully.</em></p>
+</li>
+<li>
+<p><strong>&amp;Host</strong></p>
+<p>Extracts the <a href="../http/uri/struct.Host.html" title="struct rocket::http::uri::Host"><code>Host</code></a> from the incoming request, if it exists. See
+<a href="struct.Request.html#method.host" title="method rocket::request::Request::host"><code>Request::host()</code></a> for details. If it does not exist, the request is
+forwarded with a 500 Internal Server Error status.</p>
+</li>
+<li>
+<p><strong>&amp;Route</strong></p>
+<p>Extracts the <a href="../route/struct.Route.html" title="struct rocket::route::Route"><code>Route</code></a> from the request if one is available. When used
+as a request guard in a route handler, this will always succeed. Outside
+of a route handler, a route may not be available, and the request is
+forwarded with a 500 Internal Server Error status.</p>
+<p>For more information on when an <code>&amp;Route</code> is available, see
+<a href="struct.Request.html#method.route" title="method rocket::request::Request::route"><code>Request::route()</code></a>.</p>
+</li>
+<li>
+<p><strong>&amp;CookieJar</strong></p>
+<p>Returns a borrow to the <a href="../http/struct.CookieJar.html" title="struct rocket::http::CookieJar"><code>CookieJar</code></a> in the incoming request. Note that
+<code>CookieJar</code> implements internal mutability, so a handle to a <code>CookieJar</code>
+allows you to get <em>and</em> set cookies in the request.</p>
+<p><em>This implementation always returns successfully.</em></p>
+</li>
+<li>
+<p><strong>&amp;<a href="../config/struct.Config.html" title="struct rocket::config::Config"><code>Config</code></a></strong></p>
+<p>Extracts the application <a href="../config/struct.Config.html" title="struct rocket::config::Config"><code>Config</code></a>.</p>
+<p><em>This implementation always returns successfully.</em></p>
+</li>
+<li>
+<p><strong>&amp;ContentType</strong></p>
+<p>Extracts the <a href="../http/struct.ContentType.html" title="struct rocket::http::ContentType"><code>ContentType</code></a> from the incoming request via
+<a href="struct.Request.html#method.content_type" title="method rocket::request::Request::content_type"><code>Request::content_type()</code></a>. If the request didn’t specify a
+Content-Type, the request is forwarded with a 500 Internal Server Error
+status.</p>
+</li>
+<li>
+<p><strong>&amp;ContentType</strong></p>
+<p>Extracts the <a href="../http/struct.Accept.html" title="struct rocket::http::Accept"><code>Accept</code></a> from the incoming request via
+<a href="struct.Request.html#method.accept" title="method rocket::request::Request::accept"><code>Request::accept()</code></a>. If the request didn’t specify an <code>Accept</code>, the
+request is forwarded with a 500 Internal Server Error status.</p>
+</li>
+<li>
+<p>*<strong>IpAddr</strong></p>
+<p>Extracts the client ip address of the incoming request as an <a href="https://doc.rust-lang.org/1.77.0/core/net/ip_addr/enum.IpAddr.html" title="enum core::net::ip_addr::IpAddr"><code>IpAddr</code></a>
+via <a href="struct.Request.html#method.client_ip" title="method rocket::request::Request::client_ip"><code>Request::client_ip()</code></a>. If the client’s IP address is not known,
+the request is forwarded with a 500 Internal Server Error status.</p>
+</li>
+<li>
+<p><strong>SocketAddr</strong></p>
+<p>Extracts the remote address of the incoming request as a <a href="https://doc.rust-lang.org/1.77.0/core/net/socket_addr/enum.SocketAddr.html" title="enum core::net::socket_addr::SocketAddr"><code>SocketAddr</code></a>
+via <a href="struct.Request.html#method.remote" title="method rocket::request::Request::remote"><code>Request::remote()</code></a>. If the remote address is not known, the
+request is forwarded with a 500 Internal Server Error status.</p>
+</li>
+<li>
+<p><strong>Option&lt;T&gt;</strong> <em>where</em> <strong>T: FromRequest</strong></p>
+<p>The type <code>T</code> is derived from the incoming request using <code>T</code>’s
+<code>FromRequest</code> implementation. If the derivation is a <code>Success</code>, the
+derived value is returned in <code>Some</code>. Otherwise, a <code>None</code> is returned.</p>
+<p><em>This implementation always returns successfully.</em></p>
+</li>
+<li>
+<p><strong>Result&lt;T, T::Error&gt;</strong> <em>where</em> <strong>T: FromRequest</strong></p>
+<p>The type <code>T</code> is derived from the incoming request using <code>T</code>’s
+<code>FromRequest</code> implementation. If derivation is a <code>Success</code>, the value is
+returned in <code>Ok</code>. If the derivation is an <code>Error</code>, the error value is
+returned in <code>Err</code>. If the derivation is a <code>Forward</code>, the request is
+forwarded with the same status code as the original forward.</p>
+</li>
+</ul>
+<h2 id="example-1"><a class="doc-anchor" href="#example-1">§</a>Example</h2>
+<p>Imagine you’re running an authenticated API service that requires that some
+requests be sent along with a valid API key in a header field. You want to
+ensure that the handlers corresponding to these requests don’t get called
+unless there is an API key in the request and the key is valid. The
+following example implements this using an <code>ApiKey</code> type and a <code>FromRequest</code>
+implementation for that type. The <code>ApiKey</code> type is then used in the
+<code>sensitive</code> handler.</p>
+
+<div class="example-wrap"><pre class="rust rust-example-rendered"><code><span class="kw">use </span>rocket::http::Status;
+<span class="kw">use </span>rocket::request::{<span class="self">self</span>, Outcome, Request, FromRequest};
+
+<span class="kw">struct </span>ApiKey&lt;<span class="lifetime">'r</span>&gt;(<span class="kw-2">&amp;</span><span class="lifetime">'r </span>str);
+
+<span class="attr">#[derive(Debug)]
+</span><span class="kw">enum </span>ApiKeyError {
+    Missing,
+    Invalid,
+}
+
+<span class="attr">#[rocket::async_trait]
+</span><span class="kw">impl</span>&lt;<span class="lifetime">'r</span>&gt; FromRequest&lt;<span class="lifetime">'r</span>&gt; <span class="kw">for </span>ApiKey&lt;<span class="lifetime">'r</span>&gt; {
+    <span class="kw">type </span>Error = ApiKeyError;
+
+    <span class="kw">async fn </span>from_request(req: <span class="kw-2">&amp;</span><span class="lifetime">'r </span>Request&lt;<span class="lifetime">'_</span>&gt;) -&gt; Outcome&lt;<span class="self">Self</span>, <span class="self">Self</span>::Error&gt; {
+        <span class="doccomment">/// Returns true if `key` is a valid API key string.
+        </span><span class="kw">fn </span>is_valid(key: <span class="kw-2">&amp;</span>str) -&gt; bool {
+            key == <span class="string">"valid_api_key"
+        </span>}
+
+        <span class="kw">match </span>req.headers().get_one(<span class="string">"x-api-key"</span>) {
+            <span class="prelude-val">None </span>=&gt; Outcome::Error((Status::BadRequest, ApiKeyError::Missing)),
+            <span class="prelude-val">Some</span>(key) <span class="kw">if </span>is_valid(key) =&gt; Outcome::Success(ApiKey(key)),
+            <span class="prelude-val">Some</span>(<span class="kw">_</span>) =&gt; Outcome::Error((Status::BadRequest, ApiKeyError::Invalid)),
+        }
+    }
+}
+
+<span class="attr">#[get(<span class="string">"/sensitive"</span>)]
+</span><span class="kw">fn </span>sensitive(key: ApiKey&lt;<span class="lifetime">'_</span>&gt;) -&gt; <span class="kw-2">&amp;</span><span class="lifetime">'static </span>str {
+    <span class="string">"Sensitive data."
+</span>}</code></pre></div>
+<h2 id="request-local-state"><a class="doc-anchor" href="#request-local-state">§</a>Request-Local State</h2>
+<p>Request guards that perform expensive operations, such as those that query a
+database or an external service, should use the <a href="https://rocket.rs/v0.5/guide/state/#request-local-state">request-local state</a> cache
+to store results if they might be invoked multiple times during the routing
+of a single request.</p>
+<p>For example, consider a pair of <code>User</code> and <code>Admin</code> guards and a pair of
+routes (<code>admin_dashboard</code> and <code>user_dashboard</code>):</p>
+
+<div class="example-wrap"><pre class="rust rust-example-rendered"><code><span class="attr">#[rocket::async_trait]
+</span><span class="kw">impl</span>&lt;<span class="lifetime">'r</span>&gt; FromRequest&lt;<span class="lifetime">'r</span>&gt; <span class="kw">for </span>User {
+    <span class="kw">type </span>Error = ();
+
+    <span class="kw">async fn </span>from_request(request: <span class="kw-2">&amp;</span><span class="lifetime">'r </span>Request&lt;<span class="lifetime">'_</span>&gt;) -&gt; Outcome&lt;User, ()&gt; {
+        <span class="kw">let </span>db = <span class="macro">try_outcome!</span>(request.guard::&lt;Database&gt;().<span class="kw">await</span>);
+        request.cookies()
+            .get_private(<span class="string">"user_id"</span>)
+            .and_then(|cookie| cookie.value().parse().ok())
+            .and_then(|id| db.get_user(id).ok())
+            .or_forward(Status::Unauthorized)
+    }
+}
+
+<span class="attr">#[rocket::async_trait]
+</span><span class="kw">impl</span>&lt;<span class="lifetime">'r</span>&gt; FromRequest&lt;<span class="lifetime">'r</span>&gt; <span class="kw">for </span>Admin {
+    <span class="kw">type </span>Error = ();
+
+    <span class="kw">async fn </span>from_request(request: <span class="kw-2">&amp;</span><span class="lifetime">'r </span>Request&lt;<span class="lifetime">'_</span>&gt;) -&gt; Outcome&lt;Admin, ()&gt; {
+        <span class="comment">// This will unconditionally query the database!
+        </span><span class="kw">let </span>user = <span class="macro">try_outcome!</span>(request.guard::&lt;User&gt;().<span class="kw">await</span>);
+        <span class="kw">if </span>user.is_admin {
+            Outcome::Success(Admin { user })
+        } <span class="kw">else </span>{
+            Outcome::Forward(Status::Unauthorized)
+        }
+    }
+}
+
+<span class="attr">#[get(<span class="string">"/dashboard"</span>)]
+</span><span class="kw">fn </span>admin_dashboard(admin: Admin) { }
+
+<span class="attr">#[get(<span class="string">"/dashboard"</span>, rank = <span class="number">2</span>)]
+</span><span class="kw">fn </span>user_dashboard(user: User) { }</code></pre></div>
+<p>When a non-admin user is logged in, the database will be queried twice: once
+via the <code>Admin</code> guard invoking the <code>User</code> guard, and a second time via the
+<code>User</code> guard directly. For cases like these, request-local state should be
+used, as illustrated below:</p>
+
+<div class="example-wrap"><pre class="rust rust-example-rendered"><code><span class="attr">#[rocket::async_trait]
+</span><span class="kw">impl</span>&lt;<span class="lifetime">'r</span>&gt; FromRequest&lt;<span class="lifetime">'r</span>&gt; <span class="kw">for </span><span class="kw-2">&amp;</span><span class="lifetime">'r </span>User {
+    <span class="kw">type </span>Error = std::convert::Infallible;
+
+    <span class="kw">async fn </span>from_request(request: <span class="kw-2">&amp;</span><span class="lifetime">'r </span>Request&lt;<span class="lifetime">'_</span>&gt;) -&gt; Outcome&lt;<span class="self">Self</span>, <span class="self">Self</span>::Error&gt; {
+        <span class="comment">// This closure will execute at most once per request, regardless of
+        // the number of times the `User` guard is executed.
+        </span><span class="kw">let </span>user_result = request.local_cache_async(<span class="kw">async </span>{
+            <span class="kw">let </span>db = request.guard::&lt;Database&gt;().<span class="kw">await</span>.succeeded()<span class="question-mark">?</span>;
+            request.cookies()
+                .get_private(<span class="string">"user_id"</span>)
+                .and_then(|cookie| cookie.value().parse().ok())
+                .and_then(|id| db.get_user(id).ok())
+        }).<span class="kw">await</span>;
+
+        user_result.as_ref().or_forward(Status::Unauthorized)
+    }
+}
+
+<span class="attr">#[rocket::async_trait]
+</span><span class="kw">impl</span>&lt;<span class="lifetime">'r</span>&gt; FromRequest&lt;<span class="lifetime">'r</span>&gt; <span class="kw">for </span>Admin&lt;<span class="lifetime">'r</span>&gt; {
+    <span class="kw">type </span>Error = std::convert::Infallible;
+
+    <span class="kw">async fn </span>from_request(request: <span class="kw-2">&amp;</span><span class="lifetime">'r </span>Request&lt;<span class="lifetime">'_</span>&gt;) -&gt; Outcome&lt;<span class="self">Self</span>, <span class="self">Self</span>::Error&gt; {
+        <span class="kw">let </span>user = <span class="macro">try_outcome!</span>(request.guard::&lt;<span class="kw-2">&amp;</span>User&gt;().<span class="kw">await</span>);
+        <span class="kw">if </span>user.is_admin {
+            Outcome::Success(Admin { user })
+        } <span class="kw">else </span>{
+            Outcome::Forward(Status::Unauthorized)
+        }
+    }
+}</code></pre></div>
+<p>Notice that these request guards provide access to <em>borrowed</em> data (<code>&amp;'a User</code> and <code>Admin&lt;'a&gt;</code>) as the data is now owned by the request’s cache.</p>
+</div></details><h2 id="required-associated-types" class="section-header">Required Associated Types<a href="#required-associated-types" class="anchor">§</a></h2><div class="methods"><details class="toggle" open><summary><section id="associatedtype.Error" class="method"><a class="src rightside" href="../../src/rocket/request/from_request.rs.html#375">source</a><h4 class="code-header">type <a href="#associatedtype.Error" class="associatedtype">Error</a>: <a class="trait" href="https://doc.rust-lang.org/1.77.0/core/fmt/trait.Debug.html" title="trait core::fmt::Debug">Debug</a></h4></section></summary><div class="docblock"><p>The associated error to be returned if derivation fails.</p>
+</div></details></div><h2 id="required-methods" class="section-header">Required Methods<a href="#required-methods" class="anchor">§</a></h2><div class="methods"><details class="toggle method-toggle" open><summary><section id="tymethod.from_request" class="method"><a class="src rightside" href="../../src/rocket/request/from_request.rs.html#383">source</a><h4 class="code-header">fn <a href="#tymethod.from_request" class="fn">from_request</a>&lt;'life0, 'async_trait&gt;(
+    request: &amp;'r <a class="struct" href="struct.Request.html" title="struct rocket::request::Request">Request</a>&lt;'life0&gt;
+) -&gt; <a class="struct" href="https://doc.rust-lang.org/1.77.0/core/pin/struct.Pin.html" title="struct core::pin::Pin">Pin</a>&lt;<a class="struct" href="https://doc.rust-lang.org/1.77.0/alloc/boxed/struct.Box.html" title="struct alloc::boxed::Box">Box</a>&lt;dyn <a class="trait" href="https://doc.rust-lang.org/1.77.0/core/future/future/trait.Future.html" title="trait core::future::future::Future">Future</a>&lt;Output = <a class="type" href="type.Outcome.html" title="type rocket::request::Outcome">Outcome</a>&lt;Self, Self::<a class="associatedtype" href="trait.FromRequest.html#associatedtype.Error" title="type rocket::request::FromRequest::Error">Error</a>&gt;&gt; + <a class="trait" href="https://doc.rust-lang.org/1.77.0/core/marker/trait.Send.html" title="trait core::marker::Send">Send</a> + 'async_trait&gt;&gt;<div class="where">where
+    Self: 'async_trait,
+    'r: 'async_trait,
+    'life0: 'async_trait,</div></h4></section></summary><div class="docblock"><p>Derives an instance of <code>Self</code> from the incoming request metadata.</p>
+<p>If the derivation is successful, an outcome of <code>Success</code> is returned. If
+the derivation fails in an unrecoverable fashion, <code>Error</code> is returned.
+<code>Forward</code> is returned to indicate that the request should be forwarded
+to other matching routes, if any.</p>
+</div></details></div><h2 id="object-safety" class="section-header">Object Safety<a href="#object-safety" class="anchor">§</a></h2><div class="object-safety-info">This trait is <b>not</b> <a href="https://doc.rust-lang.org/1.77.0/reference/items/traits.html#object-safety">object safe</a>.</div><h2 id="foreign-impls" class="section-header">Implementations on Foreign Types<a href="#foreign-impls" class="anchor">§</a></h2><details class="toggle implementors-toggle"><summary><section id="impl-FromRequest%3C'r%3E-for-IpAddr" class="impl"><a class="src rightside" href="../../src/rocket/request/from_request.rs.html#462-471">source</a><a href="#impl-FromRequest%3C'r%3E-for-IpAddr" class="anchor">§</a><h3 class="code-header">impl&lt;'r&gt; <a class="trait" href="trait.FromRequest.html" title="trait rocket::request::FromRequest">FromRequest</a>&lt;'r&gt; for <a class="enum" href="https://doc.rust-lang.org/1.77.0/core/net/ip_addr/enum.IpAddr.html" title="enum core::net::ip_addr::IpAddr">IpAddr</a></h3></section></summary><div class="impl-items"><section id="associatedtype.Error-1" class="associatedtype trait-impl"><a href="#associatedtype.Error-1" class="anchor">§</a><h4 class="code-header">type <a href="#associatedtype.Error" class="associatedtype">Error</a> = <a class="enum" href="https://doc.rust-lang.org/1.77.0/core/convert/enum.Infallible.html" title="enum core::convert::Infallible">Infallible</a></h4></section><section id="method.from_request" class="method trait-impl"><a class="src rightside" href="../../src/rocket/request/from_request.rs.html#465-470">source</a><a href="#method.from_request" class="anchor">§</a><h4 class="code-header">fn <a href="#tymethod.from_request" class="fn">from_request</a>&lt;'life0, 'async_trait&gt;(
+    request: &amp;'r <a class="struct" href="struct.Request.html" title="struct rocket::request::Request">Request</a>&lt;'life0&gt;
+) -&gt; <a class="struct" href="https://doc.rust-lang.org/1.77.0/core/pin/struct.Pin.html" title="struct core::pin::Pin">Pin</a>&lt;<a class="struct" href="https://doc.rust-lang.org/1.77.0/alloc/boxed/struct.Box.html" title="struct alloc::boxed::Box">Box</a>&lt;dyn <a class="trait" href="https://doc.rust-lang.org/1.77.0/core/future/future/trait.Future.html" title="trait core::future::future::Future">Future</a>&lt;Output = <a class="type" href="type.Outcome.html" title="type rocket::request::Outcome">Outcome</a>&lt;Self, <a class="enum" href="https://doc.rust-lang.org/1.77.0/core/convert/enum.Infallible.html" title="enum core::convert::Infallible">Infallible</a>&gt;&gt; + <a class="trait" href="https://doc.rust-lang.org/1.77.0/core/marker/trait.Send.html" title="trait core::marker::Send">Send</a> + 'async_trait&gt;&gt;<div class="where">where
+    Self: 'async_trait,
+    'r: 'async_trait,
+    'life0: 'async_trait,</div></h4></section></div></details><details class="toggle implementors-toggle"><summary><section id="impl-FromRequest%3C'r%3E-for-SocketAddr" class="impl"><a class="src rightside" href="../../src/rocket/request/from_request.rs.html#474-483">source</a><a href="#impl-FromRequest%3C'r%3E-for-SocketAddr" class="anchor">§</a><h3 class="code-header">impl&lt;'r&gt; <a class="trait" href="trait.FromRequest.html" title="trait rocket::request::FromRequest">FromRequest</a>&lt;'r&gt; for <a class="enum" href="https://doc.rust-lang.org/1.77.0/core/net/socket_addr/enum.SocketAddr.html" title="enum core::net::socket_addr::SocketAddr">SocketAddr</a></h3></section></summary><div class="impl-items"><section id="associatedtype.Error-2" class="associatedtype trait-impl"><a href="#associatedtype.Error-2" class="anchor">§</a><h4 class="code-header">type <a href="#associatedtype.Error" class="associatedtype">Error</a> = <a class="enum" href="https://doc.rust-lang.org/1.77.0/core/convert/enum.Infallible.html" title="enum core::convert::Infallible">Infallible</a></h4></section><section id="method.from_request-1" class="method trait-impl"><a class="src rightside" href="../../src/rocket/request/from_request.rs.html#477-482">source</a><a href="#method.from_request-1" class="anchor">§</a><h4 class="code-header">fn <a href="#tymethod.from_request" class="fn">from_request</a>&lt;'life0, 'async_trait&gt;(
+    request: &amp;'r <a class="struct" href="struct.Request.html" title="struct rocket::request::Request">Request</a>&lt;'life0&gt;
+) -&gt; <a class="struct" href="https://doc.rust-lang.org/1.77.0/core/pin/struct.Pin.html" title="struct core::pin::Pin">Pin</a>&lt;<a class="struct" href="https://doc.rust-lang.org/1.77.0/alloc/boxed/struct.Box.html" title="struct alloc::boxed::Box">Box</a>&lt;dyn <a class="trait" href="https://doc.rust-lang.org/1.77.0/core/future/future/trait.Future.html" title="trait core::future::future::Future">Future</a>&lt;Output = <a class="type" href="type.Outcome.html" title="type rocket::request::Outcome">Outcome</a>&lt;Self, <a class="enum" href="https://doc.rust-lang.org/1.77.0/core/convert/enum.Infallible.html" title="enum core::convert::Infallible">Infallible</a>&gt;&gt; + <a class="trait" href="https://doc.rust-lang.org/1.77.0/core/marker/trait.Send.html" title="trait core::marker::Send">Send</a> + 'async_trait&gt;&gt;<div class="where">where
+    Self: 'async_trait,
+    'r: 'async_trait,
+    'life0: 'async_trait,</div></h4></section></div></details><details class="toggle implementors-toggle"><summary><section id="impl-FromRequest%3C'r%3E-for-Option%3CT%3E" class="impl"><a class="src rightside" href="../../src/rocket/request/from_request.rs.html#499-508">source</a><a href="#impl-FromRequest%3C'r%3E-for-Option%3CT%3E" class="anchor">§</a><h3 class="code-header">impl&lt;'r, T: <a class="trait" href="trait.FromRequest.html" title="trait rocket::request::FromRequest">FromRequest</a>&lt;'r&gt;&gt; <a class="trait" href="trait.FromRequest.html" title="trait rocket::request::FromRequest">FromRequest</a>&lt;'r&gt; for <a class="enum" href="https://doc.rust-lang.org/1.77.0/core/option/enum.Option.html" title="enum core::option::Option">Option</a>&lt;T&gt;</h3></section></summary><div class="impl-items"><section id="associatedtype.Error-3" class="associatedtype trait-impl"><a href="#associatedtype.Error-3" class="anchor">§</a><h4 class="code-header">type <a href="#associatedtype.Error" class="associatedtype">Error</a> = <a class="enum" href="https://doc.rust-lang.org/1.77.0/core/convert/enum.Infallible.html" title="enum core::convert::Infallible">Infallible</a></h4></section><section id="method.from_request-2" class="method trait-impl"><a class="src rightside" href="../../src/rocket/request/from_request.rs.html#502-507">source</a><a href="#method.from_request-2" class="anchor">§</a><h4 class="code-header">fn <a href="#tymethod.from_request" class="fn">from_request</a>&lt;'life0, 'async_trait&gt;(
+    request: &amp;'r <a class="struct" href="struct.Request.html" title="struct rocket::request::Request">Request</a>&lt;'life0&gt;
+) -&gt; <a class="struct" href="https://doc.rust-lang.org/1.77.0/core/pin/struct.Pin.html" title="struct core::pin::Pin">Pin</a>&lt;<a class="struct" href="https://doc.rust-lang.org/1.77.0/alloc/boxed/struct.Box.html" title="struct alloc::boxed::Box">Box</a>&lt;dyn <a class="trait" href="https://doc.rust-lang.org/1.77.0/core/future/future/trait.Future.html" title="trait core::future::future::Future">Future</a>&lt;Output = <a class="type" href="type.Outcome.html" title="type rocket::request::Outcome">Outcome</a>&lt;Self, <a class="enum" href="https://doc.rust-lang.org/1.77.0/core/convert/enum.Infallible.html" title="enum core::convert::Infallible">Infallible</a>&gt;&gt; + <a class="trait" href="https://doc.rust-lang.org/1.77.0/core/marker/trait.Send.html" title="trait core::marker::Send">Send</a> + 'async_trait&gt;&gt;<div class="where">where
+    Self: 'async_trait,
+    'r: 'async_trait,
+    'life0: 'async_trait,</div></h4></section></div></details><details class="toggle implementors-toggle"><summary><section id="impl-FromRequest%3C'r%3E-for-Result%3CT,+%3CT+as+FromRequest%3C'r%3E%3E::Error%3E" class="impl"><a class="src rightside" href="../../src/rocket/request/from_request.rs.html#486-496">source</a><a href="#impl-FromRequest%3C'r%3E-for-Result%3CT,+%3CT+as+FromRequest%3C'r%3E%3E::Error%3E" class="anchor">§</a><h3 class="code-header">impl&lt;'r, T: <a class="trait" href="trait.FromRequest.html" title="trait rocket::request::FromRequest">FromRequest</a>&lt;'r&gt;&gt; <a class="trait" href="trait.FromRequest.html" title="trait rocket::request::FromRequest">FromRequest</a>&lt;'r&gt; for <a class="enum" href="https://doc.rust-lang.org/1.77.0/core/result/enum.Result.html" title="enum core::result::Result">Result</a>&lt;T, T::<a class="associatedtype" href="trait.FromRequest.html#associatedtype.Error" title="type rocket::request::FromRequest::Error">Error</a>&gt;</h3></section></summary><div class="impl-items"><section id="associatedtype.Error-4" class="associatedtype trait-impl"><a href="#associatedtype.Error-4" class="anchor">§</a><h4 class="code-header">type <a href="#associatedtype.Error" class="associatedtype">Error</a> = <a class="enum" href="https://doc.rust-lang.org/1.77.0/core/convert/enum.Infallible.html" title="enum core::convert::Infallible">Infallible</a></h4></section><section id="method.from_request-3" class="method trait-impl"><a class="src rightside" href="../../src/rocket/request/from_request.rs.html#489-495">source</a><a href="#method.from_request-3" class="anchor">§</a><h4 class="code-header">fn <a href="#tymethod.from_request" class="fn">from_request</a>&lt;'life0, 'async_trait&gt;(
+    request: &amp;'r <a class="struct" href="struct.Request.html" title="struct rocket::request::Request">Request</a>&lt;'life0&gt;
+) -&gt; <a class="struct" href="https://doc.rust-lang.org/1.77.0/core/pin/struct.Pin.html" title="struct core::pin::Pin">Pin</a>&lt;<a class="struct" href="https://doc.rust-lang.org/1.77.0/alloc/boxed/struct.Box.html" title="struct alloc::boxed::Box">Box</a>&lt;dyn <a class="trait" href="https://doc.rust-lang.org/1.77.0/core/future/future/trait.Future.html" title="trait core::future::future::Future">Future</a>&lt;Output = <a class="type" href="type.Outcome.html" title="type rocket::request::Outcome">Outcome</a>&lt;Self, <a class="enum" href="https://doc.rust-lang.org/1.77.0/core/convert/enum.Infallible.html" title="enum core::convert::Infallible">Infallible</a>&gt;&gt; + <a class="trait" href="https://doc.rust-lang.org/1.77.0/core/marker/trait.Send.html" title="trait core::marker::Send">Send</a> + 'async_trait&gt;&gt;<div class="where">where
+    Self: 'async_trait,
+    'r: 'async_trait,
+    'life0: 'async_trait,</div></h4></section></div></details><h2 id="implementors" class="section-header">Implementors<a href="#implementors" class="anchor">§</a></h2><div id="implementors-list"><details class="toggle implementors-toggle"><summary><section id="impl-FromRequest%3C'r%3E-for-%26Config" class="impl"><a class="src rightside" href="../../src/rocket/config/config.rs.html#578-584">source</a><a href="#impl-FromRequest%3C'r%3E-for-%26Config" class="anchor">§</a><h3 class="code-header">impl&lt;'r&gt; <a class="trait" href="trait.FromRequest.html" title="trait rocket::request::FromRequest">FromRequest</a>&lt;'r&gt; for &amp;'r <a class="struct" href="../config/struct.Config.html" title="struct rocket::config::Config">Config</a></h3></section></summary><div class="impl-items"><section id="associatedtype.Error-5" class="associatedtype trait-impl"><a href="#associatedtype.Error-5" class="anchor">§</a><h4 class="code-header">type <a href="#associatedtype.Error" class="associatedtype">Error</a> = <a class="enum" href="https://doc.rust-lang.org/1.77.0/core/convert/enum.Infallible.html" title="enum core::convert::Infallible">Infallible</a></h4></section></div></details><details class="toggle implementors-toggle"><summary><section id="impl-FromRequest%3C'r%3E-for-%26Limits" class="impl"><a class="src rightside" href="../../src/rocket/data/limits.rs.html#329-335">source</a><a href="#impl-FromRequest%3C'r%3E-for-%26Limits" class="anchor">§</a><h3 class="code-header">impl&lt;'r&gt; <a class="trait" href="trait.FromRequest.html" title="trait rocket::request::FromRequest">FromRequest</a>&lt;'r&gt; for &amp;'r <a class="struct" href="../data/struct.Limits.html" title="struct rocket::data::Limits">Limits</a></h3></section></summary><div class="impl-items"><section id="associatedtype.Error-6" class="associatedtype trait-impl"><a href="#associatedtype.Error-6" class="anchor">§</a><h4 class="code-header">type <a href="#associatedtype.Error" class="associatedtype">Error</a> = <a class="enum" href="https://doc.rust-lang.org/1.77.0/core/convert/enum.Infallible.html" title="enum core::convert::Infallible">Infallible</a></h4></section></div></details><details class="toggle implementors-toggle"><summary><section id="impl-FromRequest%3C'r%3E-for-%26Accept" class="impl"><a class="src rightside" href="../../src/rocket/request/from_request.rs.html#438-447">source</a><a href="#impl-FromRequest%3C'r%3E-for-%26Accept" class="anchor">§</a><h3 class="code-header">impl&lt;'r&gt; <a class="trait" href="trait.FromRequest.html" title="trait rocket::request::FromRequest">FromRequest</a>&lt;'r&gt; for &amp;'r <a class="struct" href="../http/struct.Accept.html" title="struct rocket::http::Accept">Accept</a></h3></section></summary><div class="impl-items"><section id="associatedtype.Error-7" class="associatedtype trait-impl"><a href="#associatedtype.Error-7" class="anchor">§</a><h4 class="code-header">type <a href="#associatedtype.Error" class="associatedtype">Error</a> = <a class="enum" href="https://doc.rust-lang.org/1.77.0/core/convert/enum.Infallible.html" title="enum core::convert::Infallible">Infallible</a></h4></section></div></details><details class="toggle implementors-toggle"><summary><section id="impl-FromRequest%3C'r%3E-for-%26ContentType" class="impl"><a class="src rightside" href="../../src/rocket/request/from_request.rs.html#450-459">source</a><a href="#impl-FromRequest%3C'r%3E-for-%26ContentType" class="anchor">§</a><h3 class="code-header">impl&lt;'r&gt; <a class="trait" href="trait.FromRequest.html" title="trait rocket::request::FromRequest">FromRequest</a>&lt;'r&gt; for &amp;'r <a class="struct" href="../http/struct.ContentType.html" title="struct rocket::http::ContentType">ContentType</a></h3></section></summary><div class="impl-items"><section id="associatedtype.Error-8" class="associatedtype trait-impl"><a href="#associatedtype.Error-8" class="anchor">§</a><h4 class="code-header">type <a href="#associatedtype.Error" class="associatedtype">Error</a> = <a class="enum" href="https://doc.rust-lang.org/1.77.0/core/convert/enum.Infallible.html" title="enum core::convert::Infallible">Infallible</a></h4></section></div></details><details class="toggle implementors-toggle"><summary><section id="impl-FromRequest%3C'r%3E-for-%26CookieJar%3C'r%3E" class="impl"><a class="src rightside" href="../../src/rocket/request/from_request.rs.html#429-435">source</a><a href="#impl-FromRequest%3C'r%3E-for-%26CookieJar%3C'r%3E" class="anchor">§</a><h3 class="code-header">impl&lt;'r&gt; <a class="trait" href="trait.FromRequest.html" title="trait rocket::request::FromRequest">FromRequest</a>&lt;'r&gt; for &amp;'r <a class="struct" href="../http/struct.CookieJar.html" title="struct rocket::http::CookieJar">CookieJar</a>&lt;'r&gt;</h3></section></summary><div class="impl-items"><section id="associatedtype.Error-9" class="associatedtype trait-impl"><a href="#associatedtype.Error-9" class="anchor">§</a><h4 class="code-header">type <a href="#associatedtype.Error" class="associatedtype">Error</a> = <a class="enum" href="https://doc.rust-lang.org/1.77.0/core/convert/enum.Infallible.html" title="enum core::convert::Infallible">Infallible</a></h4></section></div></details><details class="toggle implementors-toggle"><summary><section id="impl-FromRequest%3C'r%3E-for-%26Host%3C'r%3E" class="impl"><a class="src rightside" href="../../src/rocket/request/from_request.rs.html#405-414">source</a><a href="#impl-FromRequest%3C'r%3E-for-%26Host%3C'r%3E" class="anchor">§</a><h3 class="code-header">impl&lt;'r&gt; <a class="trait" href="trait.FromRequest.html" title="trait rocket::request::FromRequest">FromRequest</a>&lt;'r&gt; for &amp;'r <a class="struct" href="../http/uri/struct.Host.html" title="struct rocket::http::uri::Host">Host</a>&lt;'r&gt;</h3></section></summary><div class="impl-items"><section id="associatedtype.Error-10" class="associatedtype trait-impl"><a href="#associatedtype.Error-10" class="anchor">§</a><h4 class="code-header">type <a href="#associatedtype.Error" class="associatedtype">Error</a> = <a class="enum" href="https://doc.rust-lang.org/1.77.0/core/convert/enum.Infallible.html" title="enum core::convert::Infallible">Infallible</a></h4></section></div></details><details class="toggle implementors-toggle"><summary><section id="impl-FromRequest%3C'r%3E-for-%26Origin%3C'r%3E" class="impl"><a class="src rightside" href="../../src/rocket/request/from_request.rs.html#396-402">source</a><a href="#impl-FromRequest%3C'r%3E-for-%26Origin%3C'r%3E" class="anchor">§</a><h3 class="code-header">impl&lt;'r&gt; <a class="trait" href="trait.FromRequest.html" title="trait rocket::request::FromRequest">FromRequest</a>&lt;'r&gt; for &amp;'r <a class="struct" href="../http/uri/struct.Origin.html" title="struct rocket::http::uri::Origin">Origin</a>&lt;'r&gt;</h3></section></summary><div class="impl-items"><section id="associatedtype.Error-11" class="associatedtype trait-impl"><a href="#associatedtype.Error-11" class="anchor">§</a><h4 class="code-header">type <a href="#associatedtype.Error" class="associatedtype">Error</a> = <a class="enum" href="https://doc.rust-lang.org/1.77.0/core/convert/enum.Infallible.html" title="enum core::convert::Infallible">Infallible</a></h4></section></div></details><details class="toggle implementors-toggle"><summary><section id="impl-FromRequest%3C'r%3E-for-%26Route" class="impl"><a class="src rightside" href="../../src/rocket/request/from_request.rs.html#417-426">source</a><a href="#impl-FromRequest%3C'r%3E-for-%26Route" class="anchor">§</a><h3 class="code-header">impl&lt;'r&gt; <a class="trait" href="trait.FromRequest.html" title="trait rocket::request::FromRequest">FromRequest</a>&lt;'r&gt; for &amp;'r <a class="struct" href="../route/struct.Route.html" title="struct rocket::route::Route">Route</a></h3></section></summary><div class="impl-items"><section id="associatedtype.Error-12" class="associatedtype trait-impl"><a href="#associatedtype.Error-12" class="anchor">§</a><h4 class="code-header">type <a href="#associatedtype.Error" class="associatedtype">Error</a> = <a class="enum" href="https://doc.rust-lang.org/1.77.0/core/convert/enum.Infallible.html" title="enum core::convert::Infallible">Infallible</a></h4></section></div></details><details class="toggle implementors-toggle"><summary><section id="impl-FromRequest%3C'r%3E-for-Method" class="impl"><a class="src rightside" href="../../src/rocket/request/from_request.rs.html#387-393">source</a><a href="#impl-FromRequest%3C'r%3E-for-Method" class="anchor">§</a><h3 class="code-header">impl&lt;'r&gt; <a class="trait" href="trait.FromRequest.html" title="trait rocket::request::FromRequest">FromRequest</a>&lt;'r&gt; for <a class="enum" href="../http/enum.Method.html" title="enum rocket::http::Method">Method</a></h3></section></summary><div class="impl-items"><section id="associatedtype.Error-13" class="associatedtype trait-impl"><a href="#associatedtype.Error-13" class="anchor">§</a><h4 class="code-header">type <a href="#associatedtype.Error" class="associatedtype">Error</a> = <a class="enum" href="https://doc.rust-lang.org/1.77.0/core/convert/enum.Infallible.html" title="enum core::convert::Infallible">Infallible</a></h4></section></div></details><details class="toggle implementors-toggle"><summary><section id="impl-FromRequest%3C'r%3E-for-Shutdown" class="impl"><a class="src rightside" href="../../src/rocket/shutdown.rs.html#95-102">source</a><a href="#impl-FromRequest%3C'r%3E-for-Shutdown" class="anchor">§</a><h3 class="code-header">impl&lt;'r&gt; <a class="trait" href="trait.FromRequest.html" title="trait rocket::request::FromRequest">FromRequest</a>&lt;'r&gt; for <a class="struct" href="../struct.Shutdown.html" title="struct rocket::Shutdown">Shutdown</a></h3></section></summary><div class="impl-items"><section id="associatedtype.Error-14" class="associatedtype trait-impl"><a href="#associatedtype.Error-14" class="anchor">§</a><h4 class="code-header">type <a href="#associatedtype.Error" class="associatedtype">Error</a> = <a class="enum" href="https://doc.rust-lang.org/1.77.0/core/convert/enum.Infallible.html" title="enum core::convert::Infallible">Infallible</a></h4></section></div></details><details class="toggle implementors-toggle"><summary><section id="impl-FromRequest%3C'r%3E-for-Flash%3C%26CookieJar%3C'r%3E%3E" class="impl"><a class="src rightside" href="../../src/rocket/response/flash.rs.html#243-264">source</a><a href="#impl-FromRequest%3C'r%3E-for-Flash%3C%26CookieJar%3C'r%3E%3E" class="anchor">§</a><h3 class="code-header">impl&lt;'r&gt; <a class="trait" href="trait.FromRequest.html" title="trait rocket::request::FromRequest">FromRequest</a>&lt;'r&gt; for <a class="type" href="type.FlashMessage.html" title="type rocket::request::FlashMessage">FlashMessage</a>&lt;'r&gt;</h3></section></summary><div class="docblock"><p>Retrieves a flash message from a flash cookie. If there is no flash cookie,
+or if the flash cookie is malformed, an empty <code>Err</code> is returned.</p>
+<p>The suggested use is through an <code>Option</code> and the <code>FlashMessage</code> type alias
+in <code>request</code>: <code>Option&lt;FlashMessage&gt;</code>.</p>
+</div><div class="impl-items"><section id="associatedtype.Error-15" class="associatedtype trait-impl"><a href="#associatedtype.Error-15" class="anchor">§</a><h4 class="code-header">type <a href="#associatedtype.Error" class="associatedtype">Error</a> = <a class="primitive" href="https://doc.rust-lang.org/1.77.0/std/primitive.unit.html">()</a></h4></section></div></details><details class="toggle implementors-toggle"><summary><section id="impl-FromRequest%3C'r%3E-for-%26State%3CT%3E" class="impl"><a class="src rightside" href="../../src/rocket/state.rs.html#196-209">source</a><a href="#impl-FromRequest%3C'r%3E-for-%26State%3CT%3E" class="anchor">§</a><h3 class="code-header">impl&lt;'r, T: <a class="trait" href="https://doc.rust-lang.org/1.77.0/core/marker/trait.Send.html" title="trait core::marker::Send">Send</a> + <a class="trait" href="https://doc.rust-lang.org/1.77.0/core/marker/trait.Sync.html" title="trait core::marker::Sync">Sync</a> + 'static&gt; <a class="trait" href="trait.FromRequest.html" title="trait rocket::request::FromRequest">FromRequest</a>&lt;'r&gt; for &amp;'r <a class="struct" href="../struct.State.html" title="struct rocket::State">State</a>&lt;T&gt;</h3></section></summary><div class="impl-items"><section id="associatedtype.Error-16" class="associatedtype trait-impl"><a href="#associatedtype.Error-16" class="anchor">§</a><h4 class="code-header">type <a href="#associatedtype.Error" class="associatedtype">Error</a> = <a class="primitive" href="https://doc.rust-lang.org/1.77.0/std/primitive.unit.html">()</a></h4></section></div></details><details class="toggle implementors-toggle"><summary><section id="impl-FromRequest%3C'r%3E-for-Outcome%3CT,+(Status,+%3CT+as+FromRequest%3C'r%3E%3E::Error),+Status%3E" class="impl"><a class="src rightside" href="../../src/rocket/request/from_request.rs.html#511-517">source</a><a href="#impl-FromRequest%3C'r%3E-for-Outcome%3CT,+(Status,+%3CT+as+FromRequest%3C'r%3E%3E::Error),+Status%3E" class="anchor">§</a><h3 class="code-header">impl&lt;'r, T: <a class="trait" href="trait.FromRequest.html" title="trait rocket::request::FromRequest">FromRequest</a>&lt;'r&gt;&gt; <a class="trait" href="trait.FromRequest.html" title="trait rocket::request::FromRequest">FromRequest</a>&lt;'r&gt; for <a class="type" href="type.Outcome.html" title="type rocket::request::Outcome">Outcome</a>&lt;T, T::<a class="associatedtype" href="trait.FromRequest.html#associatedtype.Error" title="type rocket::request::FromRequest::Error">Error</a>&gt;</h3></section></summary><div class="impl-items"><section id="associatedtype.Error-17" class="associatedtype trait-impl"><a href="#associatedtype.Error-17" class="anchor">§</a><h4 class="code-header">type <a href="#associatedtype.Error" class="associatedtype">Error</a> = <a class="enum" href="https://doc.rust-lang.org/1.77.0/core/convert/enum.Infallible.html" title="enum core::convert::Infallible">Infallible</a></h4></section></div></details></div><script src="../../trait.impl/rocket/request/from_request/trait.FromRequest.js" data-ignore-extern-crates="rocket_http,core" async></script></section></div></main></body></html>

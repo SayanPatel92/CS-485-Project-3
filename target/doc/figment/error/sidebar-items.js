@@ -1,0 +1,1 @@
+window.SIDEBAR_ITEMS = {"enum":["Actual","Kind"],"struct":["Error","IntoIter","OneOf"],"type":["Result"]};

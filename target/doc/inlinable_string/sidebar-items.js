@@ -1,0 +1,1 @@
+window.SIDEBAR_ITEMS = {"enum":["InlinableString"],"mod":["inline_string","string_ext"]};

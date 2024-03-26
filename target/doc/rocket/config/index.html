@@ -1,0 +1,84 @@
+<!DOCTYPE html><html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1.0"><meta name="generator" content="rustdoc"><meta name="description" content="Server and application configuration."><title>rocket::config - Rust</title><link rel="preload" as="font" type="font/woff2" crossorigin href="../../static.files/SourceSerif4-Regular-46f98efaafac5295.ttf.woff2"><link rel="preload" as="font" type="font/woff2" crossorigin href="../../static.files/FiraSans-Regular-018c141bf0843ffd.woff2"><link rel="preload" as="font" type="font/woff2" crossorigin href="../../static.files/FiraSans-Medium-8f9a781e4970d388.woff2"><link rel="preload" as="font" type="font/woff2" crossorigin href="../../static.files/SourceCodePro-Regular-562dcc5011b6de7d.ttf.woff2"><link rel="preload" as="font" type="font/woff2" crossorigin href="../../static.files/SourceCodePro-Semibold-d899c5a5c4aeb14a.ttf.woff2"><link rel="stylesheet" href="../../static.files/normalize-76eba96aa4d2e634.css"><link rel="stylesheet" href="../../static.files/rustdoc-5bc39a1768837dd0.css"><meta name="rustdoc-vars" data-root-path="../../" data-static-root-path="../../static.files/" data-current-crate="rocket" data-themes="" data-resource-suffix="" data-rustdoc-version="1.77.0 (aedd173a2 2024-03-17)" data-channel="1.77.0" data-search-js="search-dd67cee4cfa65049.js" data-settings-js="settings-4313503d2e1961c2.js" ><script src="../../static.files/storage-4c98445ec4002617.js"></script><script defer src="../sidebar-items.js"></script><script defer src="../../static.files/main-48f368f3872407c8.js"></script><noscript><link rel="stylesheet" href="../../static.files/noscript-04d5337699b92874.css"></noscript><link rel="icon" href="https://rocket.rs/images/favicon.ico"></head><body class="rustdoc mod"><!--[if lte IE 11]><div class="warning">This old browser is unsupported and will most likely display funky things.</div><![endif]--><nav class="mobile-topbar"><button class="sidebar-menu-toggle" title="show sidebar"></button><a class="logo-container" href="../../rocket/index.html"><img src="https://rocket.rs/images/logo-boxed.png" alt=""></a></nav><nav class="sidebar"><div class="sidebar-crate"><a class="logo-container" href="../../rocket/index.html"><img src="https://rocket.rs/images/logo-boxed.png" alt="logo"></a><h2><a href="../../rocket/index.html">rocket</a><span class="version">0.5.0</span></h2></div><h2 class="location"><a href="#">Module config</a></h2><div class="sidebar-elems"><section><ul class="block"><li><a href="#structs">Structs</a></li><li><a href="#enums">Enums</a></li></ul></section><h2><a href="../index.html">In crate rocket</a></h2></div></nav><div class="sidebar-resizer"></div>
+    <main><div class="width-limiter"><nav class="sub"><form class="search-form"><span></span><div id="sidebar-button" tabindex="-1"><a href="../../rocket/all.html" title="show sidebar"></a></div><input class="search-input" name="search" aria-label="Run search in the documentation" autocomplete="off" spellcheck="false" placeholder="Click or press ‘S’ to search, ‘?’ for more options…" type="search"><div id="help-button" tabindex="-1"><a href="../../help.html" title="help">?</a></div><div id="settings-menu" tabindex="-1"><a href="../../settings.html" title="settings"><img width="22" height="22" alt="Change settings" src="../../static.files/wheel-7b819b6101059cd0.svg"></a></div></form></nav><section id="main-content" class="content"><div class="main-heading"><h1>Module <a href="../index.html">rocket</a>::<wbr><a class="mod" href="#">config</a><button id="copy-path" title="Copy item path to clipboard"><img src="../../static.files/clipboard-7571035ce49a181d.svg" width="19" height="18" alt="Copy item path"></button></h1><span class="out-of-band"><a class="src" href="../../src/rocket/config/mod.rs.html#1-682">source</a> · <button id="toggle-all-docs" title="collapse all docs">[<span>&#x2212;</span>]</button></span></div><details class="toggle top-doc" open><summary class="hideme"><span>Expand description</span></summary><div class="docblock"><p>Server and application configuration.</p>
+<p>See the <a href="https://rocket.rs/v0.5/guide/configuration/">configuration guide</a> for full details.</p>
+<h3 id="extracting-configuration-parameters"><a class="doc-anchor" href="#extracting-configuration-parameters">§</a>Extracting Configuration Parameters</h3>
+<p>Rocket exposes the active <a href="../../figment/figment/struct.Figment.html" title="struct figment::figment::Figment"><code>Figment</code></a> via <a href="../struct.Rocket.html#method.figment" title="method rocket::Rocket::figment"><code>Rocket::figment()</code></a>. Any value
+that implements <a href="../serde/trait.Deserialize.html" title="trait rocket::serde::Deserialize"><code>Deserialize</code></a> can be extracted from the figment:</p>
+
+<div class="example-wrap"><pre class="rust rust-example-rendered"><code><span class="kw">use </span>rocket::fairing::AdHoc;
+
+<span class="attr">#[derive(serde::Deserialize)]
+</span><span class="kw">struct </span>AppConfig {
+    id: <span class="prelude-ty">Option</span>&lt;usize&gt;,
+    port: u16,
+}
+
+<span class="attr">#[rocket::launch]
+</span><span class="kw">fn </span>rocket() -&gt; <span class="kw">_ </span>{
+    rocket::build().attach(AdHoc::config::&lt;AppConfig&gt;())
+}</code></pre></div>
+<h3 id="workers"><a class="doc-anchor" href="#workers">§</a>Workers</h3>
+<p>The <code>workers</code> parameter sets the number of threads used for parallel task
+execution; there is no limit to the number of concurrent tasks. Due to a
+limitation in upstream async executers, unlike other values, the <code>workers</code>
+configuration value cannot be reconfigured or be configured from sources
+other than those provided by <a href="struct.Config.html#method.figment" title="associated function rocket::config::Config::figment"><code>Config::figment()</code></a>. In other words, only the
+values set by the <code>ROCKET_WORKERS</code> environment variable or in the <code>workers</code>
+property of <code>Rocket.toml</code> will be considered - all other <code>workers</code> values
+are ignored.</p>
+<h3 id="custom-providers"><a class="doc-anchor" href="#custom-providers">§</a>Custom Providers</h3>
+<p>A custom provider can be set via <a href="../fn.custom.html" title="fn rocket::custom"><code>rocket::custom()</code></a>, which replaces calls to
+<a href="../fn.build.html" title="fn rocket::build"><code>rocket::build()</code></a>. The configured provider can be built on top of
+<a href="struct.Config.html#method.figment" title="associated function rocket::config::Config::figment"><code>Config::figment()</code></a>, <a href="struct.Config.html#method.default" title="associated function rocket::config::Config::default"><code>Config::default()</code></a>, both, or neither. The
+<a href="../../figment/index.html" title="mod figment">Figment</a> documentation has full details on instantiating existing
+providers like <a href=""><code>Toml</code></a> and <a href="../../figment/providers/env/struct.Env.html" title="struct figment::providers::env::Env"><code>Env</code></a> as well as creating custom providers for
+more complex cases.</p>
+<p>Configuration values can be overridden at runtime by merging figment’s tuple
+providers with Rocket’s default provider:</p>
+
+<div class="example-wrap"><pre class="rust rust-example-rendered"><code><span class="kw">use </span>rocket::data::{Limits, ToByteUnit};
+
+<span class="attr">#[launch]
+</span><span class="kw">fn </span>rocket() -&gt; <span class="kw">_ </span>{
+    <span class="kw">let </span>figment = rocket::Config::figment()
+        .merge((<span class="string">"port"</span>, <span class="number">1111</span>))
+        .merge((<span class="string">"limits"</span>, Limits::new().limit(<span class="string">"json"</span>, <span class="number">2</span>.mebibytes())));
+
+    rocket::custom(figment).mount(<span class="string">"/"</span>, <span class="macro">routes!</span>[<span class="comment">/* .. */</span>])
+}</code></pre></div>
+<p>An application that wants to use Rocket’s defaults for <a href="struct.Config.html" title="struct rocket::config::Config"><code>Config</code></a>, but not
+its configuration sources, while allowing the application to be configured
+via an <code>App.toml</code> file that uses top-level keys as profiles (<code>.nested()</code>)
+and <code>APP_</code> environment variables as global overrides (<code>.global()</code>), and
+<code>APP_PROFILE</code> to configure the selected profile, can be structured as
+follows:</p>
+
+<div class="example-wrap"><pre class="rust rust-example-rendered"><code><span class="kw">use </span>serde::{Serialize, Deserialize};
+<span class="kw">use </span>figment::{Figment, Profile, providers::{Format, Toml, Serialized, Env}};
+<span class="kw">use </span>rocket::fairing::AdHoc;
+
+<span class="attr">#[derive(Debug, Deserialize, Serialize)]
+</span><span class="kw">struct </span>Config {
+    app_value: usize,
+    <span class="comment">/* and so on.. */
+</span>}
+
+<span class="kw">impl </span>Default <span class="kw">for </span>Config {
+    <span class="kw">fn </span>default() -&gt; Config {
+        Config { app_value: <span class="number">3</span>, }
+    }
+}
+
+<span class="attr">#[launch]
+</span><span class="kw">fn </span>rocket() -&gt; <span class="kw">_ </span>{
+    <span class="kw">let </span>figment = Figment::from(rocket::Config::default())
+        .merge(Serialized::defaults(Config::default()))
+        .merge(Toml::file(<span class="string">"App.toml"</span>).nested())
+        .merge(Env::prefixed(<span class="string">"APP_"</span>).global())
+        .select(Profile::from_env_or(<span class="string">"APP_PROFILE"</span>, <span class="string">"default"</span>));
+
+    rocket::custom(figment)
+        .mount(<span class="string">"/"</span>, <span class="macro">routes!</span>[<span class="comment">/* .. */</span>])
+        .attach(AdHoc::config::&lt;Config&gt;())
+}</code></pre></div>
+</div></details><h2 id="structs" class="section-header">Structs<a href="#structs" class="anchor">§</a></h2><ul class="item-table"><li><div class="item-name"><a class="struct" href="struct.Config.html" title="struct rocket::config::Config">Config</a></div><div class="desc docblock-short">Rocket server configuration.</div></li><li><div class="item-name"><a class="struct" href="struct.Ident.html" title="struct rocket::config::Ident">Ident</a></div><div class="desc docblock-short">An identifier (or <code>None</code>) to send as the <code>Server</code> header.</div></li><li><div class="item-name"><a class="struct" href="struct.Shutdown.html" title="struct rocket::config::Shutdown">Shutdown</a></div><div class="desc docblock-short">Graceful shutdown configuration.</div></li></ul><h2 id="enums" class="section-header">Enums<a href="#enums" class="anchor">§</a></h2><ul class="item-table"><li><div class="item-name"><a class="enum" href="enum.LogLevel.html" title="enum rocket::config::LogLevel">LogLevel</a></div><div class="desc docblock-short">Defines the maximum level of log messages to show.</div></li></ul></section></div></main></body></html>

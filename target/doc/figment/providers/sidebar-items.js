@@ -1,0 +1,1 @@
+window.SIDEBAR_ITEMS = {"struct":["Data","Env","Serialized","Toml"],"trait":["Format"]};

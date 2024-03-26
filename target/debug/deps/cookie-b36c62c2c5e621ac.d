@@ -1,0 +1,12 @@
+/mnt/c/Users/patel/OneDrive/Attachments/CSCI 485 Programming Lang/Project 3/rust/target/debug/deps/libcookie-b36c62c2c5e621ac.rmeta: /home/sayan/.cargo/registry/src/index.crates.io-6f17d22bba15001f/cookie-0.18.0/src/lib.rs /home/sayan/.cargo/registry/src/index.crates.io-6f17d22bba15001f/cookie-0.18.0/src/builder.rs /home/sayan/.cargo/registry/src/index.crates.io-6f17d22bba15001f/cookie-0.18.0/src/parse.rs /home/sayan/.cargo/registry/src/index.crates.io-6f17d22bba15001f/cookie-0.18.0/src/jar.rs /home/sayan/.cargo/registry/src/index.crates.io-6f17d22bba15001f/cookie-0.18.0/src/delta.rs /home/sayan/.cargo/registry/src/index.crates.io-6f17d22bba15001f/cookie-0.18.0/src/same_site.rs /home/sayan/.cargo/registry/src/index.crates.io-6f17d22bba15001f/cookie-0.18.0/src/expiration.rs /home/sayan/.cargo/registry/src/index.crates.io-6f17d22bba15001f/cookie-0.18.0/src/prefix.rs
+
+/mnt/c/Users/patel/OneDrive/Attachments/CSCI 485 Programming Lang/Project 3/rust/target/debug/deps/cookie-b36c62c2c5e621ac.d: /home/sayan/.cargo/registry/src/index.crates.io-6f17d22bba15001f/cookie-0.18.0/src/lib.rs /home/sayan/.cargo/registry/src/index.crates.io-6f17d22bba15001f/cookie-0.18.0/src/builder.rs /home/sayan/.cargo/registry/src/index.crates.io-6f17d22bba15001f/cookie-0.18.0/src/parse.rs /home/sayan/.cargo/registry/src/index.crates.io-6f17d22bba15001f/cookie-0.18.0/src/jar.rs /home/sayan/.cargo/registry/src/index.crates.io-6f17d22bba15001f/cookie-0.18.0/src/delta.rs /home/sayan/.cargo/registry/src/index.crates.io-6f17d22bba15001f/cookie-0.18.0/src/same_site.rs /home/sayan/.cargo/registry/src/index.crates.io-6f17d22bba15001f/cookie-0.18.0/src/expiration.rs /home/sayan/.cargo/registry/src/index.crates.io-6f17d22bba15001f/cookie-0.18.0/src/prefix.rs
+
+/home/sayan/.cargo/registry/src/index.crates.io-6f17d22bba15001f/cookie-0.18.0/src/lib.rs:
+/home/sayan/.cargo/registry/src/index.crates.io-6f17d22bba15001f/cookie-0.18.0/src/builder.rs:
+/home/sayan/.cargo/registry/src/index.crates.io-6f17d22bba15001f/cookie-0.18.0/src/parse.rs:
+/home/sayan/.cargo/registry/src/index.crates.io-6f17d22bba15001f/cookie-0.18.0/src/jar.rs:
+/home/sayan/.cargo/registry/src/index.crates.io-6f17d22bba15001f/cookie-0.18.0/src/delta.rs:
+/home/sayan/.cargo/registry/src/index.crates.io-6f17d22bba15001f/cookie-0.18.0/src/same_site.rs:
+/home/sayan/.cargo/registry/src/index.crates.io-6f17d22bba15001f/cookie-0.18.0/src/expiration.rs:
+/home/sayan/.cargo/registry/src/index.crates.io-6f17d22bba15001f/cookie-0.18.0/src/prefix.rs:

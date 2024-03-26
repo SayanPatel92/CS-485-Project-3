@@ -1,0 +1,1 @@
+window.SIDEBAR_ITEMS = {"enum":["Path","Query"],"macro":["impl_from_uri_param_identity"],"struct":["Formatter"],"trait":["FromUriParam","Ignorable","Part","UriDisplay"]};

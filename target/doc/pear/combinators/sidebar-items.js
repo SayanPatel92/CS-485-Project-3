@@ -1,0 +1,1 @@
+window.SIDEBAR_ITEMS = {"fn":["collect","collect_some","delimited_collect","last_of_many","ok","prefixed_series","series","succeeds","surrounded","trailing_series","try_collect"],"trait":["Collection"]};

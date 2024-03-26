@@ -1,0 +1,1 @@
+window.SIDEBAR_ITEMS = {"struct":["AdHoc","Info","Kind"],"trait":["Fairing"],"type":["Result"]};

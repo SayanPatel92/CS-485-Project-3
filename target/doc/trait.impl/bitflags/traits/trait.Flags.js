@@ -1,0 +1,3 @@
+(function() {var implementors = {
+"devise_core":[["impl <a class=\"trait\" href=\"bitflags/traits/trait.Flags.html\" title=\"trait bitflags::traits::Flags\">Flags</a> for <a class=\"struct\" href=\"devise_core/struct.Support.html\" title=\"struct devise_core::Support\">Support</a>"]]
+};if (window.register_implementors) {window.register_implementors(implementors);} else {window.pending_implementors = implementors;}})()

@@ -1,0 +1,1 @@
+window.SIDEBAR_ITEMS = {"struct":["Cursor","Extent","Options","ParserInfo","Pear","Span","Text"],"trait":["Debugger","Input","Length","Rewind","Show","Slice","Token"],"type":["Expected","ParseError","Result"]};

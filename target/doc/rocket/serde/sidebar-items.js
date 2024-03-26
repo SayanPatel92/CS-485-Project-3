@@ -1,0 +1,1 @@
+window.SIDEBAR_ITEMS = {"trait":["Deserialize","DeserializeOwned","Deserializer","Serialize","Serializer"]};

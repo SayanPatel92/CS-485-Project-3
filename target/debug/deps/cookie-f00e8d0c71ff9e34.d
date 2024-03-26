@@ -1,0 +1,12 @@
+C:\Users\patel\OneDrive\Attachments\CSCI 485 Programming Lang\Project 3\rust\target\debug\deps\libcookie-f00e8d0c71ff9e34.rmeta: C:\Users\patel\.cargo\registry\src\index.crates.io-6f17d22bba15001f\cookie-0.18.0\src\lib.rs C:\Users\patel\.cargo\registry\src\index.crates.io-6f17d22bba15001f\cookie-0.18.0\src\builder.rs C:\Users\patel\.cargo\registry\src\index.crates.io-6f17d22bba15001f\cookie-0.18.0\src\parse.rs C:\Users\patel\.cargo\registry\src\index.crates.io-6f17d22bba15001f\cookie-0.18.0\src\jar.rs C:\Users\patel\.cargo\registry\src\index.crates.io-6f17d22bba15001f\cookie-0.18.0\src\delta.rs C:\Users\patel\.cargo\registry\src\index.crates.io-6f17d22bba15001f\cookie-0.18.0\src\same_site.rs C:\Users\patel\.cargo\registry\src\index.crates.io-6f17d22bba15001f\cookie-0.18.0\src\expiration.rs C:\Users\patel\.cargo\registry\src\index.crates.io-6f17d22bba15001f\cookie-0.18.0\src\prefix.rs
+
+C:\Users\patel\OneDrive\Attachments\CSCI 485 Programming Lang\Project 3\rust\target\debug\deps\cookie-f00e8d0c71ff9e34.d: C:\Users\patel\.cargo\registry\src\index.crates.io-6f17d22bba15001f\cookie-0.18.0\src\lib.rs C:\Users\patel\.cargo\registry\src\index.crates.io-6f17d22bba15001f\cookie-0.18.0\src\builder.rs C:\Users\patel\.cargo\registry\src\index.crates.io-6f17d22bba15001f\cookie-0.18.0\src\parse.rs C:\Users\patel\.cargo\registry\src\index.crates.io-6f17d22bba15001f\cookie-0.18.0\src\jar.rs C:\Users\patel\.cargo\registry\src\index.crates.io-6f17d22bba15001f\cookie-0.18.0\src\delta.rs C:\Users\patel\.cargo\registry\src\index.crates.io-6f17d22bba15001f\cookie-0.18.0\src\same_site.rs C:\Users\patel\.cargo\registry\src\index.crates.io-6f17d22bba15001f\cookie-0.18.0\src\expiration.rs C:\Users\patel\.cargo\registry\src\index.crates.io-6f17d22bba15001f\cookie-0.18.0\src\prefix.rs
+
+C:\Users\patel\.cargo\registry\src\index.crates.io-6f17d22bba15001f\cookie-0.18.0\src\lib.rs:
+C:\Users\patel\.cargo\registry\src\index.crates.io-6f17d22bba15001f\cookie-0.18.0\src\builder.rs:
+C:\Users\patel\.cargo\registry\src\index.crates.io-6f17d22bba15001f\cookie-0.18.0\src\parse.rs:
+C:\Users\patel\.cargo\registry\src\index.crates.io-6f17d22bba15001f\cookie-0.18.0\src\jar.rs:
+C:\Users\patel\.cargo\registry\src\index.crates.io-6f17d22bba15001f\cookie-0.18.0\src\delta.rs:
+C:\Users\patel\.cargo\registry\src\index.crates.io-6f17d22bba15001f\cookie-0.18.0\src\same_site.rs:
+C:\Users\patel\.cargo\registry\src\index.crates.io-6f17d22bba15001f\cookie-0.18.0\src\expiration.rs:
+C:\Users\patel\.cargo\registry\src\index.crates.io-6f17d22bba15001f\cookie-0.18.0\src\prefix.rs:

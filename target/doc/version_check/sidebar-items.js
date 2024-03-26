@@ -1,0 +1,1 @@
+window.SIDEBAR_ITEMS = {"fn":["is_exact_date","is_exact_version","is_feature_flaggable","is_max_date","is_max_version","is_min_date","is_min_version","supports_feature","triple"],"struct":["Channel","Date","Version"]};

@@ -1,0 +1,349 @@
+<!DOCTYPE html><html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1.0"><meta name="generator" content="rustdoc"><meta name="description" content="Trait implemented by data guards to derive a value from request body data."><title>FromData in rocket::data - Rust</title><link rel="preload" as="font" type="font/woff2" crossorigin href="../../static.files/SourceSerif4-Regular-46f98efaafac5295.ttf.woff2"><link rel="preload" as="font" type="font/woff2" crossorigin href="../../static.files/FiraSans-Regular-018c141bf0843ffd.woff2"><link rel="preload" as="font" type="font/woff2" crossorigin href="../../static.files/FiraSans-Medium-8f9a781e4970d388.woff2"><link rel="preload" as="font" type="font/woff2" crossorigin href="../../static.files/SourceCodePro-Regular-562dcc5011b6de7d.ttf.woff2"><link rel="preload" as="font" type="font/woff2" crossorigin href="../../static.files/SourceCodePro-Semibold-d899c5a5c4aeb14a.ttf.woff2"><link rel="stylesheet" href="../../static.files/normalize-76eba96aa4d2e634.css"><link rel="stylesheet" href="../../static.files/rustdoc-5bc39a1768837dd0.css"><meta name="rustdoc-vars" data-root-path="../../" data-static-root-path="../../static.files/" data-current-crate="rocket" data-themes="" data-resource-suffix="" data-rustdoc-version="1.77.0 (aedd173a2 2024-03-17)" data-channel="1.77.0" data-search-js="search-dd67cee4cfa65049.js" data-settings-js="settings-4313503d2e1961c2.js" ><script src="../../static.files/storage-4c98445ec4002617.js"></script><script defer src="sidebar-items.js"></script><script defer src="../../static.files/main-48f368f3872407c8.js"></script><noscript><link rel="stylesheet" href="../../static.files/noscript-04d5337699b92874.css"></noscript><link rel="icon" href="https://rocket.rs/images/favicon.ico"></head><body class="rustdoc trait"><!--[if lte IE 11]><div class="warning">This old browser is unsupported and will most likely display funky things.</div><![endif]--><nav class="mobile-topbar"><button class="sidebar-menu-toggle" title="show sidebar"></button><a class="logo-container" href="../../rocket/index.html"><img src="https://rocket.rs/images/logo-boxed.png" alt=""></a></nav><nav class="sidebar"><div class="sidebar-crate"><a class="logo-container" href="../../rocket/index.html"><img src="https://rocket.rs/images/logo-boxed.png" alt="logo"></a><h2><a href="../../rocket/index.html">rocket</a><span class="version">0.5.0</span></h2></div><h2 class="location"><a href="#">FromData</a></h2><div class="sidebar-elems"><section><h3><a href="#required-associated-types">Required Associated Types</a></h3><ul class="block"><li><a href="#associatedtype.Error">Error</a></li></ul><h3><a href="#required-methods">Required Methods</a></h3><ul class="block"><li><a href="#tymethod.from_data">from_data</a></li></ul><h3><a href="#foreign-impls">Implementations on Foreign Types</a></h3><ul class="block"><li><a href="#impl-FromData%3C'r%3E-for-%26%5Bu8%5D">&amp;&#x27;r [u8]</a></li><li><a href="#impl-FromData%3C'r%3E-for-%26str">&amp;&#x27;r str</a></li><li><a href="#impl-FromData%3C'r%3E-for-Cow%3C'_,+str%3E">Cow&lt;&#x27;_, str&gt;</a></li><li><a href="#impl-FromData%3C'r%3E-for-Option%3CT%3E">Option&lt;T&gt;</a></li><li><a href="#impl-FromData%3C'r%3E-for-Result%3CT,+%3CT+as+FromData%3C'r%3E%3E::Error%3E">Result&lt;T, T::Error&gt;</a></li><li><a href="#impl-FromData%3C'r%3E-for-String">String</a></li><li><a href="#impl-FromData%3C'r%3E-for-Vec%3Cu8%3E">Vec&lt;u8&gt;</a></li></ul><h3><a href="#object-safety">Object Safety</a></h3><h3><a href="#implementors">Implementors</a></h3></section><h2><a href="index.html">In rocket::data</a></h2></div></nav><div class="sidebar-resizer"></div>
+    <main><div class="width-limiter"><nav class="sub"><form class="search-form"><span></span><div id="sidebar-button" tabindex="-1"><a href="../../rocket/all.html" title="show sidebar"></a></div><input class="search-input" name="search" aria-label="Run search in the documentation" autocomplete="off" spellcheck="false" placeholder="Click or press ‘S’ to search, ‘?’ for more options…" type="search"><div id="help-button" tabindex="-1"><a href="../../help.html" title="help">?</a></div><div id="settings-menu" tabindex="-1"><a href="../../settings.html" title="settings"><img width="22" height="22" alt="Change settings" src="../../static.files/wheel-7b819b6101059cd0.svg"></a></div></form></nav><section id="main-content" class="content"><div class="main-heading"><h1>Trait <a href="../index.html">rocket</a>::<wbr><a href="index.html">data</a>::<wbr><a class="trait" href="#">FromData</a><button id="copy-path" title="Copy item path to clipboard"><img src="../../static.files/clipboard-7571035ce49a181d.svg" width="19" height="18" alt="Copy item path"></button></h1><span class="out-of-band"><a class="src" href="../../src/rocket/data/from_data.rs.html#304-315">source</a> · <button id="toggle-all-docs" title="collapse all docs">[<span>&#x2212;</span>]</button></span></div><pre class="rust item-decl"><code>pub trait FromData&lt;'r&gt;: <a class="trait" href="https://doc.rust-lang.org/1.77.0/core/marker/trait.Sized.html" title="trait core::marker::Sized">Sized</a> {
+    type <a href="#associatedtype.Error" class="associatedtype">Error</a>: <a class="trait" href="https://doc.rust-lang.org/1.77.0/core/marker/trait.Send.html" title="trait core::marker::Send">Send</a> + <a class="trait" href="https://doc.rust-lang.org/1.77.0/core/fmt/trait.Debug.html" title="trait core::fmt::Debug">Debug</a>;
+
+    // Required method
+    fn <a href="#tymethod.from_data" class="fn">from_data</a>&lt;'life0, 'async_trait&gt;(
+        req: &amp;'r <a class="struct" href="../request/struct.Request.html" title="struct rocket::request::Request">Request</a>&lt;'life0&gt;,
+        data: <a class="struct" href="struct.Data.html" title="struct rocket::data::Data">Data</a>&lt;'r&gt;
+    ) -&gt; <a class="struct" href="https://doc.rust-lang.org/1.77.0/core/pin/struct.Pin.html" title="struct core::pin::Pin">Pin</a>&lt;<a class="struct" href="https://doc.rust-lang.org/1.77.0/alloc/boxed/struct.Box.html" title="struct alloc::boxed::Box">Box</a>&lt;dyn <a class="trait" href="https://doc.rust-lang.org/1.77.0/core/future/future/trait.Future.html" title="trait core::future::future::Future">Future</a>&lt;Output = <a class="type" href="type.Outcome.html" title="type rocket::data::Outcome">Outcome</a>&lt;'r, Self&gt;&gt; + <a class="trait" href="https://doc.rust-lang.org/1.77.0/core/marker/trait.Send.html" title="trait core::marker::Send">Send</a> + 'async_trait&gt;&gt;
+       <span class="where">where Self: 'async_trait,
+             'r: 'async_trait,
+             'life0: 'async_trait</span>;
+}</code></pre><details class="toggle top-doc" open><summary class="hideme"><span>Expand description</span></summary><div class="docblock"><p>Trait implemented by data guards to derive a value from request body data.</p>
+<h2 id="data-guards"><a class="doc-anchor" href="#data-guards">§</a>Data Guards</h2>
+<p>A data guard is a guard that operates on a request’s body data. Data guards
+validate and parse request body data via implementations of <code>FromData</code>. In
+other words, a type is a data guard <em>iff</em> it implements <code>FromData</code>.</p>
+<p>Data guards are the target of the <code>data</code> route attribute parameter:</p>
+
+<div class="example-wrap"><pre class="rust rust-example-rendered"><code><span class="attr">#[post(<span class="string">"/submit"</span>, data = <span class="string">"&lt;var&gt;"</span>)]
+</span><span class="kw">fn </span>submit(var: DataGuard) { <span class="comment">/* ... */ </span>}</code></pre></div>
+<p>A route can have at most one data guard. Above, <code>var</code> is used as the
+argument name for the data guard type <code>DataGuard</code>. When the <code>submit</code> route
+matches, Rocket will call the <code>FromData</code> implementation for the type <code>T</code>.
+The handler will only be called if the guard returns successfully.</p>
+<h3 id="build-in-guards"><a class="doc-anchor" href="#build-in-guards">§</a>Build-In Guards</h3>
+<p>Rocket provides implementations for <code>FromData</code> for many types. Their
+behavior is documented here:</p>
+<ul>
+<li>
+<p><code>Data</code>: Returns the untouched <code>Data</code>.</p>
+<ul>
+<li>
+<p><strong>Fails:</strong> Never.</p>
+</li>
+<li>
+<p><strong>Succeeds:</strong> Always.</p>
+</li>
+<li>
+<p><strong>Forwards:</strong> Never.</p>
+</li>
+</ul>
+</li>
+<li>
+<p>Strings: <code>Cow&lt;str&gt;</code>, <code>&amp;str</code>, <code>&amp;RawStr</code>, <code>String</code></p>
+<p><em>Limited by the <code>string</code> <a href="struct.Limits.html#built-in-limits" title="struct rocket::data::Limits">data limit</a>.</em></p>
+<p>Reads the body data into a string via <a href="struct.DataStream.html#method.into_string" title="method rocket::data::DataStream::into_string"><code>DataStream::into_string()</code></a>.</p>
+<ul>
+<li>
+<p><strong>Fails:</strong> If the body data is not valid UTF-8 or on I/O errors while
+reading. The error type is <a href="https://doc.rust-lang.org/1.77.0/std/io/error/struct.Error.html" title="struct std::io::error::Error"><code>io::Error</code></a>.</p>
+</li>
+<li>
+<p><strong>Succeeds:</strong> If the body data <em>is</em> valid UTF-8. If the limit is
+exceeded, the string is truncated to the limit.</p>
+</li>
+<li>
+<p><strong>Forwards:</strong> Never.</p>
+</li>
+</ul>
+</li>
+<li>
+<p>Bytes: <code>&amp;[u8]</code>, <code>Vec&lt;u8&gt;</code></p>
+<p><em>Limited by the <code>bytes</code> <a href="struct.Limits.html#built-in-limits" title="struct rocket::data::Limits">data limit</a>.</em></p>
+<p>Reads the body data into a byte vector via <a href="struct.DataStream.html#method.into_bytes" title="method rocket::data::DataStream::into_bytes"><code>DataStream::into_bytes()</code></a>.</p>
+<ul>
+<li>
+<p><strong>Fails:</strong> On I/O errors while reading. The error type is
+<a href="https://doc.rust-lang.org/1.77.0/std/io/error/struct.Error.html" title="struct std::io::error::Error"><code>io::Error</code></a>.</p>
+</li>
+<li>
+<p><strong>Succeeds:</strong> As long as no I/O error occurs. If the limit is
+exceeded, the slice is truncated to the limit.</p>
+</li>
+<li>
+<p><strong>Forwards:</strong> Never.</p>
+</li>
+</ul>
+</li>
+<li>
+<p><a href="../fs/enum.TempFile.html" title="enum rocket::fs::TempFile"><code>TempFile</code></a></p>
+<p><em>Limited by the <code>file</code> and/or <code>file/$ext</code> <a href="struct.Limits.html#built-in-limits" title="struct rocket::data::Limits">data limit</a>.</em></p>
+<p>Streams the body data directly into a temporary file. The data is never
+buffered in memory.</p>
+<ul>
+<li>
+<p><strong>Fails:</strong> On I/O errors while reading data or creating the temporary
+file. The error type is <a href="https://doc.rust-lang.org/1.77.0/std/io/error/struct.Error.html" title="struct std::io::error::Error"><code>io::Error</code></a>.</p>
+</li>
+<li>
+<p><strong>Succeeds:</strong> As long as no I/O error occurs and the temporary file
+could be created. If the limit is exceeded, only data up to the limit is
+read and subsequently written.</p>
+</li>
+<li>
+<p><strong>Forwards:</strong> Never.</p>
+</li>
+</ul>
+</li>
+<li>
+<p>Deserializers: <a href="crate::serde::json::Json"><code>Json&lt;T&gt;</code></a>, <a href="crate::serde::msgpack::MsgPack"><code>MsgPack&lt;T&gt;</code></a></p>
+<p><em>Limited by the <code>json</code>, <code>msgpack</code> <a href="struct.Limits.html#built-in-limits" title="struct rocket::data::Limits">data limit</a>, respectively.</em></p>
+<p>Reads up to the configured limit and deserializes the read data into <code>T</code>
+using the respective format’s parser.</p>
+<ul>
+<li>
+<p><strong>Fails:</strong> On I/O errors while reading the data, or if the data fails
+to parse as a <code>T</code> according to the deserializer. The error type for
+<code>Json</code> is <a href="crate::serde::json::Error"><code>json::Error</code></a> and the error type
+for <code>MsgPack</code> is <a href="crate::serde::msgpack::Error"><code>msgpack::Error</code></a>.</p>
+</li>
+<li>
+<p><strong>Succeeds:</strong> As long as no I/O error occurs and the (limited) body
+data was successfully deserialized as a <code>T</code>.</p>
+</li>
+<li>
+<p><strong>Forwards:</strong> Never.</p>
+</li>
+</ul>
+</li>
+<li>
+<p>Forms: <a href="../form/struct.Form.html" title="struct rocket::form::Form"><code>Form&lt;T&gt;</code></a></p>
+<p><em>Limited by the <code>form</code> or <code>data-form</code> <a href="struct.Limits.html#built-in-limits" title="struct rocket::data::Limits">data limit</a>.</em></p>
+<p>Parses the incoming data stream into fields according to Rocket’s <a href="../form/index.html#field-wire-format" title="mod rocket::form">field
+wire format</a>, pushes each field to <code>T</code>’s <a href="../form/trait.FromForm.html" title="trait rocket::form::FromForm"><code>FromForm</code></a> <a href="../form/trait.FromForm.html#push-parsing" title="trait rocket::form::FromForm">push parser</a>, and
+finalizes the form. Parsing is done on the stream without reading the
+data into memory. If the request has as a <a href="../http/struct.ContentType.html#associatedconstant.Form" title="associated constant rocket::http::ContentType::Form"><code>ContentType::Form</code></a>, the
+<code>form</code> limit is applied, otherwise if the request has a
+<a href="../http/struct.ContentType.html#associatedconstant.FormData" title="associated constant rocket::http::ContentType::FormData"><code>ContentType::FormData</code></a>, the <code>data-form</code> limit is applied.</p>
+<ul>
+<li>
+<p><strong>Fails:</strong> On I/O errors while reading the data, or if the data fails
+to parse as a <code>T</code> according to its <code>FromForm</code> implementation. The errors
+are collected into an <a href="../form/struct.Errors.html" title="struct rocket::form::Errors"><code>Errors</code></a>, the error type.</p>
+</li>
+<li>
+<p><strong>Succeeds:</strong> As long as no I/O error occurs and the (limited) body
+data was successfully parsed as a <code>T</code>.</p>
+</li>
+<li>
+<p><strong>Forwards:</strong> If the request’s <code>Content-Type</code> is neither
+<a href="../http/struct.ContentType.html#associatedconstant.Form" title="associated constant rocket::http::ContentType::Form"><code>ContentType::Form</code></a> nor <a href="../http/struct.ContentType.html#associatedconstant.FormData" title="associated constant rocket::http::ContentType::FormData"><code>ContentType::FormData</code></a>.</p>
+</li>
+</ul>
+</li>
+<li>
+<p><code>Option&lt;T&gt;</code></p>
+<p>Forwards to <code>T</code>’s <code>FromData</code> implementation, capturing the outcome.</p>
+<ul>
+<li>
+<p><strong>Fails:</strong> Never.</p>
+</li>
+<li>
+<p><strong>Succeeds:</strong> Always. If <code>T</code>’s <code>FromData</code> implementation succeeds, the
+parsed value is returned in <code>Some</code>. If its implementation forwards or
+fails, <code>None</code> is returned.</p>
+</li>
+<li>
+<p><strong>Forwards:</strong> Never.</p>
+</li>
+</ul>
+</li>
+<li>
+<p><code>Result&lt;T, T::Error&gt;</code></p>
+<p>Forwards to <code>T</code>’s <code>FromData</code> implementation, capturing the outcome.</p>
+<ul>
+<li>
+<p><strong>Fails:</strong> Never.</p>
+</li>
+<li>
+<p><strong>Succeeds:</strong> If <code>T</code>’s <code>FromData</code> implementation succeeds or fails. If
+it succeeds, the value is returned in <code>Ok</code>. If it fails, the error value
+is returned in <code>Err</code>.</p>
+</li>
+<li>
+<p><strong>Forwards:</strong> If <code>T</code>’s implementation forwards.</p>
+</li>
+</ul>
+</li>
+<li>
+<p><a href="struct.Capped.html" title="struct rocket::data::Capped"><code>Capped&lt;T&gt;</code></a></p>
+<p>Forwards to <code>T</code>’s <code>FromData</code> implementation, recording whether the data
+was truncated (a.k.a. capped) due to <code>T</code>’s limit being exceeded.</p>
+<ul>
+<li><strong>Fails:</strong> If <code>T</code>’s implementation fails.</li>
+<li><strong>Succeeds:</strong> If <code>T</code>’s implementation succeeds.</li>
+<li><strong>Forwards:</strong> If <code>T</code>’s implementation forwards.</li>
+</ul>
+</li>
+</ul>
+<h3 id="async-trait"><a class="doc-anchor" href="#async-trait">§</a>Async Trait</h3>
+<p><a href="trait.FromData.html" title="trait rocket::data::FromData"><code>FromData</code></a> is an <em>async</em> trait. Implementations of <code>FromData</code> must be
+decorated with an attribute of <code>#[rocket::async_trait]</code>:</p>
+
+<div class="example-wrap"><pre class="rust rust-example-rendered"><code><span class="kw">use </span>rocket::request::Request;
+<span class="kw">use </span>rocket::data::{<span class="self">self</span>, Data, FromData};
+
+<span class="attr">#[rocket::async_trait]
+</span><span class="kw">impl</span>&lt;<span class="lifetime">'r</span>&gt; FromData&lt;<span class="lifetime">'r</span>&gt; <span class="kw">for </span>MyType {
+    <span class="kw">type </span>Error = MyError;
+
+    <span class="kw">async fn </span>from_data(req: <span class="kw-2">&amp;</span><span class="lifetime">'r </span>Request&lt;<span class="lifetime">'_</span>&gt;, data: Data&lt;<span class="lifetime">'r</span>&gt;) -&gt; data::Outcome&lt;<span class="lifetime">'r</span>, <span class="self">Self</span>&gt; {
+        <span class="comment">/* .. */
+    </span>}
+}</code></pre></div>
+<h2 id="example"><a class="doc-anchor" href="#example">§</a>Example</h2>
+<p>Say that you have a custom type, <code>Person</code>:</p>
+
+<div class="example-wrap"><pre class="rust rust-example-rendered"><code><span class="kw">struct </span>Person&lt;<span class="lifetime">'r</span>&gt; {
+    name: <span class="kw-2">&amp;</span><span class="lifetime">'r </span>str,
+    age: u16
+}</code></pre></div>
+<p><code>Person</code> has a custom serialization format, so the built-in <code>Json</code> type
+doesn’t suffice. The format is <code>&lt;name&gt;:&lt;age&gt;</code> with <code>Content-Type: application/x-person</code>. You’d like to use <code>Person</code> as a data guard, so that
+you can retrieve it directly from a client’s request body:</p>
+
+<div class="example-wrap"><pre class="rust rust-example-rendered"><code><span class="attr">#[post(<span class="string">"/person"</span>, data = <span class="string">"&lt;person&gt;"</span>)]
+</span><span class="kw">fn </span>person(person: Person&lt;<span class="lifetime">'_</span>&gt;) -&gt; <span class="kw-2">&amp;</span><span class="lifetime">'static </span>str {
+    <span class="string">"Saved the new person to the database!"
+</span>}</code></pre></div>
+<p>A <code>FromData</code> implementation for such a type might look like:</p>
+
+<div class="example-wrap"><pre class="rust rust-example-rendered"><code><span class="kw">use </span>rocket::request::{<span class="self">self</span>, Request};
+<span class="kw">use </span>rocket::data::{<span class="self">self</span>, Data, FromData, ToByteUnit};
+<span class="kw">use </span>rocket::http::{Status, ContentType};
+<span class="kw">use </span>rocket::outcome::Outcome;
+
+<span class="attr">#[derive(Debug)]
+</span><span class="kw">enum </span>Error {
+    TooLarge,
+    NoColon,
+    InvalidAge,
+    Io(std::io::Error),
+}
+
+<span class="attr">#[rocket::async_trait]
+</span><span class="kw">impl</span>&lt;<span class="lifetime">'r</span>&gt; FromData&lt;<span class="lifetime">'r</span>&gt; <span class="kw">for </span>Person&lt;<span class="lifetime">'r</span>&gt; {
+    <span class="kw">type </span>Error = Error;
+
+    <span class="kw">async fn </span>from_data(req: <span class="kw-2">&amp;</span><span class="lifetime">'r </span>Request&lt;<span class="lifetime">'_</span>&gt;, data: Data&lt;<span class="lifetime">'r</span>&gt;) -&gt; data::Outcome&lt;<span class="lifetime">'r</span>, <span class="self">Self</span>&gt; {
+        <span class="kw">use </span>Error::<span class="kw-2">*</span>;
+
+        <span class="comment">// Ensure the content type is correct before opening the data.
+        </span><span class="kw">let </span>person_ct = ContentType::new(<span class="string">"application"</span>, <span class="string">"x-person"</span>);
+        <span class="kw">if </span>req.content_type() != <span class="prelude-val">Some</span>(<span class="kw-2">&amp;</span>person_ct) {
+            <span class="kw">return </span>Outcome::Forward((data, Status::UnsupportedMediaType));
+        }
+
+        <span class="comment">// Use a configured limit with name 'person' or fallback to default.
+        </span><span class="kw">let </span>limit = req.limits().get(<span class="string">"person"</span>).unwrap_or(<span class="number">256</span>.bytes());
+
+        <span class="comment">// Read the data into a string.
+        </span><span class="kw">let </span>string = <span class="kw">match </span>data.open(limit).into_string().<span class="kw">await </span>{
+            <span class="prelude-val">Ok</span>(string) <span class="kw">if </span>string.is_complete() =&gt; string.into_inner(),
+            <span class="prelude-val">Ok</span>(<span class="kw">_</span>) =&gt; <span class="kw">return </span>Outcome::Error((Status::PayloadTooLarge, TooLarge)),
+            <span class="prelude-val">Err</span>(e) =&gt; <span class="kw">return </span>Outcome::Error((Status::InternalServerError, Io(e))),
+        };
+
+        <span class="comment">// We store `string` in request-local cache for long-lived borrows.
+        </span><span class="kw">let </span>string = <span class="macro">request::local_cache!</span>(req, string);
+
+        <span class="comment">// Split the string into two pieces at ':'.
+        </span><span class="kw">let </span>(name, age) = <span class="kw">match </span>string.find(<span class="string">':'</span>) {
+            <span class="prelude-val">Some</span>(i) =&gt; (<span class="kw-2">&amp;</span>string[..i], <span class="kw-2">&amp;</span>string[(i + <span class="number">1</span>)..]),
+            <span class="prelude-val">None </span>=&gt; <span class="kw">return </span>Outcome::Error((Status::UnprocessableEntity, NoColon)),
+        };
+
+        <span class="comment">// Parse the age.
+        </span><span class="kw">let </span>age: u16 = <span class="kw">match </span>age.parse() {
+            <span class="prelude-val">Ok</span>(age) =&gt; age,
+            <span class="prelude-val">Err</span>(<span class="kw">_</span>) =&gt; <span class="kw">return </span>Outcome::Error((Status::UnprocessableEntity, InvalidAge)),
+        };
+
+        Outcome::Success(Person { name, age })
+    }
+}
+
+<span class="comment">// The following routes now typecheck...
+
+</span><span class="attr">#[post(<span class="string">"/person"</span>, data = <span class="string">"&lt;person&gt;"</span>)]
+</span><span class="kw">fn </span>person(person: Person&lt;<span class="lifetime">'_</span>&gt;) { <span class="comment">/* .. */ </span>}
+
+<span class="attr">#[post(<span class="string">"/person"</span>, data = <span class="string">"&lt;person&gt;"</span>)]
+</span><span class="kw">fn </span>person2(person: <span class="prelude-ty">Result</span>&lt;Person&lt;<span class="lifetime">'_</span>&gt;, Error&gt;) { <span class="comment">/* .. */ </span>}
+
+<span class="attr">#[post(<span class="string">"/person"</span>, data = <span class="string">"&lt;person&gt;"</span>)]
+</span><span class="kw">fn </span>person3(person: <span class="prelude-ty">Option</span>&lt;Person&lt;<span class="lifetime">'_</span>&gt;&gt;) { <span class="comment">/* .. */ </span>}
+
+<span class="attr">#[post(<span class="string">"/person"</span>, data = <span class="string">"&lt;person&gt;"</span>)]
+</span><span class="kw">fn </span>person4(person: Person&lt;<span class="lifetime">'_</span>&gt;) -&gt; <span class="kw-2">&amp;</span>str {
+    <span class="comment">// Note that this is only possible because the data in `person` live
+    // as long as the request through request-local cache.
+    </span>person.name
+}</code></pre></div>
+</div></details><h2 id="required-associated-types" class="section-header">Required Associated Types<a href="#required-associated-types" class="anchor">§</a></h2><div class="methods"><details class="toggle" open><summary><section id="associatedtype.Error" class="method"><a class="src rightside" href="../../src/rocket/data/from_data.rs.html#306">source</a><h4 class="code-header">type <a href="#associatedtype.Error" class="associatedtype">Error</a>: <a class="trait" href="https://doc.rust-lang.org/1.77.0/core/marker/trait.Send.html" title="trait core::marker::Send">Send</a> + <a class="trait" href="https://doc.rust-lang.org/1.77.0/core/fmt/trait.Debug.html" title="trait core::fmt::Debug">Debug</a></h4></section></summary><div class="docblock"><p>The associated error to be returned when the guard fails.</p>
+</div></details></div><h2 id="required-methods" class="section-header">Required Methods<a href="#required-methods" class="anchor">§</a></h2><div class="methods"><details class="toggle method-toggle" open><summary><section id="tymethod.from_data" class="method"><a class="src rightside" href="../../src/rocket/data/from_data.rs.html#314">source</a><h4 class="code-header">fn <a href="#tymethod.from_data" class="fn">from_data</a>&lt;'life0, 'async_trait&gt;(
+    req: &amp;'r <a class="struct" href="../request/struct.Request.html" title="struct rocket::request::Request">Request</a>&lt;'life0&gt;,
+    data: <a class="struct" href="struct.Data.html" title="struct rocket::data::Data">Data</a>&lt;'r&gt;
+) -&gt; <a class="struct" href="https://doc.rust-lang.org/1.77.0/core/pin/struct.Pin.html" title="struct core::pin::Pin">Pin</a>&lt;<a class="struct" href="https://doc.rust-lang.org/1.77.0/alloc/boxed/struct.Box.html" title="struct alloc::boxed::Box">Box</a>&lt;dyn <a class="trait" href="https://doc.rust-lang.org/1.77.0/core/future/future/trait.Future.html" title="trait core::future::future::Future">Future</a>&lt;Output = <a class="type" href="type.Outcome.html" title="type rocket::data::Outcome">Outcome</a>&lt;'r, Self&gt;&gt; + <a class="trait" href="https://doc.rust-lang.org/1.77.0/core/marker/trait.Send.html" title="trait core::marker::Send">Send</a> + 'async_trait&gt;&gt;<div class="where">where
+    Self: 'async_trait,
+    'r: 'async_trait,
+    'life0: 'async_trait,</div></h4></section></summary><div class="docblock"><p>Asynchronously validates, parses, and converts an instance of <code>Self</code>
+from the incoming request body data.</p>
+<p>If validation and parsing succeeds, an outcome of <code>Success</code> is returned.
+If the data is not appropriate given the type of <code>Self</code>, <code>Forward</code> is
+returned. If parsing fails, <code>Error</code> is returned.</p>
+</div></details></div><h2 id="object-safety" class="section-header">Object Safety<a href="#object-safety" class="anchor">§</a></h2><div class="object-safety-info">This trait is <b>not</b> <a href="https://doc.rust-lang.org/1.77.0/reference/items/traits.html#object-safety">object safe</a>.</div><h2 id="foreign-impls" class="section-header">Implementations on Foreign Types<a href="#foreign-impls" class="anchor">§</a></h2><details class="toggle implementors-toggle"><summary><section id="impl-FromData%3C'r%3E-for-%26str" class="impl"><a class="src rightside" href="../../src/rocket/data/from_data.rs.html#342">source</a><a href="#impl-FromData%3C'r%3E-for-%26str" class="anchor">§</a><h3 class="code-header">impl&lt;'r&gt; <a class="trait" href="trait.FromData.html" title="trait rocket::data::FromData">FromData</a>&lt;'r&gt; for &amp;'r <a class="primitive" href="https://doc.rust-lang.org/1.77.0/std/primitive.str.html">str</a></h3></section></summary><div class="impl-items"><section id="associatedtype.Error-1" class="associatedtype trait-impl"><a href="#associatedtype.Error-1" class="anchor">§</a><h4 class="code-header">type <a href="#associatedtype.Error" class="associatedtype">Error</a> = &lt;<a class="struct" href="struct.Capped.html" title="struct rocket::data::Capped">Capped</a>&lt;&amp;'r <a class="primitive" href="https://doc.rust-lang.org/1.77.0/std/primitive.str.html">str</a>&gt; as <a class="trait" href="trait.FromData.html" title="trait rocket::data::FromData">FromData</a>&lt;'r&gt;&gt;::<a class="associatedtype" href="trait.FromData.html#associatedtype.Error" title="type rocket::data::FromData::Error">Error</a></h4></section><section id="method.from_data" class="method trait-impl"><a class="src rightside" href="../../src/rocket/data/from_data.rs.html#342">source</a><a href="#method.from_data" class="anchor">§</a><h4 class="code-header">fn <a href="#tymethod.from_data" class="fn">from_data</a>&lt;'life0, 'async_trait&gt;(
+    r: &amp;'r <a class="struct" href="../request/struct.Request.html" title="struct rocket::request::Request">Request</a>&lt;'life0&gt;,
+    d: <a class="struct" href="struct.Data.html" title="struct rocket::data::Data">Data</a>&lt;'r&gt;
+) -&gt; <a class="struct" href="https://doc.rust-lang.org/1.77.0/core/pin/struct.Pin.html" title="struct core::pin::Pin">Pin</a>&lt;<a class="struct" href="https://doc.rust-lang.org/1.77.0/alloc/boxed/struct.Box.html" title="struct alloc::boxed::Box">Box</a>&lt;dyn <a class="trait" href="https://doc.rust-lang.org/1.77.0/core/future/future/trait.Future.html" title="trait core::future::future::Future">Future</a>&lt;Output = <a class="type" href="type.Outcome.html" title="type rocket::data::Outcome">Outcome</a>&lt;'r, Self&gt;&gt; + <a class="trait" href="https://doc.rust-lang.org/1.77.0/core/marker/trait.Send.html" title="trait core::marker::Send">Send</a> + 'async_trait&gt;&gt;<div class="where">where
+    Self: 'async_trait,
+    'r: 'async_trait,
+    'life0: 'async_trait,</div></h4></section></div></details><details class="toggle implementors-toggle"><summary><section id="impl-FromData%3C'r%3E-for-%26%5Bu8%5D" class="impl"><a class="src rightside" href="../../src/rocket/data/from_data.rs.html#380">source</a><a href="#impl-FromData%3C'r%3E-for-%26%5Bu8%5D" class="anchor">§</a><h3 class="code-header">impl&lt;'r&gt; <a class="trait" href="trait.FromData.html" title="trait rocket::data::FromData">FromData</a>&lt;'r&gt; for &amp;'r [<a class="primitive" href="https://doc.rust-lang.org/1.77.0/std/primitive.u8.html">u8</a>]</h3></section></summary><div class="impl-items"><section id="associatedtype.Error-2" class="associatedtype trait-impl"><a href="#associatedtype.Error-2" class="anchor">§</a><h4 class="code-header">type <a href="#associatedtype.Error" class="associatedtype">Error</a> = &lt;<a class="struct" href="struct.Capped.html" title="struct rocket::data::Capped">Capped</a>&lt;&amp;'r [<a class="primitive" href="https://doc.rust-lang.org/1.77.0/std/primitive.u8.html">u8</a>]&gt; as <a class="trait" href="trait.FromData.html" title="trait rocket::data::FromData">FromData</a>&lt;'r&gt;&gt;::<a class="associatedtype" href="trait.FromData.html#associatedtype.Error" title="type rocket::data::FromData::Error">Error</a></h4></section><section id="method.from_data-1" class="method trait-impl"><a class="src rightside" href="../../src/rocket/data/from_data.rs.html#380">source</a><a href="#method.from_data-1" class="anchor">§</a><h4 class="code-header">fn <a href="#tymethod.from_data" class="fn">from_data</a>&lt;'life0, 'async_trait&gt;(
+    r: &amp;'r <a class="struct" href="../request/struct.Request.html" title="struct rocket::request::Request">Request</a>&lt;'life0&gt;,
+    d: <a class="struct" href="struct.Data.html" title="struct rocket::data::Data">Data</a>&lt;'r&gt;
+) -&gt; <a class="struct" href="https://doc.rust-lang.org/1.77.0/core/pin/struct.Pin.html" title="struct core::pin::Pin">Pin</a>&lt;<a class="struct" href="https://doc.rust-lang.org/1.77.0/alloc/boxed/struct.Box.html" title="struct alloc::boxed::Box">Box</a>&lt;dyn <a class="trait" href="https://doc.rust-lang.org/1.77.0/core/future/future/trait.Future.html" title="trait core::future::future::Future">Future</a>&lt;Output = <a class="type" href="type.Outcome.html" title="type rocket::data::Outcome">Outcome</a>&lt;'r, Self&gt;&gt; + <a class="trait" href="https://doc.rust-lang.org/1.77.0/core/marker/trait.Send.html" title="trait core::marker::Send">Send</a> + 'async_trait&gt;&gt;<div class="where">where
+    Self: 'async_trait,
+    'r: 'async_trait,
+    'life0: 'async_trait,</div></h4></section></div></details><details class="toggle implementors-toggle"><summary><section id="impl-FromData%3C'r%3E-for-Cow%3C'_,+str%3E" class="impl"><a class="src rightside" href="../../src/rocket/data/from_data.rs.html#367">source</a><a href="#impl-FromData%3C'r%3E-for-Cow%3C'_,+str%3E" class="anchor">§</a><h3 class="code-header">impl&lt;'r&gt; <a class="trait" href="trait.FromData.html" title="trait rocket::data::FromData">FromData</a>&lt;'r&gt; for <a class="enum" href="https://doc.rust-lang.org/1.77.0/alloc/borrow/enum.Cow.html" title="enum alloc::borrow::Cow">Cow</a>&lt;'_, <a class="primitive" href="https://doc.rust-lang.org/1.77.0/std/primitive.str.html">str</a>&gt;</h3></section></summary><div class="impl-items"><section id="associatedtype.Error-3" class="associatedtype trait-impl"><a href="#associatedtype.Error-3" class="anchor">§</a><h4 class="code-header">type <a href="#associatedtype.Error" class="associatedtype">Error</a> = &lt;<a class="struct" href="struct.Capped.html" title="struct rocket::data::Capped">Capped</a>&lt;<a class="enum" href="https://doc.rust-lang.org/1.77.0/alloc/borrow/enum.Cow.html" title="enum alloc::borrow::Cow">Cow</a>&lt;'_, <a class="primitive" href="https://doc.rust-lang.org/1.77.0/std/primitive.str.html">str</a>&gt;&gt; as <a class="trait" href="trait.FromData.html" title="trait rocket::data::FromData">FromData</a>&lt;'r&gt;&gt;::<a class="associatedtype" href="trait.FromData.html#associatedtype.Error" title="type rocket::data::FromData::Error">Error</a></h4></section><section id="method.from_data-2" class="method trait-impl"><a class="src rightside" href="../../src/rocket/data/from_data.rs.html#367">source</a><a href="#method.from_data-2" class="anchor">§</a><h4 class="code-header">fn <a href="#tymethod.from_data" class="fn">from_data</a>&lt;'life0, 'async_trait&gt;(
+    r: &amp;'r <a class="struct" href="../request/struct.Request.html" title="struct rocket::request::Request">Request</a>&lt;'life0&gt;,
+    d: <a class="struct" href="struct.Data.html" title="struct rocket::data::Data">Data</a>&lt;'r&gt;
+) -&gt; <a class="struct" href="https://doc.rust-lang.org/1.77.0/core/pin/struct.Pin.html" title="struct core::pin::Pin">Pin</a>&lt;<a class="struct" href="https://doc.rust-lang.org/1.77.0/alloc/boxed/struct.Box.html" title="struct alloc::boxed::Box">Box</a>&lt;dyn <a class="trait" href="https://doc.rust-lang.org/1.77.0/core/future/future/trait.Future.html" title="trait core::future::future::Future">Future</a>&lt;Output = <a class="type" href="type.Outcome.html" title="type rocket::data::Outcome">Outcome</a>&lt;'r, Self&gt;&gt; + <a class="trait" href="https://doc.rust-lang.org/1.77.0/core/marker/trait.Send.html" title="trait core::marker::Send">Send</a> + 'async_trait&gt;&gt;<div class="where">where
+    Self: 'async_trait,
+    'r: 'async_trait,
+    'life0: 'async_trait,</div></h4></section></div></details><details class="toggle implementors-toggle"><summary><section id="impl-FromData%3C'r%3E-for-String" class="impl"><a class="src rightside" href="../../src/rocket/data/from_data.rs.html#329">source</a><a href="#impl-FromData%3C'r%3E-for-String" class="anchor">§</a><h3 class="code-header">impl&lt;'r&gt; <a class="trait" href="trait.FromData.html" title="trait rocket::data::FromData">FromData</a>&lt;'r&gt; for <a class="struct" href="https://doc.rust-lang.org/1.77.0/alloc/string/struct.String.html" title="struct alloc::string::String">String</a></h3></section></summary><div class="impl-items"><section id="associatedtype.Error-4" class="associatedtype trait-impl"><a href="#associatedtype.Error-4" class="anchor">§</a><h4 class="code-header">type <a href="#associatedtype.Error" class="associatedtype">Error</a> = &lt;<a class="struct" href="struct.Capped.html" title="struct rocket::data::Capped">Capped</a>&lt;<a class="struct" href="https://doc.rust-lang.org/1.77.0/alloc/string/struct.String.html" title="struct alloc::string::String">String</a>&gt; as <a class="trait" href="trait.FromData.html" title="trait rocket::data::FromData">FromData</a>&lt;'r&gt;&gt;::<a class="associatedtype" href="trait.FromData.html#associatedtype.Error" title="type rocket::data::FromData::Error">Error</a></h4></section><section id="method.from_data-3" class="method trait-impl"><a class="src rightside" href="../../src/rocket/data/from_data.rs.html#329">source</a><a href="#method.from_data-3" class="anchor">§</a><h4 class="code-header">fn <a href="#tymethod.from_data" class="fn">from_data</a>&lt;'life0, 'async_trait&gt;(
+    r: &amp;'r <a class="struct" href="../request/struct.Request.html" title="struct rocket::request::Request">Request</a>&lt;'life0&gt;,
+    d: <a class="struct" href="struct.Data.html" title="struct rocket::data::Data">Data</a>&lt;'r&gt;
+) -&gt; <a class="struct" href="https://doc.rust-lang.org/1.77.0/core/pin/struct.Pin.html" title="struct core::pin::Pin">Pin</a>&lt;<a class="struct" href="https://doc.rust-lang.org/1.77.0/alloc/boxed/struct.Box.html" title="struct alloc::boxed::Box">Box</a>&lt;dyn <a class="trait" href="https://doc.rust-lang.org/1.77.0/core/future/future/trait.Future.html" title="trait core::future::future::Future">Future</a>&lt;Output = <a class="type" href="type.Outcome.html" title="type rocket::data::Outcome">Outcome</a>&lt;'r, Self&gt;&gt; + <a class="trait" href="https://doc.rust-lang.org/1.77.0/core/marker/trait.Send.html" title="trait core::marker::Send">Send</a> + 'async_trait&gt;&gt;<div class="where">where
+    Self: 'async_trait,
+    'r: 'async_trait,
+    'life0: 'async_trait,</div></h4></section></div></details><details class="toggle implementors-toggle"><summary><section id="impl-FromData%3C'r%3E-for-Vec%3Cu8%3E" class="impl"><a class="src rightside" href="../../src/rocket/data/from_data.rs.html#392">source</a><a href="#impl-FromData%3C'r%3E-for-Vec%3Cu8%3E" class="anchor">§</a><h3 class="code-header">impl&lt;'r&gt; <a class="trait" href="trait.FromData.html" title="trait rocket::data::FromData">FromData</a>&lt;'r&gt; for <a class="struct" href="https://doc.rust-lang.org/1.77.0/alloc/vec/struct.Vec.html" title="struct alloc::vec::Vec">Vec</a>&lt;<a class="primitive" href="https://doc.rust-lang.org/1.77.0/std/primitive.u8.html">u8</a>&gt;</h3></section></summary><div class="impl-items"><section id="associatedtype.Error-5" class="associatedtype trait-impl"><a href="#associatedtype.Error-5" class="anchor">§</a><h4 class="code-header">type <a href="#associatedtype.Error" class="associatedtype">Error</a> = &lt;<a class="struct" href="struct.Capped.html" title="struct rocket::data::Capped">Capped</a>&lt;<a class="struct" href="https://doc.rust-lang.org/1.77.0/alloc/vec/struct.Vec.html" title="struct alloc::vec::Vec">Vec</a>&lt;<a class="primitive" href="https://doc.rust-lang.org/1.77.0/std/primitive.u8.html">u8</a>&gt;&gt; as <a class="trait" href="trait.FromData.html" title="trait rocket::data::FromData">FromData</a>&lt;'r&gt;&gt;::<a class="associatedtype" href="trait.FromData.html#associatedtype.Error" title="type rocket::data::FromData::Error">Error</a></h4></section><section id="method.from_data-4" class="method trait-impl"><a class="src rightside" href="../../src/rocket/data/from_data.rs.html#392">source</a><a href="#method.from_data-4" class="anchor">§</a><h4 class="code-header">fn <a href="#tymethod.from_data" class="fn">from_data</a>&lt;'life0, 'async_trait&gt;(
+    r: &amp;'r <a class="struct" href="../request/struct.Request.html" title="struct rocket::request::Request">Request</a>&lt;'life0&gt;,
+    d: <a class="struct" href="struct.Data.html" title="struct rocket::data::Data">Data</a>&lt;'r&gt;
+) -&gt; <a class="struct" href="https://doc.rust-lang.org/1.77.0/core/pin/struct.Pin.html" title="struct core::pin::Pin">Pin</a>&lt;<a class="struct" href="https://doc.rust-lang.org/1.77.0/alloc/boxed/struct.Box.html" title="struct alloc::boxed::Box">Box</a>&lt;dyn <a class="trait" href="https://doc.rust-lang.org/1.77.0/core/future/future/trait.Future.html" title="trait core::future::future::Future">Future</a>&lt;Output = <a class="type" href="type.Outcome.html" title="type rocket::data::Outcome">Outcome</a>&lt;'r, Self&gt;&gt; + <a class="trait" href="https://doc.rust-lang.org/1.77.0/core/marker/trait.Send.html" title="trait core::marker::Send">Send</a> + 'async_trait&gt;&gt;<div class="where">where
+    Self: 'async_trait,
+    'r: 'async_trait,
+    'life0: 'async_trait,</div></h4></section></div></details><details class="toggle implementors-toggle"><summary><section id="impl-FromData%3C'r%3E-for-Result%3CT,+%3CT+as+FromData%3C'r%3E%3E::Error%3E" class="impl"><a class="src rightside" href="../../src/rocket/data/from_data.rs.html#404-414">source</a><a href="#impl-FromData%3C'r%3E-for-Result%3CT,+%3CT+as+FromData%3C'r%3E%3E::Error%3E" class="anchor">§</a><h3 class="code-header">impl&lt;'r, T: <a class="trait" href="trait.FromData.html" title="trait rocket::data::FromData">FromData</a>&lt;'r&gt; + 'r&gt; <a class="trait" href="trait.FromData.html" title="trait rocket::data::FromData">FromData</a>&lt;'r&gt; for <a class="enum" href="https://doc.rust-lang.org/1.77.0/core/result/enum.Result.html" title="enum core::result::Result">Result</a>&lt;T, T::<a class="associatedtype" href="trait.FromData.html#associatedtype.Error" title="type rocket::data::FromData::Error">Error</a>&gt;</h3></section></summary><div class="impl-items"><section id="associatedtype.Error-6" class="associatedtype trait-impl"><a href="#associatedtype.Error-6" class="anchor">§</a><h4 class="code-header">type <a href="#associatedtype.Error" class="associatedtype">Error</a> = <a class="enum" href="https://doc.rust-lang.org/1.77.0/core/convert/enum.Infallible.html" title="enum core::convert::Infallible">Infallible</a></h4></section><section id="method.from_data-5" class="method trait-impl"><a class="src rightside" href="../../src/rocket/data/from_data.rs.html#407-413">source</a><a href="#method.from_data-5" class="anchor">§</a><h4 class="code-header">fn <a href="#tymethod.from_data" class="fn">from_data</a>&lt;'life0, 'async_trait&gt;(
+    req: &amp;'r <a class="struct" href="../request/struct.Request.html" title="struct rocket::request::Request">Request</a>&lt;'life0&gt;,
+    data: <a class="struct" href="struct.Data.html" title="struct rocket::data::Data">Data</a>&lt;'r&gt;
+) -&gt; <a class="struct" href="https://doc.rust-lang.org/1.77.0/core/pin/struct.Pin.html" title="struct core::pin::Pin">Pin</a>&lt;<a class="struct" href="https://doc.rust-lang.org/1.77.0/alloc/boxed/struct.Box.html" title="struct alloc::boxed::Box">Box</a>&lt;dyn <a class="trait" href="https://doc.rust-lang.org/1.77.0/core/future/future/trait.Future.html" title="trait core::future::future::Future">Future</a>&lt;Output = <a class="type" href="type.Outcome.html" title="type rocket::data::Outcome">Outcome</a>&lt;'r, Self&gt;&gt; + <a class="trait" href="https://doc.rust-lang.org/1.77.0/core/marker/trait.Send.html" title="trait core::marker::Send">Send</a> + 'async_trait&gt;&gt;<div class="where">where
+    Self: 'async_trait,
+    'r: 'async_trait,
+    'life0: 'async_trait,</div></h4></section></div></details><details class="toggle implementors-toggle"><summary><section id="impl-FromData%3C'r%3E-for-Option%3CT%3E" class="impl"><a class="src rightside" href="../../src/rocket/data/from_data.rs.html#417-426">source</a><a href="#impl-FromData%3C'r%3E-for-Option%3CT%3E" class="anchor">§</a><h3 class="code-header">impl&lt;'r, T: <a class="trait" href="trait.FromData.html" title="trait rocket::data::FromData">FromData</a>&lt;'r&gt;&gt; <a class="trait" href="trait.FromData.html" title="trait rocket::data::FromData">FromData</a>&lt;'r&gt; for <a class="enum" href="https://doc.rust-lang.org/1.77.0/core/option/enum.Option.html" title="enum core::option::Option">Option</a>&lt;T&gt;</h3></section></summary><div class="impl-items"><section id="associatedtype.Error-7" class="associatedtype trait-impl"><a href="#associatedtype.Error-7" class="anchor">§</a><h4 class="code-header">type <a href="#associatedtype.Error" class="associatedtype">Error</a> = <a class="enum" href="https://doc.rust-lang.org/1.77.0/core/convert/enum.Infallible.html" title="enum core::convert::Infallible">Infallible</a></h4></section><section id="method.from_data-6" class="method trait-impl"><a class="src rightside" href="../../src/rocket/data/from_data.rs.html#420-425">source</a><a href="#method.from_data-6" class="anchor">§</a><h4 class="code-header">fn <a href="#tymethod.from_data" class="fn">from_data</a>&lt;'life0, 'async_trait&gt;(
+    req: &amp;'r <a class="struct" href="../request/struct.Request.html" title="struct rocket::request::Request">Request</a>&lt;'life0&gt;,
+    data: <a class="struct" href="struct.Data.html" title="struct rocket::data::Data">Data</a>&lt;'r&gt;
+) -&gt; <a class="struct" href="https://doc.rust-lang.org/1.77.0/core/pin/struct.Pin.html" title="struct core::pin::Pin">Pin</a>&lt;<a class="struct" href="https://doc.rust-lang.org/1.77.0/alloc/boxed/struct.Box.html" title="struct alloc::boxed::Box">Box</a>&lt;dyn <a class="trait" href="https://doc.rust-lang.org/1.77.0/core/future/future/trait.Future.html" title="trait core::future::future::Future">Future</a>&lt;Output = <a class="type" href="type.Outcome.html" title="type rocket::data::Outcome">Outcome</a>&lt;'r, Self&gt;&gt; + <a class="trait" href="https://doc.rust-lang.org/1.77.0/core/marker/trait.Send.html" title="trait core::marker::Send">Send</a> + 'async_trait&gt;&gt;<div class="where">where
+    Self: 'async_trait,
+    'r: 'async_trait,
+    'life0: 'async_trait,</div></h4></section></div></details><h2 id="implementors" class="section-header">Implementors<a href="#implementors" class="anchor">§</a></h2><div id="implementors-list"><details class="toggle implementors-toggle"><summary><section id="impl-FromData%3C'r%3E-for-%26RawStr" class="impl"><a class="src rightside" href="../../src/rocket/data/from_data.rs.html#355">source</a><a href="#impl-FromData%3C'r%3E-for-%26RawStr" class="anchor">§</a><h3 class="code-header">impl&lt;'r&gt; <a class="trait" href="trait.FromData.html" title="trait rocket::data::FromData">FromData</a>&lt;'r&gt; for &amp;'r <a class="struct" href="../http/struct.RawStr.html" title="struct rocket::http::RawStr">RawStr</a></h3></section></summary><div class="impl-items"><section id="associatedtype.Error-8" class="associatedtype trait-impl"><a href="#associatedtype.Error-8" class="anchor">§</a><h4 class="code-header">type <a href="#associatedtype.Error" class="associatedtype">Error</a> = &lt;<a class="struct" href="struct.Capped.html" title="struct rocket::data::Capped">Capped</a>&lt;&amp;'r <a class="struct" href="../http/struct.RawStr.html" title="struct rocket::http::RawStr">RawStr</a>&gt; as <a class="trait" href="trait.FromData.html" title="trait rocket::data::FromData">FromData</a>&lt;'r&gt;&gt;::<a class="associatedtype" href="trait.FromData.html#associatedtype.Error" title="type rocket::data::FromData::Error">Error</a></h4></section></div></details><details class="toggle implementors-toggle"><summary><section id="impl-FromData%3C'r%3E-for-TempFile%3C'_%3E" class="impl"><a class="src rightside" href="../../src/rocket/fs/temp_file.rs.html#551">source</a><a href="#impl-FromData%3C'r%3E-for-TempFile%3C'_%3E" class="anchor">§</a><h3 class="code-header">impl&lt;'r&gt; <a class="trait" href="trait.FromData.html" title="trait rocket::data::FromData">FromData</a>&lt;'r&gt; for <a class="enum" href="../fs/enum.TempFile.html" title="enum rocket::fs::TempFile">TempFile</a>&lt;'_&gt;</h3></section></summary><div class="impl-items"><section id="associatedtype.Error-9" class="associatedtype trait-impl"><a href="#associatedtype.Error-9" class="anchor">§</a><h4 class="code-header">type <a href="#associatedtype.Error" class="associatedtype">Error</a> = &lt;<a class="struct" href="struct.Capped.html" title="struct rocket::data::Capped">Capped</a>&lt;<a class="enum" href="../fs/enum.TempFile.html" title="enum rocket::fs::TempFile">TempFile</a>&lt;'_&gt;&gt; as <a class="trait" href="trait.FromData.html" title="trait rocket::data::FromData">FromData</a>&lt;'r&gt;&gt;::<a class="associatedtype" href="trait.FromData.html#associatedtype.Error" title="type rocket::data::FromData::Error">Error</a></h4></section></div></details><details class="toggle implementors-toggle"><summary><section id="impl-FromData%3C'r%3E-for-Capped%3C%26str%3E" class="impl"><a class="src rightside" href="../../src/rocket/data/from_data.rs.html#332-340">source</a><a href="#impl-FromData%3C'r%3E-for-Capped%3C%26str%3E" class="anchor">§</a><h3 class="code-header">impl&lt;'r&gt; <a class="trait" href="trait.FromData.html" title="trait rocket::data::FromData">FromData</a>&lt;'r&gt; for <a class="struct" href="struct.Capped.html" title="struct rocket::data::Capped">Capped</a>&lt;&amp;'r <a class="primitive" href="https://doc.rust-lang.org/1.77.0/std/primitive.str.html">str</a>&gt;</h3></section></summary><div class="impl-items"><section id="associatedtype.Error-10" class="associatedtype trait-impl"><a href="#associatedtype.Error-10" class="anchor">§</a><h4 class="code-header">type <a href="#associatedtype.Error" class="associatedtype">Error</a> = <a class="struct" href="https://doc.rust-lang.org/1.77.0/std/io/error/struct.Error.html" title="struct std::io::error::Error">Error</a></h4></section></div></details><details class="toggle implementors-toggle"><summary><section id="impl-FromData%3C'r%3E-for-Capped%3C%26RawStr%3E" class="impl"><a class="src rightside" href="../../src/rocket/data/from_data.rs.html#345-353">source</a><a href="#impl-FromData%3C'r%3E-for-Capped%3C%26RawStr%3E" class="anchor">§</a><h3 class="code-header">impl&lt;'r&gt; <a class="trait" href="trait.FromData.html" title="trait rocket::data::FromData">FromData</a>&lt;'r&gt; for <a class="struct" href="struct.Capped.html" title="struct rocket::data::Capped">Capped</a>&lt;&amp;'r <a class="struct" href="../http/struct.RawStr.html" title="struct rocket::http::RawStr">RawStr</a>&gt;</h3></section></summary><div class="impl-items"><section id="associatedtype.Error-11" class="associatedtype trait-impl"><a href="#associatedtype.Error-11" class="anchor">§</a><h4 class="code-header">type <a href="#associatedtype.Error" class="associatedtype">Error</a> = <a class="struct" href="https://doc.rust-lang.org/1.77.0/std/io/error/struct.Error.html" title="struct std::io::error::Error">Error</a></h4></section></div></details><details class="toggle implementors-toggle"><summary><section id="impl-FromData%3C'r%3E-for-Capped%3C%26%5Bu8%5D%3E" class="impl"><a class="src rightside" href="../../src/rocket/data/from_data.rs.html#370-378">source</a><a href="#impl-FromData%3C'r%3E-for-Capped%3C%26%5Bu8%5D%3E" class="anchor">§</a><h3 class="code-header">impl&lt;'r&gt; <a class="trait" href="trait.FromData.html" title="trait rocket::data::FromData">FromData</a>&lt;'r&gt; for <a class="struct" href="struct.Capped.html" title="struct rocket::data::Capped">Capped</a>&lt;&amp;'r [<a class="primitive" href="https://doc.rust-lang.org/1.77.0/std/primitive.u8.html">u8</a>]&gt;</h3></section></summary><div class="impl-items"><section id="associatedtype.Error-12" class="associatedtype trait-impl"><a href="#associatedtype.Error-12" class="anchor">§</a><h4 class="code-header">type <a href="#associatedtype.Error" class="associatedtype">Error</a> = <a class="struct" href="https://doc.rust-lang.org/1.77.0/std/io/error/struct.Error.html" title="struct std::io::error::Error">Error</a></h4></section></div></details><details class="toggle implementors-toggle"><summary><section id="impl-FromData%3C'r%3E-for-Capped%3CTempFile%3C'_%3E%3E" class="impl"><a class="src rightside" href="../../src/rocket/fs/temp_file.rs.html#531-548">source</a><a href="#impl-FromData%3C'r%3E-for-Capped%3CTempFile%3C'_%3E%3E" class="anchor">§</a><h3 class="code-header">impl&lt;'r&gt; <a class="trait" href="trait.FromData.html" title="trait rocket::data::FromData">FromData</a>&lt;'r&gt; for <a class="struct" href="struct.Capped.html" title="struct rocket::data::Capped">Capped</a>&lt;<a class="enum" href="../fs/enum.TempFile.html" title="enum rocket::fs::TempFile">TempFile</a>&lt;'_&gt;&gt;</h3></section></summary><div class="impl-items"><section id="associatedtype.Error-13" class="associatedtype trait-impl"><a href="#associatedtype.Error-13" class="anchor">§</a><h4 class="code-header">type <a href="#associatedtype.Error" class="associatedtype">Error</a> = <a class="struct" href="https://doc.rust-lang.org/1.77.0/std/io/error/struct.Error.html" title="struct std::io::error::Error">Error</a></h4></section></div></details><details class="toggle implementors-toggle"><summary><section id="impl-FromData%3C'r%3E-for-Capped%3CCow%3C'_,+str%3E%3E" class="impl"><a class="src rightside" href="../../src/rocket/data/from_data.rs.html#358-365">source</a><a href="#impl-FromData%3C'r%3E-for-Capped%3CCow%3C'_,+str%3E%3E" class="anchor">§</a><h3 class="code-header">impl&lt;'r&gt; <a class="trait" href="trait.FromData.html" title="trait rocket::data::FromData">FromData</a>&lt;'r&gt; for <a class="struct" href="struct.Capped.html" title="struct rocket::data::Capped">Capped</a>&lt;<a class="enum" href="https://doc.rust-lang.org/1.77.0/alloc/borrow/enum.Cow.html" title="enum alloc::borrow::Cow">Cow</a>&lt;'_, <a class="primitive" href="https://doc.rust-lang.org/1.77.0/std/primitive.str.html">str</a>&gt;&gt;</h3></section></summary><div class="impl-items"><section id="associatedtype.Error-14" class="associatedtype trait-impl"><a href="#associatedtype.Error-14" class="anchor">§</a><h4 class="code-header">type <a href="#associatedtype.Error" class="associatedtype">Error</a> = <a class="struct" href="https://doc.rust-lang.org/1.77.0/std/io/error/struct.Error.html" title="struct std::io::error::Error">Error</a></h4></section></div></details><details class="toggle implementors-toggle"><summary><section id="impl-FromData%3C'r%3E-for-Capped%3CString%3E" class="impl"><a class="src rightside" href="../../src/rocket/data/from_data.rs.html#320-327">source</a><a href="#impl-FromData%3C'r%3E-for-Capped%3CString%3E" class="anchor">§</a><h3 class="code-header">impl&lt;'r&gt; <a class="trait" href="trait.FromData.html" title="trait rocket::data::FromData">FromData</a>&lt;'r&gt; for <a class="struct" href="struct.Capped.html" title="struct rocket::data::Capped">Capped</a>&lt;<a class="struct" href="https://doc.rust-lang.org/1.77.0/alloc/string/struct.String.html" title="struct alloc::string::String">String</a>&gt;</h3></section></summary><div class="impl-items"><section id="associatedtype.Error-15" class="associatedtype trait-impl"><a href="#associatedtype.Error-15" class="anchor">§</a><h4 class="code-header">type <a href="#associatedtype.Error" class="associatedtype">Error</a> = <a class="struct" href="https://doc.rust-lang.org/1.77.0/std/io/error/struct.Error.html" title="struct std::io::error::Error">Error</a></h4></section></div></details><details class="toggle implementors-toggle"><summary><section id="impl-FromData%3C'r%3E-for-Capped%3CVec%3Cu8%3E%3E" class="impl"><a class="src rightside" href="../../src/rocket/data/from_data.rs.html#383-390">source</a><a href="#impl-FromData%3C'r%3E-for-Capped%3CVec%3Cu8%3E%3E" class="anchor">§</a><h3 class="code-header">impl&lt;'r&gt; <a class="trait" href="trait.FromData.html" title="trait rocket::data::FromData">FromData</a>&lt;'r&gt; for <a class="struct" href="struct.Capped.html" title="struct rocket::data::Capped">Capped</a>&lt;<a class="struct" href="https://doc.rust-lang.org/1.77.0/alloc/vec/struct.Vec.html" title="struct alloc::vec::Vec">Vec</a>&lt;<a class="primitive" href="https://doc.rust-lang.org/1.77.0/std/primitive.u8.html">u8</a>&gt;&gt;</h3></section></summary><div class="impl-items"><section id="associatedtype.Error-16" class="associatedtype trait-impl"><a href="#associatedtype.Error-16" class="anchor">§</a><h4 class="code-header">type <a href="#associatedtype.Error" class="associatedtype">Error</a> = <a class="struct" href="https://doc.rust-lang.org/1.77.0/std/io/error/struct.Error.html" title="struct std::io::error::Error">Error</a></h4></section></div></details><details class="toggle implementors-toggle"><summary><section id="impl-FromData%3C'r%3E-for-Data%3C'r%3E" class="impl"><a class="src rightside" href="../../src/rocket/data/from_data.rs.html#395-401">source</a><a href="#impl-FromData%3C'r%3E-for-Data%3C'r%3E" class="anchor">§</a><h3 class="code-header">impl&lt;'r&gt; <a class="trait" href="trait.FromData.html" title="trait rocket::data::FromData">FromData</a>&lt;'r&gt; for <a class="struct" href="struct.Data.html" title="struct rocket::data::Data">Data</a>&lt;'r&gt;</h3></section></summary><div class="impl-items"><section id="associatedtype.Error-17" class="associatedtype trait-impl"><a href="#associatedtype.Error-17" class="anchor">§</a><h4 class="code-header">type <a href="#associatedtype.Error" class="associatedtype">Error</a> = <a class="enum" href="https://doc.rust-lang.org/1.77.0/core/convert/enum.Infallible.html" title="enum core::convert::Infallible">Infallible</a></h4></section></div></details><details class="toggle implementors-toggle"><summary><section id="impl-FromData%3C'r%3E-for-Form%3CT%3E" class="impl"><a class="src rightside" href="../../src/rocket/form/form.rs.html#319-340">source</a><a href="#impl-FromData%3C'r%3E-for-Form%3CT%3E" class="anchor">§</a><h3 class="code-header">impl&lt;'r, T: <a class="trait" href="../form/trait.FromForm.html" title="trait rocket::form::FromForm">FromForm</a>&lt;'r&gt;&gt; <a class="trait" href="trait.FromData.html" title="trait rocket::data::FromData">FromData</a>&lt;'r&gt; for <a class="struct" href="../form/struct.Form.html" title="struct rocket::form::Form">Form</a>&lt;T&gt;</h3></section></summary><div class="impl-items"><section id="associatedtype.Error-18" class="associatedtype trait-impl"><a href="#associatedtype.Error-18" class="anchor">§</a><h4 class="code-header">type <a href="#associatedtype.Error" class="associatedtype">Error</a> = <a class="struct" href="../form/struct.Errors.html" title="struct rocket::form::Errors">Errors</a>&lt;'r&gt;</h4></section></div></details></div><script src="../../trait.impl/rocket/data/from_data/trait.FromData.js" data-ignore-extern-crates="rocket_http,alloc,core,std" async></script></section></div></main></body></html>

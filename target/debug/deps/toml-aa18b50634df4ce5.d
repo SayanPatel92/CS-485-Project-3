@@ -1,0 +1,13 @@
+/mnt/c/Users/patel/OneDrive/Attachments/CSCI 485 Programming Lang/Project 3/rust/target/debug/deps/libtoml-aa18b50634df4ce5.rmeta: /home/sayan/.cargo/registry/src/index.crates.io-6f17d22bba15001f/toml-0.8.12/src/lib.rs /home/sayan/.cargo/registry/src/index.crates.io-6f17d22bba15001f/toml-0.8.12/src/map.rs /home/sayan/.cargo/registry/src/index.crates.io-6f17d22bba15001f/toml-0.8.12/src/value.rs /home/sayan/.cargo/registry/src/index.crates.io-6f17d22bba15001f/toml-0.8.12/src/de.rs /home/sayan/.cargo/registry/src/index.crates.io-6f17d22bba15001f/toml-0.8.12/src/ser.rs /home/sayan/.cargo/registry/src/index.crates.io-6f17d22bba15001f/toml-0.8.12/src/macros.rs /home/sayan/.cargo/registry/src/index.crates.io-6f17d22bba15001f/toml-0.8.12/src/edit.rs /home/sayan/.cargo/registry/src/index.crates.io-6f17d22bba15001f/toml-0.8.12/src/fmt.rs /home/sayan/.cargo/registry/src/index.crates.io-6f17d22bba15001f/toml-0.8.12/src/table.rs
+
+/mnt/c/Users/patel/OneDrive/Attachments/CSCI 485 Programming Lang/Project 3/rust/target/debug/deps/toml-aa18b50634df4ce5.d: /home/sayan/.cargo/registry/src/index.crates.io-6f17d22bba15001f/toml-0.8.12/src/lib.rs /home/sayan/.cargo/registry/src/index.crates.io-6f17d22bba15001f/toml-0.8.12/src/map.rs /home/sayan/.cargo/registry/src/index.crates.io-6f17d22bba15001f/toml-0.8.12/src/value.rs /home/sayan/.cargo/registry/src/index.crates.io-6f17d22bba15001f/toml-0.8.12/src/de.rs /home/sayan/.cargo/registry/src/index.crates.io-6f17d22bba15001f/toml-0.8.12/src/ser.rs /home/sayan/.cargo/registry/src/index.crates.io-6f17d22bba15001f/toml-0.8.12/src/macros.rs /home/sayan/.cargo/registry/src/index.crates.io-6f17d22bba15001f/toml-0.8.12/src/edit.rs /home/sayan/.cargo/registry/src/index.crates.io-6f17d22bba15001f/toml-0.8.12/src/fmt.rs /home/sayan/.cargo/registry/src/index.crates.io-6f17d22bba15001f/toml-0.8.12/src/table.rs
+
+/home/sayan/.cargo/registry/src/index.crates.io-6f17d22bba15001f/toml-0.8.12/src/lib.rs:
+/home/sayan/.cargo/registry/src/index.crates.io-6f17d22bba15001f/toml-0.8.12/src/map.rs:
+/home/sayan/.cargo/registry/src/index.crates.io-6f17d22bba15001f/toml-0.8.12/src/value.rs:
+/home/sayan/.cargo/registry/src/index.crates.io-6f17d22bba15001f/toml-0.8.12/src/de.rs:
+/home/sayan/.cargo/registry/src/index.crates.io-6f17d22bba15001f/toml-0.8.12/src/ser.rs:
+/home/sayan/.cargo/registry/src/index.crates.io-6f17d22bba15001f/toml-0.8.12/src/macros.rs:
+/home/sayan/.cargo/registry/src/index.crates.io-6f17d22bba15001f/toml-0.8.12/src/edit.rs:
+/home/sayan/.cargo/registry/src/index.crates.io-6f17d22bba15001f/toml-0.8.12/src/fmt.rs:
+/home/sayan/.cargo/registry/src/index.crates.io-6f17d22bba15001f/toml-0.8.12/src/table.rs:

@@ -1,0 +1,1 @@
+window.SIDEBAR_ITEMS = {"enum":["TempFile"],"struct":["FileName","FileServer","NamedFile","Options"]};
