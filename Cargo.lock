@@ -45,6 +45,7 @@ dependencies = [
  "block-modes",
  "reqwest",
  "rocket",
+ "serde_json",
 ]
 
 [[package]]
