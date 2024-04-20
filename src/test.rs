@@ -1,28 +1,24 @@
-// Import necessary modules
-use super::*;
+#[cfg(test)]
+mod tests {
+    use super::*;
 
-#[test]
-fn test_send_file_success() {
-    // Define test data
-    let data = b"test_data";
-    let server_url = "http://localhost:8000"; // Change to your server URL
+    #[test]
+    fn test_send_file_success() {
+        let data = b"test_data";
+        let server_url = "http://localhost:8000"; // Ensure this server is expected to return success
 
-    // Call the function being tested
-    send_file(data, server_url);
+        // Call the function and expect an Ok result
+        let result = send_file(data, server_url);
+        assert!(result.is_ok(), "Expected Ok(()) but got Err({})", result.unwrap_err());
+    }
 
-    // Assert that the file was sent successfully
-    // You may need to adjust this assertion based on the behavior of your server
-    assert!(true); // Placeholder assertion for demonstration
-}
+    #[test]
+    fn test_send_file_failure() {
+        let data = b"test_data";
+        let server_url = "http://localhost:8001"; // Ensure this server is expected to return failure
 
-#[test]
-fn test_send_file_failure() {
-    // Define test data
-    let data = b"test_data";
-    let server_url = "http://localhost:8000"; // Change to your server URL
-
-    // Call the function being tested
-    send_file(data, server_url);
-
-    assert!(true); // Placeholder assertion for demonstration
+        // Call the function and expect an Err result
+        let result = send_file(data, server_url);
+        assert!(result.is_err(), "Expected Err but got Ok(())");
+    }
 }

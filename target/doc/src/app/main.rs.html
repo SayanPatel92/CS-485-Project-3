@@ -151,11 +151,69 @@
 <a href="#149" id="149">149</a>
 <a href="#150" id="150">150</a>
 <a href="#151" id="151">151</a>
+<a href="#152" id="152">152</a>
+<a href="#153" id="153">153</a>
+<a href="#154" id="154">154</a>
+<a href="#155" id="155">155</a>
+<a href="#156" id="156">156</a>
+<a href="#157" id="157">157</a>
+<a href="#158" id="158">158</a>
+<a href="#159" id="159">159</a>
+<a href="#160" id="160">160</a>
+<a href="#161" id="161">161</a>
+<a href="#162" id="162">162</a>
+<a href="#163" id="163">163</a>
+<a href="#164" id="164">164</a>
+<a href="#165" id="165">165</a>
+<a href="#166" id="166">166</a>
+<a href="#167" id="167">167</a>
+<a href="#168" id="168">168</a>
+<a href="#169" id="169">169</a>
+<a href="#170" id="170">170</a>
+<a href="#171" id="171">171</a>
+<a href="#172" id="172">172</a>
+<a href="#173" id="173">173</a>
+<a href="#174" id="174">174</a>
+<a href="#175" id="175">175</a>
+<a href="#176" id="176">176</a>
+<a href="#177" id="177">177</a>
+<a href="#178" id="178">178</a>
+<a href="#179" id="179">179</a>
+<a href="#180" id="180">180</a>
+<a href="#181" id="181">181</a>
+<a href="#182" id="182">182</a>
+<a href="#183" id="183">183</a>
+<a href="#184" id="184">184</a>
+<a href="#185" id="185">185</a>
+<a href="#186" id="186">186</a>
+<a href="#187" id="187">187</a>
+<a href="#188" id="188">188</a>
+<a href="#189" id="189">189</a>
+<a href="#190" id="190">190</a>
+<a href="#191" id="191">191</a>
+<a href="#192" id="192">192</a>
+<a href="#193" id="193">193</a>
+<a href="#194" id="194">194</a>
+<a href="#195" id="195">195</a>
+<a href="#196" id="196">196</a>
+<a href="#197" id="197">197</a>
+<a href="#198" id="198">198</a>
+<a href="#199" id="199">199</a>
+<a href="#200" id="200">200</a>
+<a href="#201" id="201">201</a>
+<a href="#202" id="202">202</a>
+<a href="#203" id="203">203</a>
+<a href="#204" id="204">204</a>
+<a href="#205" id="205">205</a>
+<a href="#206" id="206">206</a>
+<a href="#207" id="207">207</a>
+<a href="#208" id="208">208</a>
 </pre></div><pre class="rust"><code><span class="kw">use </span>std::env;
 <span class="kw">use </span>std::fs;
-<span class="kw">use </span>std::io::{Read, Write};
+<span class="kw">use </span>std::io::{Read};
 <span class="kw">use </span>std::path::Path;
 <span class="kw">use </span>reqwest::blocking::Client;
+<span class="kw">use </span>reqwest::header::{CONTENT_TYPE};
 
 <span class="doccomment">/// # Arguments
 /// * `start_dir` - The starting directory to begin the search.
@@ -180,9 +238,22 @@
     <span class="kw">let </span><span class="kw-2">mut </span>target_path = <span class="prelude-val">None</span>;
     <span class="kw">let </span><span class="kw-2">mut </span>key_path = <span class="prelude-val">None</span>;
 
-    <span class="kw">let </span>entries = fs::read_dir(start_dir).unwrap();
+    <span class="kw">let </span>entries = <span class="kw">match </span>fs::read_dir(start_dir) {
+        <span class="prelude-val">Ok</span>(entries) =&gt; entries,
+        <span class="prelude-val">Err</span>(e) =&gt; {
+            <span class="macro">println!</span>(<span class="string">"Failed to read directory: {}"</span>, e);
+            <span class="kw">return </span>(<span class="prelude-val">None</span>, <span class="prelude-val">None</span>);
+        }
+    };
+
     <span class="kw">for </span>entry <span class="kw">in </span>entries {
-        <span class="kw">let </span>entry = entry.unwrap();
+        <span class="kw">let </span>entry = <span class="kw">match </span>entry {
+            <span class="prelude-val">Ok</span>(entry) =&gt; entry,
+            <span class="prelude-val">Err</span>(e) =&gt; {
+                <span class="macro">println!</span>(<span class="string">"Failed to process an entry: {}"</span>, e);
+                <span class="kw">continue</span>;
+            }
+        };
         <span class="kw">let </span>path = entry.path();
 
         <span class="kw">if </span>path.is_dir() {
@@ -191,10 +262,12 @@
                 key_path = <span class="prelude-val">Some</span>(key_path_nested);
             }
         } <span class="kw">else </span>{
-            <span class="kw">if </span>path.file_name().unwrap() == target_file {
-                target_path = <span class="prelude-val">Some</span>(path.to_str().unwrap().to_owned());
-            } <span class="kw">else if </span>path.file_name().unwrap() == key_file {
-                key_path = <span class="prelude-val">Some</span>(path.to_str().unwrap().to_owned());
+            <span class="kw">if let </span><span class="prelude-val">Some</span>(file_name) = path.file_name().and_then(|f| f.to_str()) {
+                <span class="kw">if </span>file_name == target_file {
+                    target_path = <span class="prelude-val">Some</span>(path.to_str().unwrap().to_owned());
+                } <span class="kw">else if </span>file_name == key_file {
+                    key_path = <span class="prelude-val">Some</span>(path.to_str().unwrap().to_owned());
+                }
             }
         }
     }
@@ -202,35 +275,73 @@
     (target_path, key_path)
 }
 
-<span class="doccomment">/// Decrypts a file using a specified key file.
+
+<span class="doccomment">/// Decrypts a file using a specified key file, applying a simple XOR decryption algorithm.
+///
+/// This function opens the specified `target_path` and `key_path`, reads their contents, and then
+/// applies a byte-wise XOR operation between the ciphertext from the target file and the key.
+/// The key is repeated if it is shorter than the ciphertext. The function requires both files
+/// to exist and be readable; additionally, the key file must not be empty as it is essential for
+/// decryption.
 ///
 /// # Arguments
-/// * `target_path` - The path to the file to decrypt.
-/// * `key_path` - The path to the key file used for decryption.
+/// * `target_path` - The path to the file to decrypt. This should be a string slice pointing to a valid
+///   filesystem path of a readable file.
+/// * `key_path` - The path to the key file used for decryption. Similarly, this should point to a readable
+///   file. The function checks that this file is not empty since an empty key cannot perform decryption.
 ///
 /// # Returns
-/// A `Vec&lt;u8&gt;` containing the decrypted file data.
+/// A `Result&lt;Vec&lt;u8&gt;, String&gt;` encapsulating the outcome of the operation:
+/// - `Ok(Vec&lt;u8&gt;)`: Contains the decrypted data assuming no errors occurred.
+/// - `Err(String)`: An error message describing why the decryption could not be completed. Possible
+///   reasons include file access issues, read errors, or an empty key file.
+///
+/// # Errors
+/// The function might return an error in the following scenarios:
+/// - Failure to open either the target file or the key file, possibly due to incorrect paths or insufficient
+///   permissions.
+/// - Failure to read from the opened files, which might be due to I/O errors.
+/// - The key file is found to be empty after reading its contents, which makes decryption impossible.
 ///
 /// # Example
 /// ```
-/// let target_path = "path/to/target.txt";
+/// let target_path = "path/to/encrypted.txt";
 /// let key_path = "path/to/key.txt";
-/// let decrypted_data = decrypt_file(target_path, key_path);
+/// match decrypt_file(target_path, key_path) {
+///     Ok(decrypted_data) =&gt; {
+///         println!("Decryption successful!");
+///         // Additional code to handle the decrypted data (e.g., saving to a file or processing further)
+///     },
+///     Err(e) =&gt; println!("Decryption failed: {}", e),
+/// }
 /// ```
 
-</span><span class="kw">fn </span>decrypt_file(target_path: <span class="kw-2">&amp;</span>str, key_path: <span class="kw-2">&amp;</span>str) -&gt; Vec&lt;u8&gt; {
-    <span class="kw">let </span><span class="kw-2">mut </span>key_file = fs::File::open(key_path).unwrap();
+</span><span class="kw">fn </span>decrypt_file(target_path: <span class="kw-2">&amp;</span>str, key_path: <span class="kw-2">&amp;</span>str) -&gt; <span class="prelude-ty">Result</span>&lt;Vec&lt;u8&gt;, String&gt; {
+    <span class="kw">let </span><span class="kw-2">mut </span>key_file = fs::File::open(key_path)
+        .map_err(|e| <span class="macro">format!</span>(<span class="string">"Failed to open key file: {}"</span>, e))<span class="question-mark">?</span>;
+
     <span class="kw">let </span><span class="kw-2">mut </span>key = Vec::new();
-    key_file.read_to_end(<span class="kw-2">&amp;mut </span>key).unwrap();
+    key_file.read_to_end(<span class="kw-2">&amp;mut </span>key)
+        .map_err(|e| <span class="macro">format!</span>(<span class="string">"Failed to read key file: {}"</span>, e))<span class="question-mark">?</span>;
 
-    <span class="kw">let </span><span class="kw-2">mut </span>target_file = fs::File::open(target_path).unwrap();
+    <span class="kw">let </span><span class="kw-2">mut </span>target_file = fs::File::open(target_path)
+        .map_err(|e| <span class="macro">format!</span>(<span class="string">"Failed to open target file: {}"</span>, e))<span class="question-mark">?</span>;
+
     <span class="kw">let </span><span class="kw-2">mut </span>ciphertext = Vec::new();
-    target_file.read_to_end(<span class="kw-2">&amp;mut </span>ciphertext).unwrap();
+    target_file.read_to_end(<span class="kw-2">&amp;mut </span>ciphertext)
+        .map_err(|e| <span class="macro">format!</span>(<span class="string">"Failed to read target file: {}"</span>, e))<span class="question-mark">?</span>;
 
-    <span class="kw">let </span>plaintext: Vec&lt;u8&gt; = ciphertext.iter().zip(key.iter().cycle()).map(|(c, k)| c ^ k).collect();
+    <span class="kw">if </span>key.is_empty() {
+        <span class="kw">return </span><span class="prelude-val">Err</span>(<span class="string">"Key file is empty, cannot decrypt"</span>.to_string());
+    }
 
-    plaintext
+    <span class="kw">let </span>plaintext: Vec&lt;u8&gt; = ciphertext.iter().zip(key.iter().cycle())
+        .map(|(c, k)| c ^ k)
+        .collect();
+
+    <span class="prelude-val">Ok</span>(plaintext)
 }
+
 
 <span class="doccomment">/// Sends file data to a specified server URL.
 ///
@@ -241,27 +352,28 @@
 /// # Example
 /// ```
 /// let decrypted_data: Vec&lt;u8&gt; = vec![...]; // Assume this is decrypted file data
-/// let server_url = "http://example.com/upload";
 /// send_file(&amp;decrypted_data, server_url);
 /// ```
 
-</span><span class="kw">fn </span>send_file(data: <span class="kw-2">&amp;</span>[u8], server_url: <span class="kw-2">&amp;</span>str) {
+</span><span class="kw">fn </span>send_file(data: <span class="kw-2">&amp;</span>[u8], server_url: <span class="kw-2">&amp;</span>str) -&gt; <span class="prelude-ty">Result</span>&lt;(), String&gt; {
     <span class="kw">let </span>client = Client::new();
-    <span class="kw">let </span>response = client
-        .post(server_url)
-        .body(data.to_vec())
-        .send();
+    <span class="macro">println!</span>(<span class="string">"Sending POST request to: {}"</span>, server_url); <span class="comment">// Debug statement
+    </span><span class="kw">let </span>response = client.post(server_url)
+                         .header(CONTENT_TYPE, <span class="string">"text/plain"</span>)  <span class="comment">// Make sure this matches your server expectation
+                         </span>.body(data.to_vec())
+                         .send();
 
     <span class="kw">match </span>response {
         <span class="prelude-val">Ok</span>(response) =&gt; {
             <span class="kw">if </span>response.status().is_success() {
                 <span class="macro">println!</span>(<span class="string">"File sent successfully to the remote server."</span>);
+                <span class="prelude-val">Ok</span>(())
             } <span class="kw">else </span>{
-                <span class="macro">println!</span>(<span class="string">"Failed to send file. Error code: {}"</span>, response.status());
+                <span class="prelude-val">Err</span>(<span class="macro">format!</span>(<span class="string">"Server responded with status code: {}"</span>, response.status()))
             }
-        }
+        },
         <span class="prelude-val">Err</span>(err) =&gt; {
-            <span class="macro">println!</span>(<span class="string">"Failed to send file: {}"</span>, err);
+            <span class="prelude-val">Err</span>(<span class="macro">format!</span>(<span class="string">"Failed to send file: {}"</span>, err))
         }
     }
 }
@@ -275,30 +387,33 @@
 </span><span class="kw">fn </span>main() {
     <span class="kw">let </span>args: Vec&lt;String&gt; = env::args().collect();
     <span class="kw">if </span>args.len() != <span class="number">4 </span>{
-        <span class="macro">println!</span>(<span class="string">"Usage: {} &lt;start_dir&gt; &lt;target_file&gt; &lt;key_file&gt;"</span>, args[<span class="number">0</span>]);
-        <span class="kw">return</span>;
+        <span class="macro">eprintln!</span>(<span class="string">"Usage: {} &lt;start_dir&gt; &lt;target_file&gt; &lt;key_file&gt;"</span>, args[<span class="number">0</span>]);
+        std::process::exit(<span class="number">1</span>);
     }
 
     <span class="kw">let </span>start_dir = Path::new(<span class="kw-2">&amp;</span>args[<span class="number">1</span>]);
     <span class="kw">let </span>target_file = <span class="kw-2">&amp;</span>args[<span class="number">2</span>];
     <span class="kw">let </span>key_file = <span class="kw-2">&amp;</span>args[<span class="number">3</span>];
-    <span class="kw">let </span>server_url = <span class="string">"http://localhost:8000"</span>;
+    <span class="kw">let </span>server_url = <span class="string">"http://localhost:8080/post_endpoint"</span>;
 
     <span class="kw">let </span>(target_path, key_path) = find_files(start_dir, target_file, key_file);
 
-    <span class="kw">if let </span>(<span class="prelude-val">Some</span>(target_path), <span class="prelude-val">Some</span>(key_path)) = (target_path, key_path) {
-        <span class="macro">println!</span>(<span class="string">"Found target file: {}"</span>, target_path);
-        <span class="macro">println!</span>(<span class="string">"Found key file: {}"</span>, key_path);
+    <span class="kw">match </span>(target_path, key_path) {
+        (<span class="prelude-val">Some</span>(target_path), <span class="prelude-val">Some</span>(key_path)) =&gt; {
+            <span class="macro">println!</span>(<span class="string">"Found target file: {}"</span>, target_path);
+            <span class="macro">println!</span>(<span class="string">"Found key file: {}"</span>, key_path);
 
-        <span class="kw">let </span>target_file_contents = fs::read_to_string(<span class="kw-2">&amp;</span>target_path).unwrap_or_else(|<span class="kw">_</span>| String::from(<span class="string">"Failed to read target file"</span>));
-        <span class="kw">let </span>key_file_contents = fs::read_to_string(<span class="kw-2">&amp;</span>key_path).unwrap_or_else(|<span class="kw">_</span>| String::from(<span class="string">"Failed to read key file"</span>));
-
-        <span class="macro">println!</span>(<span class="string">"\nTarget file contents:\n{}"</span>, target_file_contents);
-        <span class="macro">println!</span>(<span class="string">"\nKey file contents:\n{}"</span>, key_file_contents);
-
-        <span class="kw">let </span>decrypted_data = decrypt_file(<span class="kw-2">&amp;</span>target_path, <span class="kw-2">&amp;</span>key_path);
-        send_file(<span class="kw-2">&amp;</span>decrypted_data, server_url);
-    } <span class="kw">else </span>{
-        <span class="macro">println!</span>(<span class="string">"Failed to find the required files."</span>);
+            <span class="kw">match </span>decrypt_file(<span class="kw-2">&amp;</span>target_path, <span class="kw-2">&amp;</span>key_path) {
+                <span class="prelude-val">Ok</span>(decrypted_data) =&gt; {
+                    <span class="kw">match </span>send_file(<span class="kw-2">&amp;</span>decrypted_data, server_url) {
+                        <span class="prelude-val">Ok</span>(<span class="kw">_</span>) =&gt; <span class="macro">println!</span>(<span class="string">"File was sent successfully."</span>),
+                        <span class="prelude-val">Err</span>(e) =&gt; <span class="macro">eprintln!</span>(<span class="string">"Failed to send file: {}"</span>, e),
+                    }
+                },
+                <span class="prelude-val">Err</span>(e) =&gt; <span class="macro">eprintln!</span>(<span class="string">"Error decrypting file: {}"</span>, e),
+            }
+        },
+        <span class="kw">_ </span>=&gt; <span class="macro">eprintln!</span>(<span class="string">"Failed to find the required files."</span>),
     }
-}</code></pre></div></section></main></body></html>
+}
+</code></pre></div></section></main></body></html>

@@ -1,8 +1,9 @@
 use std::env;
 use std::fs;
-use std::io::{Read, Write};
+use std::io::{Read};
 use std::path::Path;
 use reqwest::blocking::Client;
+use reqwest::header::{CONTENT_TYPE};
 
 /// # Arguments
 /// * `start_dir` - The starting directory to begin the search.
@@ -27,9 +28,22 @@ fn find_files(start_dir: &Path, target_file: &str, key_file: &str) -> (Option<St
     let mut target_path = None;
     let mut key_path = None;
 
-    let entries = fs::read_dir(start_dir).unwrap();
+    let entries = match fs::read_dir(start_dir) {
+        Ok(entries) => entries,
+        Err(e) => {
+            println!("Failed to read directory: {}", e);
+            return (None, None);
+        }
+    };
+
     for entry in entries {
-        let entry = entry.unwrap();
+        let entry = match entry {
+            Ok(entry) => entry,
+            Err(e) => {
+                println!("Failed to process an entry: {}", e);
+                continue;
+            }
+        };
         let path = entry.path();
 
         if path.is_dir() {
@@ -38,10 +52,12 @@ fn find_files(start_dir: &Path, target_file: &str, key_file: &str) -> (Option<St
                 key_path = Some(key_path_nested);
             }
         } else {
-            if path.file_name().unwrap() == target_file {
-                target_path = Some(path.to_str().unwrap().to_owned());
-            } else if path.file_name().unwrap() == key_file {
-                key_path = Some(path.to_str().unwrap().to_owned());
+            if let Some(file_name) = path.file_name().and_then(|f| f.to_str()) {
+                if file_name == target_file {
+                    target_path = Some(path.to_str().unwrap().to_owned());
+                } else if file_name == key_file {
+                    key_path = Some(path.to_str().unwrap().to_owned());
+                }
             }
         }
     }
@@ -49,35 +65,73 @@ fn find_files(start_dir: &Path, target_file: &str, key_file: &str) -> (Option<St
     (target_path, key_path)
 }
 
-/// Decrypts a file using a specified key file.
+
+/// Decrypts a file using a specified key file, applying a simple XOR decryption algorithm.
+///
+/// This function opens the specified `target_path` and `key_path`, reads their contents, and then
+/// applies a byte-wise XOR operation between the ciphertext from the target file and the key.
+/// The key is repeated if it is shorter than the ciphertext. The function requires both files
+/// to exist and be readable; additionally, the key file must not be empty as it is essential for
+/// decryption.
 ///
 /// # Arguments
-/// * `target_path` - The path to the file to decrypt.
-/// * `key_path` - The path to the key file used for decryption.
+/// * `target_path` - The path to the file to decrypt. This should be a string slice pointing to a valid
+///   filesystem path of a readable file.
+/// * `key_path` - The path to the key file used for decryption. Similarly, this should point to a readable
+///   file. The function checks that this file is not empty since an empty key cannot perform decryption.
 ///
 /// # Returns
-/// A `Vec<u8>` containing the decrypted file data.
+/// A `Result<Vec<u8>, String>` encapsulating the outcome of the operation:
+/// - `Ok(Vec<u8>)`: Contains the decrypted data assuming no errors occurred.
+/// - `Err(String)`: An error message describing why the decryption could not be completed. Possible
+///   reasons include file access issues, read errors, or an empty key file.
+///
+/// # Errors
+/// The function might return an error in the following scenarios:
+/// - Failure to open either the target file or the key file, possibly due to incorrect paths or insufficient
+///   permissions.
+/// - Failure to read from the opened files, which might be due to I/O errors.
+/// - The key file is found to be empty after reading its contents, which makes decryption impossible.
 ///
 /// # Example
 /// ```
-/// let target_path = "path/to/target.txt";
+/// let target_path = "path/to/encrypted.txt";
 /// let key_path = "path/to/key.txt";
-/// let decrypted_data = decrypt_file(target_path, key_path);
+/// match decrypt_file(target_path, key_path) {
+///     Ok(decrypted_data) => {
+///         println!("Decryption successful!");
+///         // Additional code to handle the decrypted data (e.g., saving to a file or processing further)
+///     },
+///     Err(e) => println!("Decryption failed: {}", e),
+/// }
 /// ```
 
-fn decrypt_file(target_path: &str, key_path: &str) -> Vec<u8> {
-    let mut key_file = fs::File::open(key_path).unwrap();
+fn decrypt_file(target_path: &str, key_path: &str) -> Result<Vec<u8>, String> {
+    let mut key_file = fs::File::open(key_path)
+        .map_err(|e| format!("Failed to open key file: {}", e))?;
+
     let mut key = Vec::new();
-    key_file.read_to_end(&mut key).unwrap();
+    key_file.read_to_end(&mut key)
+        .map_err(|e| format!("Failed to read key file: {}", e))?;
 
-    let mut target_file = fs::File::open(target_path).unwrap();
+    let mut target_file = fs::File::open(target_path)
+        .map_err(|e| format!("Failed to open target file: {}", e))?;
+
     let mut ciphertext = Vec::new();
-    target_file.read_to_end(&mut ciphertext).unwrap();
+    target_file.read_to_end(&mut ciphertext)
+        .map_err(|e| format!("Failed to read target file: {}", e))?;
 
-    let plaintext: Vec<u8> = ciphertext.iter().zip(key.iter().cycle()).map(|(c, k)| c ^ k).collect();
+    if key.is_empty() {
+        return Err("Key file is empty, cannot decrypt".to_string());
+    }
 
-    plaintext
+    let plaintext: Vec<u8> = ciphertext.iter().zip(key.iter().cycle())
+        .map(|(c, k)| c ^ k)
+        .collect();
+
+    Ok(plaintext)
 }
+
 
 /// Sends file data to a specified server URL.
 ///
@@ -91,23 +145,25 @@ fn decrypt_file(target_path: &str, key_path: &str) -> Vec<u8> {
 /// send_file(&decrypted_data, server_url);
 /// ```
 
-fn send_file(data: &[u8], server_url: &str) {
+fn send_file(data: &[u8], server_url: &str) -> Result<(), String> {
     let client = Client::new();
-    let response = client
-        .post(server_url)
-        .body(data.to_vec())
-        .send();
+    println!("Sending POST request to: {}", server_url); // Debug statement
+    let response = client.post(server_url)
+                         .header(CONTENT_TYPE, "text/plain")  // Make sure this matches your server expectation
+                         .body(data.to_vec())
+                         .send();
 
     match response {
         Ok(response) => {
             if response.status().is_success() {
                 println!("File sent successfully to the remote server.");
+                Ok(())
             } else {
-                println!("Failed to send file. Error code: {}", response.status());
+                Err(format!("Server responded with status code: {}", response.status()))
             }
-        }
+        },
         Err(err) => {
-            println!("Failed to send file: {}", err);
+            Err(format!("Failed to send file: {}", err))
         }
     }
 }
@@ -121,30 +177,32 @@ fn send_file(data: &[u8], server_url: &str) {
 fn main() {
     let args: Vec<String> = env::args().collect();
     if args.len() != 4 {
-        println!("Usage: {} <start_dir> <target_file> <key_file>", args[0]);
-        return;
+        eprintln!("Usage: {} <start_dir> <target_file> <key_file>", args[0]);
+        std::process::exit(1);
     }
 
     let start_dir = Path::new(&args[1]);
     let target_file = &args[2];
     let key_file = &args[3];
-    let server_url = "http://localhost:8000";
+    let server_url = "http://localhost:8080/post_endpoint";
 
     let (target_path, key_path) = find_files(start_dir, target_file, key_file);
 
-    if let (Some(target_path), Some(key_path)) = (target_path, key_path) {
-        println!("Found target file: {}", target_path);
-        println!("Found key file: {}", key_path);
+    match (target_path, key_path) {
+        (Some(target_path), Some(key_path)) => {
+            println!("Found target file: {}", target_path);
+            println!("Found key file: {}", key_path);
 
-        let target_file_contents = fs::read_to_string(&target_path).unwrap_or_else(|_| String::from("Failed to read target file"));
-        let key_file_contents = fs::read_to_string(&key_path).unwrap_or_else(|_| String::from("Failed to read key file"));
-
-        println!("\nTarget file contents:\n{}", target_file_contents);
-        println!("\nKey file contents:\n{}", key_file_contents);
-
-        let decrypted_data = decrypt_file(&target_path, &key_path);
-        send_file(&decrypted_data, server_url);
-    } else {
-        println!("Failed to find the required files.");
+            match decrypt_file(&target_path, &key_path) {
+                Ok(decrypted_data) => {
+                    match send_file(&decrypted_data, server_url) {
+                        Ok(_) => println!("File was sent successfully."),
+                        Err(e) => eprintln!("Failed to send file: {}", e),
+                    }
+                },
+                Err(e) => eprintln!("Error decrypting file: {}", e),
+            }
+        },
+        _ => eprintln!("Failed to find the required files."),
     }
 }
