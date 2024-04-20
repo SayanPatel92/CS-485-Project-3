@@ -168,11 +168,36 @@ fn send_file(data: &[u8], server_url: &str) -> Result<(), String> {
     }
 }
 
-/// Main function to orchestrate file finding, decryption, and sending.
+/// Orchestrates the process of finding, decrypting, and sending a file.
 ///
-/// # Example
-/// Run the program from the command line with the following arguments:
+/// This program requires three command-line arguments:
+/// 1. `start_dir` - The directory from which the search for files begins.
+/// 2. `target_file` - The name of the file to find and decrypt.
+/// 3. `key_file` - The name of the key file used for decryption.
+///
+/// The program searches for the `target_file` and `key_file` starting from `start_dir`.
+/// If found, it attempts to decrypt the `target_file` using the contents of the `key_file` and then
+/// sends the decrypted data to a predefined server endpoint.
+///
+/// # Usage
+/// Run the program from the command line as follows:
+/// ```bash
+/// cargo run <start_dir> <target_file> <key_file>
 /// ```
+/// Example:
+/// ```bash
+/// cargo run /path/to/search /path/to/target/file.txt /path/to/key/file.txt
+/// ```
+///
+/// # Behavior
+/// - **File Finding**: Searches recursively starting from `start_dir` for both `target_file` and `key_file`.
+/// - **Decryption**: Uses the XOR decryption method (defined in `decrypt_file`).
+/// - **Transmission**: Sends the decrypted data to `http://localhost:8080/post_endpoint`.
+///
+/// # Errors
+/// - Exits with an error message if the incorrect number of arguments is provided.
+/// - Reports failures during the file finding, decryption, or file sending processes.
+///
 
 fn main() {
     let args: Vec<String> = env::args().collect();

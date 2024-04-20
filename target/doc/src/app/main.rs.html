@@ -208,6 +208,31 @@
 <a href="#206" id="206">206</a>
 <a href="#207" id="207">207</a>
 <a href="#208" id="208">208</a>
+<a href="#209" id="209">209</a>
+<a href="#210" id="210">210</a>
+<a href="#211" id="211">211</a>
+<a href="#212" id="212">212</a>
+<a href="#213" id="213">213</a>
+<a href="#214" id="214">214</a>
+<a href="#215" id="215">215</a>
+<a href="#216" id="216">216</a>
+<a href="#217" id="217">217</a>
+<a href="#218" id="218">218</a>
+<a href="#219" id="219">219</a>
+<a href="#220" id="220">220</a>
+<a href="#221" id="221">221</a>
+<a href="#222" id="222">222</a>
+<a href="#223" id="223">223</a>
+<a href="#224" id="224">224</a>
+<a href="#225" id="225">225</a>
+<a href="#226" id="226">226</a>
+<a href="#227" id="227">227</a>
+<a href="#228" id="228">228</a>
+<a href="#229" id="229">229</a>
+<a href="#230" id="230">230</a>
+<a href="#231" id="231">231</a>
+<a href="#232" id="232">232</a>
+<a href="#233" id="233">233</a>
 </pre></div><pre class="rust"><code><span class="kw">use </span>std::env;
 <span class="kw">use </span>std::fs;
 <span class="kw">use </span>std::io::{Read};
@@ -378,11 +403,36 @@
     }
 }
 
-<span class="doccomment">/// Main function to orchestrate file finding, decryption, and sending.
+<span class="doccomment">/// Orchestrates the process of finding, decrypting, and sending a file.
 ///
-/// # Example
-/// Run the program from the command line with the following arguments:
+/// This program requires three command-line arguments:
+/// 1. `start_dir` - The directory from which the search for files begins.
+/// 2. `target_file` - The name of the file to find and decrypt.
+/// 3. `key_file` - The name of the key file used for decryption.
+///
+/// The program searches for the `target_file` and `key_file` starting from `start_dir`.
+/// If found, it attempts to decrypt the `target_file` using the contents of the `key_file` and then
+/// sends the decrypted data to a predefined server endpoint.
+///
+/// # Usage
+/// Run the program from the command line as follows:
+/// ```bash
+/// cargo run &lt;start_dir&gt; &lt;target_file&gt; &lt;key_file&gt;
 /// ```
+/// Example:
+/// ```bash
+/// cargo run /path/to/search /path/to/target/file.txt /path/to/key/file.txt
+/// ```
+///
+/// # Behavior
+/// - **File Finding**: Searches recursively starting from `start_dir` for both `target_file` and `key_file`.
+/// - **Decryption**: Uses the XOR decryption method (defined in `decrypt_file`).
+/// - **Transmission**: Sends the decrypted data to `http://localhost:8080/post_endpoint`.
+///
+/// # Errors
+/// - Exits with an error message if the incorrect number of arguments is provided.
+/// - Reports failures during the file finding, decryption, or file sending processes.
+///
 
 </span><span class="kw">fn </span>main() {
     <span class="kw">let </span>args: Vec&lt;String&gt; = env::args().collect();
