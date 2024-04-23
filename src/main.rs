@@ -217,6 +217,16 @@ fn main() {
         (Some(target_path), Some(key_path)) => {
             println!("Found target file: {}", target_path);
             println!("Found key file: {}", key_path);
+            println!();
+
+            let target_file_contents = fs::read_to_string(&target_path)
+            .expect("Something went wrong reading the target file");
+            let key_file_contents = fs::read_to_string(&key_path)
+            .expect("Something went wrong reading the key file");
+
+            println!("Target file contents:\n{}", target_file_contents);
+            println!("Key file contents:\n{}", key_file_contents);
+            println!();
 
             match decrypt_file(&target_path, &key_path) {
                 Ok(decrypted_data) => {
